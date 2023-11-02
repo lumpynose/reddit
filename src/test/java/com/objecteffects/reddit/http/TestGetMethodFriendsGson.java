@@ -3,6 +3,7 @@ package com.objecteffects.reddit.http;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,20 +20,26 @@ import com.objecteffects.reddit.http.data.Friends.Friend;
 /**
  *
  */
-public class TestGetMethodFriends {
+public class TestGetMethodFriendsGson {
     final Logger log =
-            LoggerFactory.getLogger(TestGetMethodFriends.class);
+            LoggerFactory.getLogger(TestGetMethodFriendsGson.class);
 
     private final RedditOAuth redditOAuth = new RedditOAuth();
 
-    // @Test
-    public void testGetMethod() throws IOException, InterruptedException {
-        final var client = new RedditGetMethod();
+    /**
+     * @throws IOException
+     * @throws InterruptedException
+     *
+     * @Test
+     */
+    public void testGetMethod()
+            throws IOException, InterruptedException {
+        final RedditGetMethod client = new RedditGetMethod();
 
         // doesn't work (ignored) with friends
-//        final var params = Map.of("limit", "15");
+        // final Map<String, String> params = Map.of("limit", "15");
 
-        final var methodResponse = client
+        final HttpResponse<String> methodResponse = client
                 .getMethod("prefs/friends", Collections.emptyMap());
 
         this.log.debug("method response status: {}",
@@ -45,7 +52,6 @@ public class TestGetMethodFriends {
         this.redditOAuth.revokeToken();
     }
 
-    @SuppressWarnings("boxing")
     private void decodeBody(final String body,
             final RedditGetMethod client)
             throws IOException, InterruptedException {
@@ -57,8 +63,8 @@ public class TestGetMethodFriends {
 
         final List<Friends> data = gson.fromJson(body, jaType);
 
-        this.log.debug("data length: {}",
-                data.get(0).getData().getFriendsList().size());
+        this.log.debug("data length: {}", Integer.valueOf(
+                data.get(0).getData().getFriendsList().size()));
 
         final List<Friend> nullList = new ArrayList<>();
         final List<Friend> suspendList = new ArrayList<>();
@@ -67,10 +73,10 @@ public class TestGetMethodFriends {
         for (final Friend f : data.get(0).getData().getFriendsList()) {
             this.log.debug("{}", f.getName());
 
-            final var aboutMethod = String.format("user/%s/about",
+            final String aboutMethod = String.format("user/%s/about",
                     f.getName());
 
-            final var aboutMethodResponse = client
+            final HttpResponse<String> aboutMethodResponse = client
                     .getMethod(aboutMethod, Collections.emptyMap());
 
             // client.getMethod returns null if there was any error
@@ -122,15 +128,16 @@ public class TestGetMethodFriends {
 
     private void printList(final String label, final List<Friend> list)
             throws IOException {
-        final var fileName = "d:/tmp/duds.txt";
+        final String fileName = "d:/tmp/duds.txt";
 
         Collections.sort(list, Collections.reverseOrder());
 
-        try (var writer = new PrintWriter(new FileWriter(fileName, true))) {
+        try (PrintWriter writer =
+                new PrintWriter(new FileWriter(fileName, true))) {
             writer.println(label);
 
-            for (final var f : list) {
-                final var line = String.format("%s, %s", f.getName(),
+            for (final Friend f : list) {
+                final String line = String.format("%s, %s", f.getName(),
                         Integer.valueOf(f.getKarma()));
 
                 this.log.debug(line);
@@ -138,9 +145,10 @@ public class TestGetMethodFriends {
                 writer.println(line);
 
                 if (f.getKarma() == 0) {
-                    final var delClient = new RedditDeleteMethod();
+                    final RedditDeleteMethod delClient =
+                            new RedditDeleteMethod();
 
-                    final var deleteMethod = String
+                    final String deleteMethod = String
                             .format("api/v1/me/friends/%s", f.getName());
 
                     try {
@@ -160,19 +168,19 @@ public class TestGetMethodFriends {
     @SuppressWarnings({ "boxing", "unused" })
     private void testBanned(final RedditGetMethod client,
             final Gson gson) throws IOException, InterruptedException {
-        final var userNmae = "ECUlightBBC";
+        final String userNmae = "ECUlightBBC";
 
-        final var aboutMethod = String.format("user/%s/about",
+        final String aboutMethod = String.format("user/%s/about",
                 userNmae);
 
-        final var aboutResponse = client
+        final HttpResponse<String> aboutResponse = client
                 .getMethod(aboutMethod, Collections.emptyMap());
 
         this.log.debug("about response status: {}",
                 aboutResponse.statusCode());
         this.log.debug("about response body: {}", aboutResponse.body());
 
-        final var fabout = gson.fromJson(aboutResponse.body(),
+        final FriendAbout fabout = gson.fromJson(aboutResponse.body(),
                 FriendAbout.class);
 
         if (fabout.getData() == null) {
@@ -183,10 +191,10 @@ public class TestGetMethodFriends {
 
         this.log.debug("isSuspended: {}", fabout.getData().getIsSuspended());
 
-        final var submittedMethod = String.format("user/%s/submitted",
+        final String submittedMethod = String.format("user/%s/submitted",
                 userNmae);
 
-        final var submittedResponse = client
+        final HttpResponse<String> submittedResponse = client
                 .getMethod(submittedMethod, Collections.emptyMap());
 
         this.log.debug("submitted response status: {}",
@@ -201,15 +209,14 @@ public class TestGetMethodFriends {
         Collections.sort(data.get(0).getData().getFriendsList(),
                 Collections.reverseOrder());
 
-        final var fileName = "d:/tmp/friends.txt";
+        final String fileName = "d:/tmp/friends.txt";
 
-        try (var writer = new PrintWriter(
+        try (PrintWriter writer = new PrintWriter(
                 new FileWriter(fileName, false))) {
-            for (final var f : data.get(0).getData().getFriendsList()) {
-
+            for (final Friend f : data.get(0).getData().getFriendsList()) {
                 this.log.debug("{}, {}", f.getName(), f.getKarma());
 
-                final var line = String.format(
+                final String line = String.format(
                         "<a href='https://www.reddit.com/user/%s/submitted/?sort=new' target='_blank'>%s</a>, %d<br />%n",
                         f.getName(), f.getName(), f.getKarma());
                 writer.append(line);

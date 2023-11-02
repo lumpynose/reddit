@@ -1,6 +1,7 @@
 package com.objecteffects.reddit.main;
 
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.util.Collections;
 import java.util.List;
 
@@ -75,9 +76,9 @@ public class GetFriends {
     @SuppressWarnings("boxing")
     public List<Friend> getFriends(final int count, final boolean getKarma)
             throws IOException, InterruptedException {
-        final var client = new RedditGetMethod();
+        final RedditGetMethod client = new RedditGetMethod();
 
-        final var methodResponse = client
+        final HttpResponse<String> methodResponse = client
                 .getMethod("prefs/friends", Collections.emptyMap());
 
         if (methodResponse == null) {
@@ -91,10 +92,11 @@ public class GetFriends {
             // nothing here
         };
 
-        final List<Friends> data = this.gson.fromJson(methodResponse.body(),
-                jaType);
+        final List<Friends> data =
+                this.gson.fromJson(methodResponse.body(), jaType);
 
-        final List<Friend> friends = data.get(0).getData().getFriendsList();
+        final List<Friend> friends =
+                data.get(0).getData().getFriendsList();
 
         this.log.debug("friends length: {}", friends.size());
 
@@ -110,7 +112,7 @@ public class GetFriends {
     private List<Friend> decodeAbout(final List<Friend> friends,
             final int count)
             throws IOException, InterruptedException {
-        final var client = new RedditGetMethod();
+        final RedditGetMethod client = new RedditGetMethod();
 
         List<Friend> sublist = friends;
 
@@ -121,17 +123,20 @@ public class GetFriends {
         for (final Friend f : sublist) {
             Thread.sleep(1000);
 
-            final var aboutMethod = String.format("user/%s/about", f.getName());
+            final String aboutMethod =
+                    String.format("user/%s/about", f.getName());
 
-            final var aboutMethodResponse = client
+            final HttpResponse<String> aboutMethodResponse = client
                     .getMethod(aboutMethod, Collections.emptyMap());
 
             if (aboutMethodResponse == null) {
                 f.setKarma(0);
             }
             else {
+                final String response = aboutMethodResponse.body();
+
                 final FriendAbout fabout = this.gson.fromJson(
-                        aboutMethodResponse.body(), FriendAbout.class);
+                        response, FriendAbout.class);
 
                 if (fabout.getData() == null) {
                     this.log.debug("{}: no about data", f.getName());

@@ -21,7 +21,7 @@ public class TestUpVotePosts {
         this.log.debug("configuration: {}",
                 this.configuration.dumpConfig());
 
-        final var upVotePosts = new UpVotePosts();
+        final UpVotePosts upVotePosts = new UpVotePosts();
 
         upVotePosts.upVotePosts("Dangerous-Welcome961", 100, null);
     }

@@ -1,6 +1,7 @@
 package com.objecteffects.reddit.http;
 
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
@@ -26,17 +27,19 @@ public class TestUpVotedPosts {
 
         log.debug("configuration: {}", configuration.dumpConfig());
 
-        final var getClient = new RedditGetMethod();
+        final RedditGetMethod getClient = new RedditGetMethod();
 
-        final var upvotedMethod = String.format("/user/%s/upvoted",
+        final String upvotedMethod = String.format("/user/%s/upvoted",
                 user);
 
-        final var params = Map.of("limit", "100", "sort", "new", "type",
-                "links");
+        final Map<String, String> params =
+                Map.of("limit", "100", "sort", "new", "type",
+                        "links");
 
-        final var methodResponse = getClient.getMethod(upvotedMethod, params);
+        final HttpResponse<String> methodResponse =
+                getClient.getMethod(upvotedMethod, params);
 
-        final var gson = new Gson();
+        final Gson gson = new Gson();
 
         final Posts data = gson.fromJson(methodResponse.body(), Posts.class);
 

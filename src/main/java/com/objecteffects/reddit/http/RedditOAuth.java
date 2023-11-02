@@ -48,15 +48,15 @@ public class RedditOAuth {
         params.put("username", this.configuration.getUsername());
         params.put("password", this.configuration.getPassword());
 
-        final var username = this.configuration.getClientId();
-        final var password = this.configuration.getSecret();
+        final String username = this.configuration.getClientId();
+        final String password = this.configuration.getSecret();
 
         this.log.debug("client_id: {}", username);
         this.log.debug("secret: {}", password);
 
-        final var method = "api/v1/access_token";
+        final String method = "api/v1/access_token";
 
-        final var fullUrl = String.format("%s/%s", RedditHttpClient.AUTH_URL,
+        final String fullUrl = String.format("%s/%s", RedditHttpClient.AUTH_URL,
                 method);
 
         this.log.debug("fullUrl: {}", fullUrl);
@@ -112,7 +112,7 @@ public class RedditOAuth {
             throw new IllegalStateException("no access_token");
         }
 
-        final var access_token = stringMap.get("access_token");
+        final String access_token = stringMap.get("access_token");
 
         this.log.debug("access_token: {}", access_token);
 
@@ -130,7 +130,7 @@ public class RedditOAuth {
             throws IOException, InterruptedException {
         final Map<String, String> params = new HashMap<>();
 
-        final var access_token = this.configuration.getOAuthToken();
+        final String access_token = this.configuration.getOAuthToken();
 
         if (access_token == null) {
             return null;
@@ -139,8 +139,8 @@ public class RedditOAuth {
         params.put("token", access_token);
         params.put("token_type_hint", "access_token");
 
-        final var username = this.configuration.getClientId();
-        final var password = this.configuration.getSecret();
+        final String username = this.configuration.getClientId();
+        final String password = this.configuration.getSecret();
 
         final String form = params.entrySet().stream()
                 .map(entry -> entry.getKey() + "=" + entry.getValue())
@@ -148,8 +148,8 @@ public class RedditOAuth {
 
         this.log.debug("form: {}", form);
 
-        final var method = "api/v1/revoke_token";
-        final var fullUrl = String.format("%s/%s", RedditHttpClient.AUTH_URL,
+        final String method = "api/v1/revoke_token";
+        final String fullUrl = String.format("%s/%s", RedditHttpClient.AUTH_URL,
                 method);
 
         this.log.debug("fullUrl: " + fullUrl);

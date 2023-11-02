@@ -122,7 +122,7 @@ public class RedditHttpClient {
             this.log.debug("response status: {}",
                     Integer.valueOf(response.statusCode()));
             this.log.debug("response headers: {}", response.headers());
-            this.log.debug("response body: {}", response.body());
+            // this.log.debug("response body: {}", response.body());
         }
         catch (IOException | InterruptedException e) {
             this.log.debug("exception: {}", e);

@@ -25,17 +25,17 @@ public class TestDeleteMethod {
 
         /* */
 
-        final var getClient = new RedditGetMethod();
+        final RedditGetMethod getClient = new RedditGetMethod();
 
-        final var aboutMethod = String.format("user/%s/about", user);
+        final String aboutMethod = String.format("user/%s/about", user);
 
         getClient.getMethod(aboutMethod, Collections.emptyMap());
 
         /* */
 
-        final var putClient = new RedditPutMethod();
+        final RedditPutMethod putClient = new RedditPutMethod();
 
-        final var putMethod = String.format("api/v1/me/friends/%s", user);
+        final String putMethod = String.format("api/v1/me/friends/%s", user);
 
         final Map<String, String> map = Map.of("name", user /*
                                                              * , "note",
@@ -46,16 +46,16 @@ public class TestDeleteMethod {
 
         /* */
 
-        final var infoMethod = String.format("api/v1/me/friends/%s",
+        final String infoMethod = String.format("api/v1/me/friends/%s",
                 user);
 
         getClient.getMethod(infoMethod, Collections.emptyMap());
 
         /* */
 
-        final var delClient = new RedditDeleteMethod();
+        final RedditDeleteMethod delClient = new RedditDeleteMethod();
 
-        final var deleteMethod = String.format("api/v1/me/friends/%s", user);
+        final String deleteMethod = String.format("api/v1/me/friends/%s", user);
 
         delClient.deleteMethod(deleteMethod, Collections.emptyMap());
 

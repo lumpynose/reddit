@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.main.Configuration;
 
-public class TestHidePosts2 {
+public class TestHidePostsGson {
     final Logger log =
-            LoggerFactory.getLogger(TestHidePosts2.class);
+            LoggerFactory.getLogger(TestHidePostsGson.class);
 
     private final static Configuration configuration =
             new Configuration();
@@ -26,7 +26,7 @@ public class TestHidePosts2 {
             return;
         }
 
-        final var hidePosts = new HidePosts();
+        final HidePosts hidePosts = new HidePosts();
 
         for (final String user : users) {
             hidePosts.hidePosts(user, 1, null);

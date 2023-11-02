@@ -26,7 +26,7 @@ public class TestAuthToken {
 
         this.redditOAuth.getAuthToken();
 
-        final var access_token = configuration.getOAuthToken();
+        final String access_token = configuration.getOAuthToken();
 
         this.log.debug("access_token: {}", access_token);
     }
