@@ -19,10 +19,18 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.objecteffects.reddit.main.Configuration;
 
+/**
+ *
+ */
 public class RedditOAuth {
     private final static Logger log = LogManager
             .getLogger(RedditOAuth.class);
 
+    /**
+     * @return HttpResponse
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public static HttpResponse<String> getAuthToken()
             throws IOException, InterruptedException {
         if (Configuration.getOAuthToken() != null) {
@@ -110,6 +118,11 @@ public class RedditOAuth {
         return response;
     }
 
+    /**
+     * @return HttpResponse
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public static HttpResponse<String> revokeToken()
             throws IOException, InterruptedException {
         final Map<String, String> params = new HashMap<>();

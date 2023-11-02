@@ -15,6 +15,9 @@ import com.objecteffects.reddit.http.data.FriendAbout;
 import com.objecteffects.reddit.http.data.Friends;
 import com.objecteffects.reddit.http.data.Friends.Friend;
 
+/**
+ *
+ */
 public class GetFriends {
     private final static Logger log = LogManager
             .getLogger(GetFriends.class);
@@ -22,24 +25,52 @@ public class GetFriends {
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;
 
-    // gets all friends, no karma
+    /**
+     * Gets all friends, no karma.
+     *
+     * @return List of Friend
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public List<Friend> getFriends() throws IOException, InterruptedException {
         return getFriends(this.defaultCount, this.defaultGetKarma);
     }
 
-    // gets all friends, with karma
+    /**
+     * Gets all friends, with karma.
+     *
+     * @param getKarma
+     * @return List of Friend
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public List<Friend> getFriends(final boolean getKarma)
             throws IOException, InterruptedException {
         return getFriends(this.defaultCount, getKarma);
     }
 
-    // gets some friends, with karma
+    /**
+     * Gets some friends, with karma.
+     *
+     * @param count
+     * @return List of Friend
+     * @throws IOException
+     * @throws InterruptedException
+     */
     public List<Friend> getFriends(final int count)
             throws IOException, InterruptedException {
         return getFriends(count, true);
     }
 
-    // gets all or some friends, with or without karma
+    /**
+     * Gets all or some friends, with or without karma.
+     *
+     * @param count
+     * @param getKarma
+     * @return List of Friend
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @SuppressWarnings("boxing")
     public List<Friend> getFriends(final int count, final boolean getKarma)
             throws IOException, InterruptedException {

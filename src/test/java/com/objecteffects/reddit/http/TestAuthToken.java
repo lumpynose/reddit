@@ -12,6 +12,10 @@ public class TestAuthToken {
     private final static Logger log = LogManager
             .getLogger(TestAuthToken.class);
 
+    /**
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @Test
     public void testGetAuthToken() throws IOException, InterruptedException {
 

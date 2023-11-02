@@ -16,6 +16,9 @@ import com.objecteffects.reddit.http.data.FriendAbout;
 import com.objecteffects.reddit.http.data.Friends;
 import com.objecteffects.reddit.http.data.Friends.Friend;
 
+/**
+ *
+ */
 public class TestGetMethodFriends {
     private final static Logger log = LogManager
             .getLogger(TestGetMethodFriends.class);

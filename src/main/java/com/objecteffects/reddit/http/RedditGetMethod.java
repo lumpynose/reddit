@@ -15,10 +15,20 @@ import org.apache.logging.log4j.Logger;
 
 import com.objecteffects.reddit.main.Configuration;
 
+/**
+ *
+ */
 public class RedditGetMethod {
     private final static Logger log = LogManager
             .getLogger(RedditGetMethod.class);
 
+    /**
+     * @param method
+     * @param params
+     * @return HttpResponse
+     * @throws InterruptedException
+     * @throws IOException
+     */
     public HttpResponse<String> getMethod(final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
@@ -41,7 +51,8 @@ public class RedditGetMethod {
                     .map(entry -> entry.getKey() + "=" + entry.getValue())
                     .collect(Collectors.joining("&"));
 
-            log.debug("form: {}, {}", formattedParams, formattedParams.length());
+            log.debug("form: {}, {}", formattedParams,
+                    formattedParams.length());
 
             fullUrl = String.format("%s/%s?%s", RedditHttpClient.METHOD_URL,
                     method, formattedParams);

@@ -8,11 +8,21 @@ import java.util.Map;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ *
+ */
 public class RedditDeleteMethod {
     @SuppressWarnings("unused")
     private final static Logger log = LogManager
             .getLogger(RedditDeleteMethod.class);
 
+    /**
+     * @param method
+     * @param params
+     * @return HttpResponse
+     * @throws InterruptedException
+     * @throws IOException
+     */
     public HttpResponse<String> deleteMethod(final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {

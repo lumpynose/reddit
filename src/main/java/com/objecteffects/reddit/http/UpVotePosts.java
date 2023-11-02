@@ -10,10 +10,21 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.Gson;
 import com.objecteffects.reddit.http.data.Posts;
 
+/**
+ *
+ */
 public class UpVotePosts {
     private final static Logger log = LogManager
             .getLogger(UpVotePosts.class);
 
+    /**
+     * @param name
+     * @param count
+     * @param lastAfter
+     * @return String
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @SuppressWarnings("boxing")
     public String upVotePosts(final String name, final int count,
             final String lastAfter)

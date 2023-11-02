@@ -19,6 +19,9 @@ import org.apache.logging.log4j.Logger;
 
 import com.objecteffects.reddit.main.Configuration;
 
+/**
+ *
+ */
 public class RedditHttpClient {
     private final static Logger log = LogManager
             .getLogger(RedditHttpClient.class);
@@ -58,6 +61,14 @@ public class RedditHttpClient {
         return client;
     }
 
+    /**
+     * @param request
+     * @param method
+     * @param params
+     * @return HttpResponse
+     * @throws InterruptedException
+     * @throws IOException
+     */
     @SuppressWarnings("boxing")
     public static HttpResponse<String> clientSend(
             final HttpRequest.Builder request,

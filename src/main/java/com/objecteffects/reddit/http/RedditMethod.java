@@ -1,5 +1,8 @@
 package com.objecteffects.reddit.http;
 
+/**
+ *
+ */
 public enum RedditMethod {
     // list of friends
     FriendsMethod("prefs/friends"),

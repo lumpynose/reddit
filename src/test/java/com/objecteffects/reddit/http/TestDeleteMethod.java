@@ -13,6 +13,10 @@ public class TestDeleteMethod {
     private final static Logger log = LogManager
             .getLogger(TestDeleteMethod.class);
 
+    /**
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @Test
     public void testGetMethod() throws IOException, InterruptedException {
         final String user = "daronjay";

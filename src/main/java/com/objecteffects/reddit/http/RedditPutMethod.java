@@ -12,11 +12,21 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.gson.Gson;
 
+/**
+ *
+ */
 public class RedditPutMethod {
     @SuppressWarnings("unused")
     private final static Logger log = LogManager
             .getLogger(RedditPutMethod.class);
 
+    /**
+     * @param method
+     * @param params
+     * @return HttpResponse
+     * @throws InterruptedException
+     * @throws IOException
+     */
     public HttpResponse<String> putMethod(final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
