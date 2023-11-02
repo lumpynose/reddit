@@ -10,7 +10,7 @@ import com.objecteffects.reddit.main.Configuration;
 
 public class TestUpVotePosts {
     final Logger log =
-            LoggerFactory.getLogger(Configuration.class);
+            LoggerFactory.getLogger(TestUpVotePosts.class);
 
     private final Configuration configuration =
             new Configuration();

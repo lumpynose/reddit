@@ -11,7 +11,7 @@ import com.objecteffects.reddit.main.Configuration;
 
 public class TestHidePosts2 {
     final Logger log =
-            LoggerFactory.getLogger(Configuration.class);
+            LoggerFactory.getLogger(TestHidePosts2.class);
 
     private final static Configuration configuration =
             new Configuration();

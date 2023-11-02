@@ -10,7 +10,7 @@ import com.objecteffects.reddit.main.Configuration;
 
 public class TestAuthToken {
     private final Logger log =
-            LoggerFactory.getLogger(Configuration.class);
+            LoggerFactory.getLogger(TestAuthToken.class);
 
     private final RedditOAuth redditOAuth = new RedditOAuth();
 

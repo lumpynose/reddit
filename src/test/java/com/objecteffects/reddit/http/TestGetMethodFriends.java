@@ -15,14 +15,13 @@ import com.google.gson.reflect.TypeToken;
 import com.objecteffects.reddit.http.data.FriendAbout;
 import com.objecteffects.reddit.http.data.Friends;
 import com.objecteffects.reddit.http.data.Friends.Friend;
-import com.objecteffects.reddit.main.Configuration;
 
 /**
  *
  */
 public class TestGetMethodFriends {
     final Logger log =
-            LoggerFactory.getLogger(Configuration.class);
+            LoggerFactory.getLogger(TestGetMethodFriends.class);
 
     private final RedditOAuth redditOAuth = new RedditOAuth();
 

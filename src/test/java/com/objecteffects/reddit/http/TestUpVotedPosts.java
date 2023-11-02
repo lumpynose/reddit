@@ -13,7 +13,7 @@ import com.objecteffects.reddit.main.Configuration;
 
 public class TestUpVotedPosts {
     final static Logger log =
-            LoggerFactory.getLogger(Configuration.class);
+            LoggerFactory.getLogger(TestUpVotedPosts.class);
 
     private final static Configuration configuration =
             new Configuration();
