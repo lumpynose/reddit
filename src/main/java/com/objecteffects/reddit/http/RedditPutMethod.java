@@ -7,8 +7,8 @@ import java.net.http.HttpResponse;
 import java.util.Collections;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 
@@ -17,8 +17,10 @@ import com.google.gson.Gson;
  */
 public class RedditPutMethod {
     @SuppressWarnings("unused")
-    private final static Logger log = LogManager
-            .getLogger(RedditPutMethod.class);
+    private final Logger log =
+            LoggerFactory.getLogger(RedditPutMethod.class);
+
+    private final RedditHttpClient redditHttpClient = new RedditHttpClient();
 
     /**
      * @param method
@@ -40,7 +42,7 @@ public class RedditPutMethod {
         final HttpRequest.Builder putBuilder = HttpRequest.newBuilder()
                 .PUT(BodyPublishers.ofString(json));
 
-        return RedditHttpClient.clientSend(putBuilder, method,
+        return this.redditHttpClient.clientSend(putBuilder, method,
                 Collections.emptyMap());
     }
 }

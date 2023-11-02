@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.main.Configuration;
 
@@ -23,8 +23,8 @@ import com.objecteffects.reddit.main.Configuration;
  *
  */
 public class RedditHttpClient {
-    private final static Logger log = LogManager
-            .getLogger(RedditHttpClient.class);
+    final Logger log =
+            LoggerFactory.getLogger(RedditHttpClient.class);
 
     private static final HttpClient client = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(RedditHttpClient.timeoutSeconds))
@@ -57,6 +57,10 @@ public class RedditHttpClient {
     @SuppressWarnings("boxing")
     final static List<Integer> okCodes = Arrays.asList(200, 201, 202, 203, 204);
 
+    private final RedditOAuth redditOAuth = new RedditOAuth();
+    private final Configuration configuration =
+            new Configuration();
+
     public static HttpClient getHttpClient() {
         return client;
     }
@@ -70,7 +74,7 @@ public class RedditHttpClient {
      * @throws IOException
      */
     @SuppressWarnings("boxing")
-    public static HttpResponse<String> clientSend(
+    public HttpResponse<String> clientSend(
             final HttpRequest.Builder request,
             final String method,
             final Map<String, String> params)
@@ -82,26 +86,26 @@ public class RedditHttpClient {
                     .map(entry -> entry.getKey() + "=" + entry.getValue())
                     .collect(Collectors.joining("&"));
 
-            log.debug("form: {}, {}", form, form.length());
+            this.log.debug("form: {}, {}", form, form.length());
 
-            fullUrl = String.format("%s/%s?%s", RedditHttpClient.METHOD_URL,
-                    method, form);
+            fullUrl = String.format("%s/%s?%s",
+                    RedditHttpClient.METHOD_URL, method, form);
         }
         else {
-            fullUrl = String.format("%s/%s", RedditHttpClient.METHOD_URL,
-                    method);
+            fullUrl = String.format("%s/%s",
+                    RedditHttpClient.METHOD_URL, method);
         }
 
-        log.debug("fullUrl: {}", fullUrl);
+        this.log.debug("fullUrl: {}", fullUrl);
 
         // loads the OAuth token for Configuration.getOAuthToken().
-        RedditOAuth.getAuthToken();
+        this.redditOAuth.getAuthToken();
 
         final HttpRequest buildRequest = request
                 .headers("User-Agent",
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
                 .header("Authorization",
-                        "bearer " + Configuration.getOAuthToken())
+                        "bearer " + this.configuration.getOAuthToken())
                 .uri(URI.create(fullUrl))
                 .timeout(Duration.ofSeconds(RedditHttpClient.timeoutSeconds))
                 .build();
@@ -111,17 +115,17 @@ public class RedditHttpClient {
         HttpResponse<String> response = null;
 
         try {
-            log.debug("method: {}", method);
+            this.log.debug("method: {}", method);
 
             response = client.send(buildRequest, BodyHandlers.ofString());
 
-            log.debug("response status: {}",
+            this.log.debug("response status: {}",
                     Integer.valueOf(response.statusCode()));
-            log.debug("response headers: {}", response.headers());
-            log.debug("response body: {}", response.body());
+            this.log.debug("response headers: {}", response.headers());
+            this.log.debug("response body: {}", response.body());
         }
         catch (IOException | InterruptedException e) {
-            log.debug("exception: {}", e);
+            this.log.debug("exception: {}", e);
 
             // fall through to retries below
 
@@ -134,22 +138,22 @@ public class RedditHttpClient {
                 Thread.sleep(i * 1500);
 
                 try {
-                    log.debug("method: {}", method);
+                    this.log.debug("method: {}", method);
 
                     response = client.send(buildRequest,
                             BodyHandlers.ofString());
 
-                    log.debug("response status: {}",
+                    this.log.debug("response status: {}",
                             Integer.valueOf(response.statusCode()));
-                    log.debug("response headers: {}", response.headers());
-                    log.debug("response body: {}", response.body());
+                    this.log.debug("response headers: {}", response.headers());
+                    this.log.debug("response body: {}", response.body());
 
                     if (okCodes.contains(response.statusCode())) {
                         break;
                     }
                 }
                 catch (IOException | InterruptedException e) {
-                    log.debug("exception: {}", e);
+                    this.log.debug("exception: {}", e);
 
                     // keep retrying
 

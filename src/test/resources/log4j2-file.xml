@@ -6,7 +6,7 @@
     </Properties>
     
     <Appenders>
-        <File name="file" append="false" bufferedIO="true" immediateFlush="true" fileName="${logfile}">
+        <File name="file" append="false" immediateFlush="true" fileName="${logfile}">
             <PatternLayout pattern="${pattern}" />
         </File>
     </Appenders>

@@ -10,8 +10,8 @@ import java.time.Duration;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.main.Configuration;
 
@@ -19,8 +19,14 @@ import com.objecteffects.reddit.main.Configuration;
  *
  */
 public class RedditGetMethod {
-    private final static Logger log = LogManager
-            .getLogger(RedditGetMethod.class);
+    private final Logger log =
+            LoggerFactory.getLogger(RedditGetMethod.class);
+
+    private final RedditOAuth redditOAuth = new RedditOAuth();
+    private final RedditHttpClient redditHttpClient =
+            new RedditHttpClient();
+    private final Configuration configuration =
+            new Configuration();
 
     /**
      * @param method
@@ -35,7 +41,8 @@ public class RedditGetMethod {
 
         final HttpRequest.Builder getBuilder = HttpRequest.newBuilder().GET();
 
-        return RedditHttpClient.clientSend(getBuilder, method, params);
+        return this.redditHttpClient.clientSend(getBuilder,
+                method, params);
     }
 
     @SuppressWarnings({ "unused", "boxing" })
@@ -44,14 +51,14 @@ public class RedditGetMethod {
             throws InterruptedException, IOException {
         final String fullUrl;
 
-        log.debug("method: {}", method);
+        this.log.debug("method: {}", method);
 
         if (!params.isEmpty()) {
             final String formattedParams = params.entrySet().stream()
                     .map(entry -> entry.getKey() + "=" + entry.getValue())
                     .collect(Collectors.joining("&"));
 
-            log.debug("form: {}, {}", formattedParams,
+            this.log.debug("form: {}, {}", formattedParams,
                     formattedParams.length());
 
             fullUrl = String.format("%s/%s?%s", RedditHttpClient.METHOD_URL,
@@ -62,17 +69,17 @@ public class RedditGetMethod {
                     method);
         }
 
-        log.debug("fullUrl: {}", fullUrl);
+        this.log.debug("fullUrl: {}", fullUrl);
 
         // loads the OAuth token for Configuration.getOAuthToken().
-        RedditOAuth.getAuthToken();
+        this.redditOAuth.getAuthToken();
 
         final HttpRequest request = HttpRequest.newBuilder()
                 .GET()
                 .headers("User-Agent",
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
                 .header("Authorization",
-                        "bearer " + Configuration.getOAuthToken())
+                        "bearer " + this.configuration.getOAuthToken())
                 .uri(URI.create(fullUrl))
                 .timeout(Duration.ofSeconds(15))
                 .build();
@@ -86,13 +93,13 @@ public class RedditGetMethod {
         try {
             response = client.send(request, BodyHandlers.ofString());
 
-            log.debug("response status: {}",
+            this.log.debug("response status: {}",
                     Integer.valueOf(response.statusCode()));
-            log.debug("response headers: {}", response.headers());
-            log.debug("response body: {}", response.body());
+            this.log.debug("response headers: {}", response.headers());
+            this.log.debug("response body: {}", response.body());
         }
         catch (IOException | InterruptedException e) {
-            log.debug("exception: {}", e);
+            this.log.debug("exception: {}", e);
         }
 
         if (response == null) {
@@ -106,13 +113,13 @@ public class RedditGetMethod {
                         break;
                     }
 
-                    log.debug("response status: {}",
+                    this.log.debug("response status: {}",
                             Integer.valueOf(response.statusCode()));
-                    log.debug("response headers: {}", response.headers());
-                    log.debug("response body: {}", response.body());
+                    this.log.debug("response headers: {}", response.headers());
+                    this.log.debug("response body: {}", response.body());
                 }
                 catch (IOException | InterruptedException e) {
-                    log.debug("exception: {}", e);
+                    this.log.debug("exception: {}", e);
                 }
             }
         }

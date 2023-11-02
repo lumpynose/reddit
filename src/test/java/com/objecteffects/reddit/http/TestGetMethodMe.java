@@ -3,21 +3,42 @@ package com.objecteffects.reddit.http;
 import java.io.IOException;
 import java.util.Collections;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import com.objecteffects.reddit.main.Configuration;
+
+/**
+ *
+ */
 public class TestGetMethodMe {
-    @SuppressWarnings("unused")
-    private final static Logger log = LogManager
-            .getLogger(TestGetMethodMe.class);
+    final Logger log =
+            LoggerFactory.getLogger(Configuration.class);
 
+    private final RedditOAuth redditOAuth = new RedditOAuth();
+
+    /**
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @Test
     public void testGetMethod() throws IOException, InterruptedException {
-        final var client = new RedditGetMethod();
+        final RedditGetMethod client = new RedditGetMethod();
 
-        client.getMethod("api/v1/me", Collections.emptyMap());
+        final String me =
+                client.getMethod("api/v1/me",
+                        Collections.emptyMap()).body();
 
-        RedditOAuth.revokeToken();
+        this.log.debug("me: {}", me);
+
+        final DocumentContext jsonContext = JsonPath.parse(me);
+        final String all = jsonContext.read("$.is_employee").toString();
+
+        this.log.debug("all: {}", all);
+
+        this.redditOAuth.revokeToken();
     }
 }

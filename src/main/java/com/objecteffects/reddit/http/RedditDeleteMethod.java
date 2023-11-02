@@ -5,16 +5,19 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  */
 public class RedditDeleteMethod {
     @SuppressWarnings("unused")
-    private final static Logger log = LogManager
-            .getLogger(RedditDeleteMethod.class);
+    private final Logger log =
+            LoggerFactory.getLogger(RedditDeleteMethod.class);
+
+    private final RedditHttpClient redditHttpClient =
+            new RedditHttpClient();
 
     /**
      * @param method
@@ -30,6 +33,6 @@ public class RedditDeleteMethod {
         final HttpRequest.Builder deleteBuilder = HttpRequest.newBuilder()
                 .DELETE();
 
-        return RedditHttpClient.clientSend(deleteBuilder, method, params);
+        return this.redditHttpClient.clientSend(deleteBuilder, method, params);
     }
 }

@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,18 +23,21 @@ import com.objecteffects.reddit.main.Configuration;
  *
  */
 public class RedditOAuth {
-    private final static Logger log = LogManager
-            .getLogger(RedditOAuth.class);
+    private final Logger log =
+            LoggerFactory.getLogger(RedditOAuth.class);
+
+    private final Configuration configuration =
+            new Configuration();
 
     /**
      * @return HttpResponse
      * @throws IOException
      * @throws InterruptedException
      */
-    public static HttpResponse<String> getAuthToken()
+    public HttpResponse<String> getAuthToken()
             throws IOException, InterruptedException {
-        if (Configuration.getOAuthToken() != null) {
-            log.debug("auth token already loaded");
+        if (this.configuration.getOAuthToken() != null) {
+            this.log.debug("auth token already loaded");
 
             return null;
         }
@@ -42,27 +45,27 @@ public class RedditOAuth {
         final Map<String, String> params = new HashMap<>();
 
         params.put("grant_type", "password");
-        params.put("username", Configuration.getUsername());
-        params.put("password", Configuration.getPassword());
+        params.put("username", this.configuration.getUsername());
+        params.put("password", this.configuration.getPassword());
 
-        final var username = Configuration.getClientId();
-        final var password = Configuration.getSecret();
+        final var username = this.configuration.getClientId();
+        final var password = this.configuration.getSecret();
 
-        log.debug("client_id: {}", username);
-        log.debug("secret: {}", password);
+        this.log.debug("client_id: {}", username);
+        this.log.debug("secret: {}", password);
 
         final var method = "api/v1/access_token";
 
         final var fullUrl = String.format("%s/%s", RedditHttpClient.AUTH_URL,
                 method);
 
-        log.debug("fullUrl: {}", fullUrl);
+        this.log.debug("fullUrl: {}", fullUrl);
 
         final String form = params.entrySet().stream()
                 .map(entry -> entry.getKey() + "=" + entry.getValue())
                 .collect(Collectors.joining("&"));
 
-        log.debug("form: {}", form);
+        this.log.debug("form: {}", form);
 
         final HttpRequest request = HttpRequest.newBuilder()
                 .headers("Content-Type", "application/x-www-form-urlencoded")
@@ -74,25 +77,25 @@ public class RedditOAuth {
                 .timeout(Duration.ofSeconds(RedditHttpClient.timeoutSeconds))
                 .build();
 
-        log.debug("request headers: {}", request.headers());
+        this.log.debug("request headers: {}", request.headers());
 
         final HttpClient client = RedditHttpClient.getHttpClient();
 
         final HttpResponse<String> response = client.send(request,
                 BodyHandlers.ofString());
 
-        log.debug("auth response status: {}",
+        this.log.debug("auth response status: {}",
                 Integer.valueOf(response.statusCode()));
 
         if (response.statusCode() != 200) {
-            Configuration.setOAuthToken(null);
+            this.configuration.setOAuthToken(null);
 
             throw new IllegalStateException(
                     "status code: " + response.statusCode());
         }
 
-        log.debug("auth response headers: {}", response.headers());
-        log.debug("auth response body: {}", response.body());
+        this.log.debug("auth response headers: {}", response.headers());
+        this.log.debug("auth response body: {}", response.body());
 
         final Gson gson = new Gson();
 
@@ -104,16 +107,16 @@ public class RedditOAuth {
                 mapType);
 
         if (!stringMap.containsKey("access_token")) {
-            log.error("no access_token");
+            this.log.error("no access_token");
 
             throw new IllegalStateException("no access_token");
         }
 
         final var access_token = stringMap.get("access_token");
 
-        log.debug("access_token: {}", access_token);
+        this.log.debug("access_token: {}", access_token);
 
-        Configuration.setOAuthToken(access_token);
+        this.configuration.setOAuthToken(access_token);
 
         return response;
     }
@@ -123,11 +126,11 @@ public class RedditOAuth {
      * @throws IOException
      * @throws InterruptedException
      */
-    public static HttpResponse<String> revokeToken()
+    public HttpResponse<String> revokeToken()
             throws IOException, InterruptedException {
         final Map<String, String> params = new HashMap<>();
 
-        final var access_token = Configuration.getOAuthToken();
+        final var access_token = this.configuration.getOAuthToken();
 
         if (access_token == null) {
             return null;
@@ -136,20 +139,20 @@ public class RedditOAuth {
         params.put("token", access_token);
         params.put("token_type_hint", "access_token");
 
-        final var username = Configuration.getClientId();
-        final var password = Configuration.getSecret();
+        final var username = this.configuration.getClientId();
+        final var password = this.configuration.getSecret();
 
         final String form = params.entrySet().stream()
                 .map(entry -> entry.getKey() + "=" + entry.getValue())
                 .collect(Collectors.joining("&"));
 
-        log.debug("form: {}", form);
+        this.log.debug("form: {}", form);
 
         final var method = "api/v1/revoke_token";
         final var fullUrl = String.format("%s/%s", RedditHttpClient.AUTH_URL,
                 method);
 
-        log.debug("fullUrl: " + fullUrl);
+        this.log.debug("fullUrl: " + fullUrl);
 
         final HttpRequest request = HttpRequest.newBuilder()
                 .headers("Content-Type", "application/x-www-form-urlencoded")
@@ -161,26 +164,26 @@ public class RedditOAuth {
                 .timeout(Duration.ofSeconds(RedditHttpClient.timeoutSeconds))
                 .build();
 
-        log.debug("headers: {}", request.headers());
+        this.log.debug("headers: {}", request.headers());
 
         final HttpClient client = RedditHttpClient.getHttpClient();
 
         final HttpResponse<String> response = client.send(request,
                 BodyHandlers.ofString());
 
-        log.debug("revoke response status: {}",
+        this.log.debug("revoke response status: {}",
                 Integer.valueOf(response.statusCode()));
-        log.debug("revoke response headers: {}", response.headers());
-        log.debug("revoke response body: {}", response.body());
+        this.log.debug("revoke response headers: {}", response.headers());
+        this.log.debug("revoke response body: {}", response.body());
 
         if (response.statusCode() != 200) {
-            Configuration.setOAuthToken(null);
+            this.configuration.setOAuthToken(null);
 
             throw new IllegalStateException(
                     "status code: " + response.statusCode());
         }
 
-        Configuration.setOAuthToken(null);
+        this.configuration.setOAuthToken(null);
 
         return response;
     }

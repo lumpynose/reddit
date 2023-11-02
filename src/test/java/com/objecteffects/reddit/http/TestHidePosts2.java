@@ -3,21 +3,24 @@ package com.objecteffects.reddit.http;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.main.Configuration;
 
 public class TestHidePosts2 {
-    private final static Logger log = LogManager
-            .getLogger(TestHidePosts2.class);
+    final Logger log =
+            LoggerFactory.getLogger(Configuration.class);
+
+    private final static Configuration configuration =
+            new Configuration();
 
     @Test
     public void testPostMethod() throws IOException, InterruptedException {
-        final List<String> users = Configuration.getHide();
+        final List<String> users = configuration.getHide();
 
-        log.debug("configuration: {}", Configuration.dumpConfig());
+        this.log.debug("configuration: {}", configuration.dumpConfig());
 
         if (users.isEmpty()) {
             return;

@@ -3,17 +3,20 @@ package com.objecteffects.reddit.http;
 import java.io.IOException;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.objecteffects.reddit.http.data.Posts;
 import com.objecteffects.reddit.main.Configuration;
 
 public class TestUpVotedPosts {
-    private final static Logger log = LogManager
-            .getLogger(TestUpVotedPosts.class);
+    final static Logger log =
+            LoggerFactory.getLogger(Configuration.class);
+
+    private final static Configuration configuration =
+            new Configuration();
 
     @Test
     @SuppressWarnings("boxing")
@@ -21,7 +24,7 @@ public class TestUpVotedPosts {
             throws IOException, InterruptedException {
         final String user = "gatrouz";
 
-        log.debug("configuration: {}", Configuration.dumpConfig());
+        log.debug("configuration: {}", configuration.dumpConfig());
 
         final var getClient = new RedditGetMethod();
 

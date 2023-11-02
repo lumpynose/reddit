@@ -4,14 +4,18 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.objecteffects.reddit.main.Configuration;
 
 public class TestDeleteMethod {
     @SuppressWarnings("unused")
-    private final static Logger log = LogManager
-            .getLogger(TestDeleteMethod.class);
+    final Logger log =
+            LoggerFactory.getLogger(Configuration.class);
+
+    private final RedditOAuth redditOAuth = new RedditOAuth();
 
     /**
      * @throws IOException
@@ -59,6 +63,6 @@ public class TestDeleteMethod {
 
         /* */
 
-        RedditOAuth.revokeToken();
+        this.redditOAuth.revokeToken();
     }
 }

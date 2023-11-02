@@ -11,12 +11,12 @@ import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Configuration {
-    private final static Logger log = LogManager
-            .getLogger(Configuration.class);
+    private final Logger log =
+            LoggerFactory.getLogger(Configuration.class);
 
     private static String username = null;
     private static String password = null;
@@ -25,20 +25,23 @@ public class Configuration {
     private static String oauthToken = null;
     private static List<String> hide = null;
 
-    private final static String configFile = "c:/home/lumpy/redditconfig.properties";
+    private final static String configFile =
+            "c:/home/lumpy/redditconfig.properties";
 
     private final static Parameters params = new Parameters();
 
-    private final static FileBasedConfigurationBuilder<FileBasedConfiguration> builder = new FileBasedConfigurationBuilder<FileBasedConfiguration>(
-            PropertiesConfiguration.class)
-            .configure(params.properties()
-                    .setFileName(configFile)
-                    .setListDelimiterHandler(
-                            new DefaultListDelimiterHandler(',')));
+    private final static FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
+            new FileBasedConfigurationBuilder<FileBasedConfiguration>(
+                    PropertiesConfiguration.class)
+                    .configure(params.properties()
+                            .setFileName(configFile)
+                            .setListDelimiterHandler(
+                                    new DefaultListDelimiterHandler(',')));
 
-    public static void loadConfiguration() {
+    public void loadConfiguration() {
         try {
-            final FileBasedConfiguration config = builder.getConfiguration();
+            final FileBasedConfiguration config =
+                    builder.getConfiguration();
 
             username = config.getString("username");
             password = config.getString("password");
@@ -49,7 +52,7 @@ public class Configuration {
             hide = Arrays.asList(config.getStringArray("hide"));
         }
         catch (final ConfigurationException ex) {
-            log.error("configuration exception: ", ex);
+            this.log.error("configuration exception: ", ex);
 
             username = "";
             password = "";
@@ -59,7 +62,7 @@ public class Configuration {
         }
     }
 
-    public static String getUsername() {
+    public String getUsername() {
         if (username == null) {
             loadConfiguration();
         }
@@ -67,7 +70,7 @@ public class Configuration {
         return username;
     }
 
-    public static String getPassword() {
+    public String getPassword() {
         if (password == null) {
             loadConfiguration();
         }
@@ -75,7 +78,7 @@ public class Configuration {
         return password;
     }
 
-    public static String getClientId() {
+    public String getClientId() {
         if (clientId == null) {
             loadConfiguration();
         }
@@ -83,7 +86,7 @@ public class Configuration {
         return clientId;
     }
 
-    public static String getSecret() {
+    public String getSecret() {
         if (secret == null) {
             loadConfiguration();
         }
@@ -91,15 +94,15 @@ public class Configuration {
         return secret;
     }
 
-    public static String getOAuthToken() {
+    public String getOAuthToken() {
         return oauthToken;
     }
 
-    public static void setOAuthToken(final String _oauthToken) {
+    public void setOAuthToken(final String _oauthToken) {
         oauthToken = _oauthToken;
     }
 
-    public static List<String> getHide() {
+    public List<String> getHide() {
         if (hide == null) {
             loadConfiguration();
         }
@@ -107,7 +110,7 @@ public class Configuration {
         return hide;
     }
 
-    public static String dumpConfig() {
+    public String dumpConfig() {
         return new ToStringBuilder(Configuration.class)
                 .append(username)
                 .append(password)

@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -19,11 +19,12 @@ import com.objecteffects.reddit.http.data.Friends.Friend;
  *
  */
 public class GetFriends {
-    private final static Logger log = LogManager
-            .getLogger(GetFriends.class);
+    private final Logger log =
+            LoggerFactory.getLogger(GetFriends.class);
     private final Gson gson = new Gson();
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;
+    private final RedditOAuth redditOAuth = new RedditOAuth();
 
     /**
      * Gets all friends, no karma.
@@ -83,7 +84,7 @@ public class GetFriends {
             throw new IllegalStateException("null friends respones");
         }
 
-        log.debug("friends method response status: {}",
+        this.log.debug("friends method response status: {}",
                 Integer.valueOf(methodResponse.statusCode()));
 
         final TypeToken<List<Friends>> jaType = new TypeToken<>() {
@@ -95,13 +96,13 @@ public class GetFriends {
 
         final List<Friend> friends = data.get(0).getData().getFriendsList();
 
-        log.debug("friends length: {}", friends.size());
+        this.log.debug("friends length: {}", friends.size());
 
         if (getKarma) {
             decodeAbout(friends, count);
         }
 
-        RedditOAuth.revokeToken();
+        this.redditOAuth.revokeToken();
 
         return friends;
     }
@@ -133,12 +134,12 @@ public class GetFriends {
                         aboutMethodResponse.body(), FriendAbout.class);
 
                 if (fabout.getData() == null) {
-                    log.debug("{}: no about data", f.getName());
+                    this.log.debug("{}: no about data", f.getName());
 
                     f.setKarma(0);
                 }
                 else {
-                    log.debug("friend about: {}", fabout);
+                    this.log.debug("friend about: {}", fabout);
 
                     f.setKarma(fabout.getData().getTotalKarma());
                 }

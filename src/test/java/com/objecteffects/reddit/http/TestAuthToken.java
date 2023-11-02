@@ -2,15 +2,20 @@ package com.objecteffects.reddit.http;
 
 import java.io.IOException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.main.Configuration;
 
 public class TestAuthToken {
-    private final static Logger log = LogManager
-            .getLogger(TestAuthToken.class);
+    private final Logger log =
+            LoggerFactory.getLogger(Configuration.class);
+
+    private final RedditOAuth redditOAuth = new RedditOAuth();
+
+    private final static Configuration configuration =
+            new Configuration();
 
     /**
      * @throws IOException
@@ -19,10 +24,10 @@ public class TestAuthToken {
     @Test
     public void testGetAuthToken() throws IOException, InterruptedException {
 
-        RedditOAuth.getAuthToken();
+        this.redditOAuth.getAuthToken();
 
-        final var access_token = Configuration.getOAuthToken();
+        final var access_token = configuration.getOAuthToken();
 
-        log.debug("access_token: {}", access_token);
+        this.log.debug("access_token: {}", access_token);
     }
 }

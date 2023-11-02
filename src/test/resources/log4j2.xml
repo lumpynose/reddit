@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="warn">
     <Properties>
-        <Property name="logfile">${env:TMP}\reddit.log</Property>
-        <Property name="pattern">%-5level %date{yyyy-MMM-dd HH:mm} [%thread] %logger{2}.%method - %msg%n</Property>
+        <Property name="logfile">${env:TMP}\temperature.log</Property>
+        <Property name="pattern">%-5level %date{yyyy-MMM-dd HH:mm}
+            [%thread] %logger{2}.%method - %msg%n</Property>
     </Properties>
-    
+
     <Appenders>
-        <File name="file" append="false" immediateFlush="true" fileName="${logfile}">
+        <Console name="console" target="SYSTEM_OUT">
             <PatternLayout pattern="${pattern}" />
-        </File>
+        </Console>
     </Appenders>
-    
+
     <Loggers>
-        <Root level="trace">
-            <AppenderRef ref="file" />
+        <Root level="debug">
+            <AppenderRef ref="console" />
         </Root>
     </Loggers>
 </Configuration>

@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.objecteffects.reddit.http.data.Posts;
@@ -14,8 +14,8 @@ import com.objecteffects.reddit.http.data.Posts;
  *
  */
 public class UpVotePosts {
-    private final static Logger log = LogManager
-            .getLogger(UpVotePosts.class);
+    private final Logger log =
+            LoggerFactory.getLogger(UpVotePosts.class);
 
     /**
      * @param name
@@ -50,14 +50,14 @@ public class UpVotePosts {
 
         final Posts data = gson.fromJson(methodResponse.body(), Posts.class);
 
-        log.debug("data length: {}", data.getData().getChildren().size());
+        this.log.debug("data length: {}", data.getData().getChildren().size());
 
         final var postClient = new RedditPostMethod();
 
         final var upVoteMethod = String.format("api/vote");
 
         for (final Posts.Post pd : data.getData().getChildren()) {
-            log.debug("post: {}", pd.getPostData());
+            this.log.debug("post: {}", pd.getPostData());
 
             final var param = Map.of("id", pd.getPostData().getName(),
                     "dir", "1",
@@ -70,7 +70,7 @@ public class UpVotePosts {
             final var upVoteResponse =
                     postClient.postMethod(upVoteMethod, param);
 
-            log.debug("response: {}", upVoteResponse.statusCode());
+            this.log.debug("response: {}", upVoteResponse.statusCode());
         }
 
         String after;
@@ -84,7 +84,7 @@ public class UpVotePosts {
             after = null;
         }
 
-        log.debug("after: {}", after);
+        this.log.debug("after: {}", after);
 
         return after;
     }
