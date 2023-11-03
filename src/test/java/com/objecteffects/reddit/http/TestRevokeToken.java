@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.objecteffects.reddit.http.core.RedditOAuth;
+
 public class TestRevokeToken {
     final Logger log = LoggerFactory.getLogger(TestRevokeToken.class);
 

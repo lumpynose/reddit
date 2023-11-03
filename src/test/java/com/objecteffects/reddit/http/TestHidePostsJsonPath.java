@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.main.Configuration;
 
-public class TestHidePostsGson {
+public class TestHidePostsJsonPath {
     final Logger log =
-            LoggerFactory.getLogger(TestHidePostsGson.class);
+            LoggerFactory.getLogger(TestHidePostsJsonPath.class);
 
     private final static Configuration configuration =
             new Configuration();

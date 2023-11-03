@@ -8,6 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.objecteffects.reddit.http.core.RedditDeleteMethod;
+import com.objecteffects.reddit.http.core.RedditGetMethod;
+import com.objecteffects.reddit.http.core.RedditOAuth;
+import com.objecteffects.reddit.http.core.RedditPutMethod;
+
 public class TestDeleteMethod {
     @SuppressWarnings("unused")
     final Logger log =

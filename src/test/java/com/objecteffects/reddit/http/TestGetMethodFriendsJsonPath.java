@@ -21,7 +21,9 @@ import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.json.JsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.jayway.jsonpath.spi.mapper.MappingProvider;
-import com.objecteffects.reddit.http.data.Friend;
+import com.objecteffects.reddit.data.Friend;
+import com.objecteffects.reddit.http.core.RedditGetMethod;
+import com.objecteffects.reddit.http.core.RedditOAuth;
 
 /**
  *

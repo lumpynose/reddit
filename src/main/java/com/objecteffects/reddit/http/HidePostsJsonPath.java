@@ -9,11 +9,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
-import com.objecteffects.reddit.http.data.Posts;
+import com.objecteffects.reddit.data.Posts;
+import com.objecteffects.reddit.http.core.RedditGetMethod;
+import com.objecteffects.reddit.http.core.RedditPostMethod;
 
-public class HidePosts {
+public class HidePostsJsonPath {
     private final Logger log =
-            LoggerFactory.getLogger(HidePosts.class);
+            LoggerFactory.getLogger(HidePostsJsonPath.class);
 
     @SuppressWarnings("boxing")
     public String hidePosts(final String name, final int count,

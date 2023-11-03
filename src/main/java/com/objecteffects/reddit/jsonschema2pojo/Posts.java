@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.http.jsonschema2pojo;
+package com.objecteffects.reddit.jsonschema2pojo;
 
 import java.util.List;
 

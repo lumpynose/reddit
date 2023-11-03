@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.http.json2pojo;
+package com.objecteffects.reddit.json2pojo;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.main;
+package com.objecteffects.reddit.http;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
@@ -10,11 +10,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.objecteffects.reddit.http.RedditGetMethod;
-import com.objecteffects.reddit.http.RedditOAuth;
-import com.objecteffects.reddit.http.data.FriendAbout;
-import com.objecteffects.reddit.http.data.Friends;
-import com.objecteffects.reddit.http.data.Friends.Friend;
+import com.objecteffects.reddit.data.FriendAbout;
+import com.objecteffects.reddit.data.Friends;
+import com.objecteffects.reddit.data.Friends.Friend;
+import com.objecteffects.reddit.http.core.RedditGetMethod;
+import com.objecteffects.reddit.http.core.RedditOAuth;
 
 /**
  *

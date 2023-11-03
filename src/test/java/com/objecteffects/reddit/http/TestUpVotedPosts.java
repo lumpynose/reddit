@@ -9,7 +9,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
-import com.objecteffects.reddit.http.data.Posts;
+import com.objecteffects.reddit.data.Posts;
+import com.objecteffects.reddit.http.core.RedditGetMethod;
 import com.objecteffects.reddit.main.Configuration;
 
 public class TestUpVotedPosts {

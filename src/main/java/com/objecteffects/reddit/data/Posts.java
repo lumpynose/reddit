@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.http.data;
+package com.objecteffects.reddit.data;
 
 import java.util.List;
 

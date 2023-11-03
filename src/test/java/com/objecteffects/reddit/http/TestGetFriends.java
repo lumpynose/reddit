@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.main;
+package com.objecteffects.reddit.http;
 
 import java.io.IOException;
 import java.util.List;
@@ -7,7 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.http.data.Friends.Friend;
+import com.objecteffects.reddit.data.Friends.Friend;
+import com.objecteffects.reddit.http.GetFriends;
 
 public class TestGetFriends {
     final Logger log =
