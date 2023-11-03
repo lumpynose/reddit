@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.http.core.RedditOAuth;
+import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.main.Configuration;
 
 public class TestAuthToken {

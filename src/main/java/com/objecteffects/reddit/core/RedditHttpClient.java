@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.http.core;
+package com.objecteffects.reddit.core;
 
 import java.io.IOException;
 import java.net.URI;

@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.http.core;
+package com.objecteffects.reddit.core;
 
 /**
  *

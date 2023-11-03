@@ -9,9 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditPostMethod;
 import com.objecteffects.reddit.data.Posts;
-import com.objecteffects.reddit.http.core.RedditGetMethod;
-import com.objecteffects.reddit.http.core.RedditPostMethod;
 
 public class HidePostsGson {
     private final Logger log =

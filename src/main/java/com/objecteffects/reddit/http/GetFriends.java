@@ -10,11 +10,11 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.FriendAbout;
 import com.objecteffects.reddit.data.Friends;
 import com.objecteffects.reddit.data.Friends.Friend;
-import com.objecteffects.reddit.http.core.RedditGetMethod;
-import com.objecteffects.reddit.http.core.RedditOAuth;
 
 /**
  *

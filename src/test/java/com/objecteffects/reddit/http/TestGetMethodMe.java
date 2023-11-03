@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
-import com.objecteffects.reddit.http.core.RedditGetMethod;
-import com.objecteffects.reddit.http.core.RedditOAuth;
+import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditOAuth;
 
 /**
  *
