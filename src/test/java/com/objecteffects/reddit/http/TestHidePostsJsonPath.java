@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.main.Configuration;
+import com.objecteffects.reddit.method.HidePostsGson;
 
 public class TestHidePostsJsonPath {
     final Logger log =

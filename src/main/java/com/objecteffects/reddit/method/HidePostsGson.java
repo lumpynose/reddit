@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.http;
+package com.objecteffects.reddit.method;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
@@ -13,9 +13,9 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditPostMethod;
 import com.objecteffects.reddit.data.Posts;
 
-public class HidePostsJsonPath {
+public class HidePostsGson {
     private final Logger log =
-            LoggerFactory.getLogger(HidePostsJsonPath.class);
+            LoggerFactory.getLogger(HidePostsGson.class);
 
     @SuppressWarnings("boxing")
     public String hidePosts(final String name, final int count,

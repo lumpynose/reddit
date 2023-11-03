@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.data.Friends.Friend;
-import com.objecteffects.reddit.http.GetFriends;
+import com.objecteffects.reddit.method.GetFriends;
 
 public class TestGetFriends {
     final Logger log =

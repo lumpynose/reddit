@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.http;
+package com.objecteffects.reddit.method;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;

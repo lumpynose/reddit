@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.main.Configuration;
+import com.objecteffects.reddit.method.UpVotePosts;
 
 public class TestUpVotePosts {
     final Logger log =
