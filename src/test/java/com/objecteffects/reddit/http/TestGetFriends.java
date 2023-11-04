@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.data.Friends.Friend;
-import com.objecteffects.reddit.method.GetFriends;
+import com.objecteffects.reddit.method.gson.GetFriendsGson;
 
 public class TestGetFriends {
     final Logger log =
@@ -16,7 +16,7 @@ public class TestGetFriends {
 
     @Test
     public void testGetFriends() throws IOException, InterruptedException {
-        final GetFriends getFriends = new GetFriends();
+        final GetFriendsGson getFriends = new GetFriendsGson();
 
         final List<Friend> friends = getFriends.getFriends(100);
 

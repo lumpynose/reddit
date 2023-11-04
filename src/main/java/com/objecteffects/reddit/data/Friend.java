@@ -4,6 +4,9 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ *
+ */
 public class Friend implements Comparable<Friend> {
     @JsonProperty("rel_id")
     private String relId;

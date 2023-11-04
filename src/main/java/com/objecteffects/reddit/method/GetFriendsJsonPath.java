@@ -19,9 +19,10 @@ import com.objecteffects.reddit.data.Friends.Friend;
 /**
  *
  */
-public class GetFriends {
+public class GetFriendsJsonPath {
     private final Logger log =
-            LoggerFactory.getLogger(GetFriends.class);
+            LoggerFactory.getLogger(GetFriendsJsonPath.class);
+
     private final Gson gson = new Gson();
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;

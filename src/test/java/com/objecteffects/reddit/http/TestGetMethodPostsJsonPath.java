@@ -2,9 +2,10 @@ package com.objecteffects.reddit.http;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
-import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -19,14 +20,14 @@ import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditOAuth;
-import com.objecteffects.reddit.data.Friend;
+import com.objecteffects.reddit.data.Post;
 
 /**
  *
  */
-public class TestGetMethodFriendsJsonPath {
+public class TestGetMethodPostsJsonPath {
     final Logger log =
-            LoggerFactory.getLogger(TestGetMethodFriendsJsonPath.class);
+            LoggerFactory.getLogger(TestGetMethodPostsJsonPath.class);
 
     private final RedditOAuth redditOAuth = new RedditOAuth();
 
@@ -42,15 +43,24 @@ public class TestGetMethodFriendsJsonPath {
      * @throws InterruptedException
      */
     @Test
-    public void testGetMethodFriends()
+    public void testGetMethodPosts()
             throws InterruptedException, IOException {
-        final RedditGetMethod client = new RedditGetMethod();
+        final int count = 5;
+        final String name = "montgranite";
 
-        // doesn't work (ignored) with friends
-        // final Map<String, String> params = Map.of("limit", "15");
+        final RedditGetMethod getClient = new RedditGetMethod();
 
-        final HttpResponse<String> methodResponse = client
-                .getMethod("prefs/friends", Collections.emptyMap());
+        final String submittedMethod =
+                String.format("/user/%s/submitted", name);
+
+        final Map<String, String> params =
+                new HashMap<>(
+                        Map.of("limit", String.valueOf(count),
+                                "sort", "new",
+                                "type", "links"));
+
+        final HttpResponse<String> methodResponse =
+                getClient.getMethod(submittedMethod, params);
 
         this.log.debug("method response status: {}",
                 Integer.valueOf(methodResponse.statusCode()));
@@ -64,19 +74,30 @@ public class TestGetMethodFriendsJsonPath {
     }
 
     private void decodeBodyJsonPath(final String body) {
-        final String path = "$[0]['data']['children']";
+        final String path = "$['data']['children'][*]['data']";
 
-        final TypeRef<List<Friend>> typeRef = new TypeRef<>() {
+        final TypeRef<List<Post>> typeRef = new TypeRef<>() {
             // empty
         };
 
         final DocumentContext jsonContext =
                 JsonPath.using(this.conf).parse(body);
 
-        final List<Friend> list = jsonContext.read(path, typeRef);
+        final List<Post> list = jsonContext.read(path, typeRef);
 
-        for (final Friend friend : list) {
-            this.log.debug("name: {}", friend.getName());
+        // final List<Map<String, String>> list = jsonContext.read(path);
+
+        this.log.debug("list size: {}", Integer.valueOf(list.size()));
+
+        for (final Post post : list) {
+            this.log.debug("name: {}", post.getName());
         }
+
+//        for (final Map<String, String> sublist : list) {
+//            for (final Map.Entry<String, String> entry : sublist.entrySet()) {
+//                this.log.debug("key: {}, value: {}",
+//                        entry.getKey(), entry.getValue());
+//            }
+//        }
     }
 }

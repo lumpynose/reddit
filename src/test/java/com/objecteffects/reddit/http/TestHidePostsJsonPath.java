@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.main.Configuration;
-import com.objecteffects.reddit.method.HidePostsGson;
+import com.objecteffects.reddit.method.HidePostsJsonPath;
 
 public class TestHidePostsJsonPath {
     final Logger log =
@@ -17,6 +17,10 @@ public class TestHidePostsJsonPath {
     private final static Configuration configuration =
             new Configuration();
 
+    /**
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @Test
     public void testPostMethod() throws IOException, InterruptedException {
         final List<String> users = configuration.getHide();
@@ -27,10 +31,10 @@ public class TestHidePostsJsonPath {
             return;
         }
 
-        final HidePostsGson hidePosts = new HidePostsGson();
+        final HidePostsJsonPath hidePosts = new HidePostsJsonPath();
 
         for (final String user : users) {
-            hidePosts.hidePosts(user, 1, null);
+            hidePosts.hidePosts(user, 2, null);
         }
     }
 }

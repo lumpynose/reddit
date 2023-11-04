@@ -2,7 +2,6 @@ package com.objecteffects.reddit.method;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,37 +9,36 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.TypeRef;
-import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
-import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditPostMethod;
 import com.objecteffects.reddit.data.Post;
 
-public class HidePostsJsonPath {
-    private final Logger log =
-            LoggerFactory.getLogger(HidePostsJsonPath.class);
+import jakarta.inject.Named;
 
-    private final Configuration conf =
-            new Configuration.ConfigurationBuilder()
-                    .jsonProvider(new JacksonJsonProvider())
-                    .mappingProvider(new JacksonMappingProvider())
-                    .options(EnumSet.noneOf(Option.class))
-                    .build();
+/**
+ *
+ */
+@Named
+public class UpVotePostsJsonPath {
+    private final Logger log =
+            LoggerFactory.getLogger(UpVotePostsJsonPath.class);
+
+    public UpVotePostsJsonPath() {
+        // empty
+    }
 
     /**
      * @param name
      * @param count
      * @param lastAfter
-     * @return String after
+     * @return String
      * @throws IOException
      * @throws InterruptedException
      */
-    public String hidePosts(final String name, final int count,
+    public String upVotePosts(final String name, final int count,
             final String lastAfter)
             throws IOException, InterruptedException {
 
@@ -59,20 +57,10 @@ public class HidePostsJsonPath {
             params.put("after", lastAfter);
         }
 
-        final HttpResponse<String> methodResponse =
-                getClient.getMethod(submittedMethod, params);
+        final String body =
+                getClient.getMethod(submittedMethod, params).body();
 
-        if (methodResponse == null) {
-            return "";
-        }
-
-        // this.log.debug("posts: {}", methodResponse.body());
-
-        this.log.debug("method response status: {}",
-                Integer.valueOf(methodResponse.statusCode()));
-
-        this.log.debug("method response headers: {}",
-                methodResponse.headers());
+        this.log.debug(body);
 
         final String path = "$['data']['children'][*]['data']";
 
@@ -81,8 +69,7 @@ public class HidePostsJsonPath {
         };
 
         final DocumentContext jsonContext =
-                JsonPath.using(this.conf)
-                        .parse(methodResponse.body());
+                JsonPath.parse(body);
 
         final List<Post> posts = jsonContext.read(path, typeRef);
 
@@ -90,22 +77,21 @@ public class HidePostsJsonPath {
 
         final RedditPostMethod postClient = new RedditPostMethod();
 
-        final String hideMethod = String.format("/api/hide");
+        final String upVoteMethod = String.format("api/vote");
 
-        for (final Post post : posts) {
-            this.log.debug("post: {}", post);
+        for (final Post pd : posts) {
+            this.log.debug("post: {}", pd);
 
             final Map<String, String> param =
-                    Map.of("id", post.getName());
+                    Map.of("id", pd.getName(),
+                            "dir", "1",
+                            "rank", "2");
 
-            if (post.isHidden()) {
-                continue;
-            }
+            final HttpResponse<String> upVoteResponse =
+                    postClient.postMethod(upVoteMethod, param);
 
-            final HttpResponse<String> hideResponse =
-                    postClient.postMethod(hideMethod, param);
-
-            this.log.debug("response: {}", hideResponse.statusCode());
+            this.log.debug("response: {}",
+                    Integer.valueOf(upVoteResponse.statusCode()));
         }
 
         String after = null;

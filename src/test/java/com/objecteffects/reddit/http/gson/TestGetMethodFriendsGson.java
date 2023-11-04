@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.http;
+package com.objecteffects.reddit.http.gson;
 
 import java.io.FileWriter;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.http;
+package com.objecteffects.reddit.http.gson;
 
 import java.io.IOException;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.main.Configuration;
-import com.objecteffects.reddit.method.HidePostsGson;
+import com.objecteffects.reddit.method.gson.HidePostsGson;
 
 public class TestHidePostsGson {
     final Logger log =
@@ -18,10 +18,12 @@ public class TestHidePostsGson {
             new Configuration();
 
     @Test
-    public void testPostMethod() throws IOException, InterruptedException {
+    public void testPostMethod()
+            throws IOException, InterruptedException {
         final List<String> users = configuration.getHide();
 
-        this.log.debug("configuration: {}", configuration.dumpConfig());
+        this.log.debug("configuration: {}",
+                configuration.dumpConfig());
 
         if (users.isEmpty()) {
             return;

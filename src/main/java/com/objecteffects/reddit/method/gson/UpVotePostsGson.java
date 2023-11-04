@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.method;
+package com.objecteffects.reddit.method.gson;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
@@ -13,12 +13,23 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditPostMethod;
 import com.objecteffects.reddit.data.Posts;
 
-public class HidePostsGson {
+/**
+ *
+ */
+public class UpVotePostsGson {
     private final Logger log =
-            LoggerFactory.getLogger(HidePostsGson.class);
+            LoggerFactory.getLogger(UpVotePostsGson.class);
 
+    /**
+     * @param name
+     * @param count
+     * @param lastAfter
+     * @return String
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @SuppressWarnings("boxing")
-    public String hidePosts(final String name, final int count,
+    public String upVotePosts(final String name, final int count,
             final String lastAfter)
             throws IOException, InterruptedException {
 
@@ -48,22 +59,24 @@ public class HidePostsGson {
 
         final RedditPostMethod postClient = new RedditPostMethod();
 
-        final String hideMethod = String.format("/api/hide");
+        final String upVoteMethod = String.format("api/vote");
 
         for (final Posts.Post pd : data.getData().getChildren()) {
             this.log.debug("post: {}", pd.getPostData());
 
             final Map<String, String> param =
-                    Map.of("id", pd.getPostData().getName());
+                    Map.of("id", pd.getPostData().getName(),
+                            "dir", "1",
+                            "rank", "2");
 
-            if (pd.getPostData().isHidden()) {
-                continue;
-            }
+//            if (pd.getPostData().isHidden()) {
+//                continue;
+//            }
 
-            final HttpResponse<String> hideResponse =
-                    postClient.postMethod(hideMethod, param);
+            final HttpResponse<String> upVoteResponse =
+                    postClient.postMethod(upVoteMethod, param);
 
-            this.log.debug("response: {}", hideResponse.statusCode());
+            this.log.debug("response: {}", upVoteResponse.statusCode());
         }
 
         String after;

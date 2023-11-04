@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.http;
+package com.objecteffects.reddit.http.gson;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
@@ -13,9 +13,9 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.data.Posts;
 import com.objecteffects.reddit.main.Configuration;
 
-public class TestUpVotedPosts {
+public class TestUpVotedPostsGson {
     final static Logger log =
-            LoggerFactory.getLogger(TestUpVotedPosts.class);
+            LoggerFactory.getLogger(TestUpVotedPostsGson.class);
 
     private final static Configuration configuration =
             new Configuration();
