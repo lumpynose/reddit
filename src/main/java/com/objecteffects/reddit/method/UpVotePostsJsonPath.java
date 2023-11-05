@@ -65,10 +65,16 @@ public class UpVotePostsJsonPath {
             params.put("after", lastAfter);
         }
 
-        final String body =
-                getClient.getMethod(submittedMethod, params).body();
+        final HttpResponse<String> response =
+                getClient.getMethod(submittedMethod, params);
 
-        this.log.debug(body);
+        if (response == null) {
+            this.log.debug("null response");
+
+            return null;
+        }
+
+        this.log.debug(response.body());
 
         final String path = "$['data']['children'][*]['data']";
 
@@ -77,7 +83,7 @@ public class UpVotePostsJsonPath {
         };
 
         final DocumentContext jsonContext =
-                JsonPath.using(this.conf).parse(body);
+                JsonPath.using(this.conf).parse(response.body());
 
         final List<Post> posts =
                 jsonContext.read(path, typeRef);
@@ -99,6 +105,12 @@ public class UpVotePostsJsonPath {
 
             final HttpResponse<String> upVoteResponse =
                     postClient.postMethod(upVoteMethod, param);
+
+            if (upVoteResponse == null) {
+                this.log.debug("null response");
+
+                continue;
+            }
 
             this.log.debug("response: {}",
                     Integer.valueOf(upVoteResponse.statusCode()));

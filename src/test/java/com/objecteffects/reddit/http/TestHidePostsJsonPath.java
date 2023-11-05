@@ -3,6 +3,9 @@ package com.objecteffects.reddit.http;
 import java.io.IOException;
 import java.util.List;
 
+import org.jboss.weld.junit5.EnableWeld;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +13,12 @@ import org.slf4j.LoggerFactory;
 import com.objecteffects.reddit.main.AppConfig;
 import com.objecteffects.reddit.method.HidePostsJsonPath;
 
+import jakarta.inject.Inject;
+
 /**
  *
  */
+@EnableWeld
 public class TestHidePostsJsonPath {
     final Logger log =
             LoggerFactory.getLogger(TestHidePostsJsonPath.class);
@@ -21,11 +27,21 @@ public class TestHidePostsJsonPath {
             new AppConfig();
 
     /**
+     */
+    @WeldSetup
+    public WeldInitiator weld =
+            WeldInitiator.of(HidePostsJsonPath.class);
+
+    @Inject
+    private HidePostsJsonPath hidePosts;
+
+    /**
      * @throws IOException
      * @throws InterruptedException
      */
     @Test
-    public void testPostMethod() throws IOException, InterruptedException {
+    public void testPostMethod()
+            throws IOException, InterruptedException {
         final List<String> users = configuration.getHide();
 
         this.log.debug("configuration: {}", configuration.dumpConfig());
@@ -34,10 +50,10 @@ public class TestHidePostsJsonPath {
             return;
         }
 
-        final HidePostsJsonPath hidePosts = new HidePostsJsonPath();
+        // final HidePostsJsonPath hidePosts = new HidePostsJsonPath();
 
         for (final String user : users) {
-            hidePosts.hidePosts(user, 3, null);
+            this.hidePosts.hidePosts(user, 3, null);
         }
     }
 }

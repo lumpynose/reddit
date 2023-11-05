@@ -21,9 +21,12 @@ import com.objecteffects.reddit.core.RedditOAuthJsonPath;
 import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.data.FriendAboutJsonPath;
 
+import jakarta.inject.Named;
+
 /**
  *
  */
+@Named
 public class GetFriendsJsonPath {
     private final Logger log =
             LoggerFactory.getLogger(GetFriendsJsonPath.class);

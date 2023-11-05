@@ -21,9 +21,12 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditPostMethodJsonPath;
 import com.objecteffects.reddit.data.Post;
 
+import jakarta.inject.Named;
+
 /**
  *
  */
+@Named
 public class HidePostsJsonPath {
     private final Logger log =
             LoggerFactory.getLogger(HidePostsJsonPath.class);
@@ -66,6 +69,8 @@ public class HidePostsJsonPath {
                 getClient.getMethod(submittedMethod, params);
 
         if (methodResponse == null) {
+            this.log.debug("null response");
+
             return "";
         }
 

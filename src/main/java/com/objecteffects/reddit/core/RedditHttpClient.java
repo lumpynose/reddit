@@ -26,33 +26,33 @@ public class RedditHttpClient {
     final Logger log =
             LoggerFactory.getLogger(RedditHttpClient.class);
 
+    static final int timeoutSeconds = 15;
+
     private static final HttpClient client = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(RedditHttpClient.timeoutSeconds))
+            .connectTimeout(Duration.ofSeconds(timeoutSeconds))
             .version(Version.HTTP_2)
             .followRedirects(Redirect.NORMAL)
             .build();
 
-    public final static String AUTH_URL = "https://www.reddit.com";
-    public final static String METHOD_URL = "https://oauth.reddit.com";
+    final String AUTH_URL = "https://www.reddit.com";
+    final String METHOD_URL = "https://oauth.reddit.com";
 
     // list of friends
-    public final static String FRIENDS_METHOD = "prefs/friends";
+    // public final static String FRIENDS_METHOD = "prefs/friends";
     // info about a user
-    public final static String ABOUT_METHOD = "user/%s/about";
+    // public final static String ABOUT_METHOD = "user/%s/about";
     // friend or unfriend a user
-    public final static String FRIEND_METHOD = "api/v1/me/friends/%s";
+    // public final static String FRIEND_METHOD = "api/v1/me/friends/%s";
     // list of posts by a user
-    public final static String SUBMITTED_METHOD = "/user/%s/submitted";
+    // public final static String SUBMITTED_METHOD = "/user/%s/submitted";
     // hide a post
-    public final static String HIDE_METHOD = "/api/hide";
+    // public final static String HIDE_METHOD = "/api/hide";
     // info about me
-    public final static String ABOUT_ME_METHOD = "api/v1/me";
+    // public final static String ABOUT_ME_METHOD = "api/v1/me";
     // revoke OAuth token
-    public final static String REVOKE_TOKEN_METHOD = "api/v1/revoke_token";
+    // public final static String REVOKE_TOKEN_METHOD = "api/v1/revoke_token";
     // get OAuth token
-    public final static String GET_TOKEN_METHOD = "api/v1/access_token";
-
-    public final static int timeoutSeconds = 15;
+    // public final static String GET_TOKEN_METHOD = "api/v1/access_token";
 
     @SuppressWarnings("boxing")
     public final static List<Integer> okCodes =
@@ -91,11 +91,11 @@ public class RedditHttpClient {
             this.log.debug("form: {}, {}", form, form.length());
 
             fullUrl = String.format("%s/%s?%s",
-                    RedditHttpClient.METHOD_URL, method, form);
+                    this.METHOD_URL, method, form);
         }
         else {
             fullUrl = String.format("%s/%s",
-                    RedditHttpClient.METHOD_URL, method);
+                    this.METHOD_URL, method);
         }
 
         this.log.debug("fullUrl: {}", fullUrl);
@@ -119,7 +119,8 @@ public class RedditHttpClient {
         try {
             this.log.debug("method: {}", method);
 
-            response = client.send(buildRequest, BodyHandlers.ofString());
+            response = RedditHttpClient.client.send(buildRequest,
+                    BodyHandlers.ofString());
 
             this.log.debug("response status: {}",
                     Integer.valueOf(response.statusCode()));
@@ -142,8 +143,9 @@ public class RedditHttpClient {
                 try {
                     this.log.debug("method: {}", method);
 
-                    response = client.send(buildRequest,
-                            BodyHandlers.ofString());
+                    response = RedditHttpClient.client
+                            .send(buildRequest,
+                                    BodyHandlers.ofString());
 
                     this.log.debug("response status: {}",
                             Integer.valueOf(response.statusCode()));

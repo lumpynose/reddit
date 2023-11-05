@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Option;
@@ -34,8 +35,8 @@ public class RedditOAuthJsonPath {
     private final AppConfig configuration =
             new AppConfig();
 
-    private final com.jayway.jsonpath.Configuration conf =
-            new com.jayway.jsonpath.Configuration.ConfigurationBuilder()
+    private final Configuration conf =
+            new Configuration.ConfigurationBuilder()
                     .jsonProvider(new JacksonJsonProvider())
                     .mappingProvider(new JacksonMappingProvider())
                     .options(EnumSet.noneOf(Option.class))
