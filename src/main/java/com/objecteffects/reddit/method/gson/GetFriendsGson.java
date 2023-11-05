@@ -11,8 +11,8 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditOAuth;
-import com.objecteffects.reddit.data.FriendAbout;
+import com.objecteffects.reddit.core.RedditOAuthGson;
+import com.objecteffects.reddit.data.FriendAboutGson;
 import com.objecteffects.reddit.data.Friends;
 import com.objecteffects.reddit.data.Friends.Friend;
 
@@ -25,7 +25,7 @@ public class GetFriendsGson {
     private final Gson gson = new Gson();
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;
-    private final RedditOAuth redditOAuth = new RedditOAuth();
+    private final RedditOAuthGson redditOAuth = new RedditOAuthGson();
 
     /**
      * Gets all friends, no karma.
@@ -135,8 +135,8 @@ public class GetFriendsGson {
             else {
                 final String response = aboutMethodResponse.body();
 
-                final FriendAbout fabout = this.gson.fromJson(
-                        response, FriendAbout.class);
+                final FriendAboutGson fabout = this.gson.fromJson(
+                        response, FriendAboutGson.class);
 
                 if (fabout.getData() == null) {
                     this.log.debug("{}: no about data", f.getName());

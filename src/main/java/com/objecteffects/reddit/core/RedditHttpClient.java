@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.main.Configuration;
+import com.objecteffects.reddit.main.AppConfig;
 
 /**
  *
@@ -57,9 +57,10 @@ public class RedditHttpClient {
     @SuppressWarnings("boxing")
     final static List<Integer> okCodes = Arrays.asList(200, 201, 202, 203, 204);
 
-    private final RedditOAuth redditOAuth = new RedditOAuth();
-    private final Configuration configuration =
-            new Configuration();
+    private final RedditOAuthJsonPath redditOAuth =
+            new RedditOAuthJsonPath();
+    private final AppConfig appConfig =
+            new AppConfig();
 
     public static HttpClient getHttpClient() {
         return client;
@@ -98,14 +99,14 @@ public class RedditHttpClient {
 
         this.log.debug("fullUrl: {}", fullUrl);
 
-        // loads the OAuth token for Configuration.getOAuthToken().
+        // loads the OAuth token for AppConfig.getOAuthToken().
         this.redditOAuth.getAuthToken();
 
         final HttpRequest buildRequest = request
                 .headers("User-Agent",
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
                 .header("Authorization",
-                        "bearer " + this.configuration.getOAuthToken())
+                        "bearer " + this.appConfig.getOAuthToken())
                 .uri(URI.create(fullUrl))
                 .timeout(Duration.ofSeconds(RedditHttpClient.timeoutSeconds))
                 .build();
@@ -135,7 +136,7 @@ public class RedditHttpClient {
 
         if (response == null || !okCodes.contains(response.statusCode())) {
             for (int i = 1; i < 11; i++) {
-                Thread.sleep(i * 1500);
+                Thread.sleep(i * 500);
 
                 try {
                     this.log.debug("method: {}", method);

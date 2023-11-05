@@ -10,15 +10,15 @@ import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.core.RedditDeleteMethod;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditOAuth;
-import com.objecteffects.reddit.core.RedditPutMethod;
+import com.objecteffects.reddit.core.RedditOAuthGson;
+import com.objecteffects.reddit.core.RedditPutMethodGson;
 
 public class TestDeleteMethod {
     @SuppressWarnings("unused")
     final Logger log =
             LoggerFactory.getLogger(TestDeleteMethod.class);
 
-    private final RedditOAuth redditOAuth = new RedditOAuth();
+    private final RedditOAuthGson redditOAuth = new RedditOAuthGson();
 
     /**
      * @throws IOException
@@ -38,7 +38,7 @@ public class TestDeleteMethod {
 
         /* */
 
-        final RedditPutMethod putClient = new RedditPutMethod();
+        final RedditPutMethodGson putClient = new RedditPutMethodGson();
 
         final String putMethod = String.format("api/v1/me/friends/%s", user);
 

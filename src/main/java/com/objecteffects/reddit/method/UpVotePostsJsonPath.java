@@ -2,6 +2,7 @@ package com.objecteffects.reddit.method;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,11 +10,15 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.TypeRef;
+import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
+import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditPostMethod;
+import com.objecteffects.reddit.core.RedditPostMethodGson;
 import com.objecteffects.reddit.data.Post;
 
 import jakarta.inject.Named;
@@ -26,9 +31,12 @@ public class UpVotePostsJsonPath {
     private final Logger log =
             LoggerFactory.getLogger(UpVotePostsJsonPath.class);
 
-    public UpVotePostsJsonPath() {
-        // empty
-    }
+    private final Configuration conf =
+            new Configuration.ConfigurationBuilder()
+                    .jsonProvider(new JacksonJsonProvider())
+                    .mappingProvider(new JacksonMappingProvider())
+                    .options(EnumSet.noneOf(Option.class))
+                    .build();
 
     /**
      * @param name
@@ -69,13 +77,15 @@ public class UpVotePostsJsonPath {
         };
 
         final DocumentContext jsonContext =
-                JsonPath.parse(body);
+                JsonPath.using(this.conf).parse(body);
 
-        final List<Post> posts = jsonContext.read(path, typeRef);
+        final List<Post> posts =
+                jsonContext.read(path, typeRef);
 
         this.log.debug("list size: {}", Integer.valueOf(posts.size()));
 
-        final RedditPostMethod postClient = new RedditPostMethod();
+        final RedditPostMethodGson postClient =
+                new RedditPostMethodGson();
 
         final String upVoteMethod = String.format("api/vote");
 

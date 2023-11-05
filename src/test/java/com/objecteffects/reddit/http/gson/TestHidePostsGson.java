@@ -7,15 +7,15 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.main.Configuration;
+import com.objecteffects.reddit.main.AppConfig;
 import com.objecteffects.reddit.method.gson.HidePostsGson;
 
 public class TestHidePostsGson {
     final Logger log =
             LoggerFactory.getLogger(TestHidePostsGson.class);
 
-    private final static Configuration configuration =
-            new Configuration();
+    private final static AppConfig configuration =
+            new AppConfig();
 
     @Test
     public void testPostMethod()

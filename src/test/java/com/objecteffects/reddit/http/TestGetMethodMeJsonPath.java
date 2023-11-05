@@ -16,7 +16,7 @@ import com.jayway.jsonpath.TypeRef;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditOAuth;
+import com.objecteffects.reddit.core.RedditOAuthGson;
 import com.objecteffects.reddit.data.Me;
 
 /**
@@ -26,7 +26,7 @@ public class TestGetMethodMeJsonPath {
     final Logger log =
             LoggerFactory.getLogger(TestGetMethodMeJsonPath.class);
 
-    private final RedditOAuth redditOAuth = new RedditOAuth();
+    private final RedditOAuthGson redditOAuth = new RedditOAuthGson();
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()

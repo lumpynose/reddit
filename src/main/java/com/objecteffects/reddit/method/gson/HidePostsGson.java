@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditPostMethod;
+import com.objecteffects.reddit.core.RedditPostMethodGson;
 import com.objecteffects.reddit.data.Posts;
 
 public class HidePostsGson {
@@ -46,7 +46,7 @@ public class HidePostsGson {
 
         this.log.debug("data length: {}", data.getData().getChildren().size());
 
-        final RedditPostMethod postClient = new RedditPostMethod();
+        final RedditPostMethodGson postClient = new RedditPostMethodGson();
 
         final String hideMethod = String.format("/api/hide");
 

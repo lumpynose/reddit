@@ -11,14 +11,14 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.data.Posts;
-import com.objecteffects.reddit.main.Configuration;
+import com.objecteffects.reddit.main.AppConfig;
 
 public class TestUpVotedPostsGson {
     final static Logger log =
             LoggerFactory.getLogger(TestUpVotedPostsGson.class);
 
-    private final static Configuration configuration =
-            new Configuration();
+    private final static AppConfig configuration =
+            new AppConfig();
 
     @Test
     @SuppressWarnings("boxing")

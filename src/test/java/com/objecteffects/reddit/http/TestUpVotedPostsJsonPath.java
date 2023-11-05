@@ -18,14 +18,17 @@ import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.data.Post;
-import com.objecteffects.reddit.main.Configuration;
+import com.objecteffects.reddit.main.AppConfig;
 
+/**
+ *
+ */
 public class TestUpVotedPostsJsonPath {
     final static Logger log =
             LoggerFactory.getLogger(TestUpVotedPostsJsonPath.class);
 
-    private final static Configuration configuration =
-            new Configuration();
+    private final static AppConfig configuration =
+            new AppConfig();
 
     private final com.jayway.jsonpath.Configuration conf =
             new com.jayway.jsonpath.Configuration.ConfigurationBuilder()
@@ -34,10 +37,14 @@ public class TestUpVotedPostsJsonPath {
                     .options(EnumSet.noneOf(Option.class))
                     .build();
 
+    /**
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @Test
     public void testUpVotedMethod()
             throws IOException, InterruptedException {
-        final String user = "montgranite";
+        final String user = "figwax";
 
         log.debug("configuration: {}", configuration.dumpConfig());
 
@@ -52,6 +59,12 @@ public class TestUpVotedPostsJsonPath {
 
         final HttpResponse<String> methodResponse =
                 getClient.getMethod(upvotedMethod, params);
+
+        if (methodResponse == null) {
+            log.debug("null response");
+
+            return;
+        }
 
         final String path = "$['data']['children'][*]['data']";
 

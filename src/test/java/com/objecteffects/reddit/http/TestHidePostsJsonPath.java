@@ -7,15 +7,18 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.main.Configuration;
+import com.objecteffects.reddit.main.AppConfig;
 import com.objecteffects.reddit.method.HidePostsJsonPath;
 
+/**
+ *
+ */
 public class TestHidePostsJsonPath {
     final Logger log =
             LoggerFactory.getLogger(TestHidePostsJsonPath.class);
 
-    private final static Configuration configuration =
-            new Configuration();
+    private final static AppConfig configuration =
+            new AppConfig();
 
     /**
      * @throws IOException
@@ -34,7 +37,7 @@ public class TestHidePostsJsonPath {
         final HidePostsJsonPath hidePosts = new HidePostsJsonPath();
 
         for (final String user : users) {
-            hidePosts.hidePosts(user, 2, null);
+            hidePosts.hidePosts(user, 3, null);
         }
     }
 }

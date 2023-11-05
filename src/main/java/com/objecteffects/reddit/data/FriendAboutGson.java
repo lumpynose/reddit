@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName;
 /*
  *
  */
-public class FriendAbout {
+public class FriendAboutGson {
     private String kind;
     private FriendData data;
 
-    public FriendAbout() {
+    public FriendAboutGson() {
     }
 
     public String getKind() {
@@ -22,7 +22,7 @@ public class FriendAbout {
 
     @Override
     public String toString() {
-        return "FriendAbout [kind=" + this.kind + ", data=" + this.data + "]";
+        return "FriendAboutGson [kind=" + this.kind + ", data=" + this.data + "]";
     }
 
     static public class FriendData {

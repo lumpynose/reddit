@@ -18,9 +18,12 @@ import com.jayway.jsonpath.TypeRef;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditPostMethod;
+import com.objecteffects.reddit.core.RedditPostMethodJsonPath;
 import com.objecteffects.reddit.data.Post;
 
+/**
+ *
+ */
 public class HidePostsJsonPath {
     private final Logger log =
             LoggerFactory.getLogger(HidePostsJsonPath.class);
@@ -88,7 +91,8 @@ public class HidePostsJsonPath {
 
         this.log.debug("list size: {}", Integer.valueOf(posts.size()));
 
-        final RedditPostMethod postClient = new RedditPostMethod();
+        final RedditPostMethodJsonPath postClient =
+                new RedditPostMethodJsonPath();
 
         final String hideMethod = String.format("/api/hide");
 
@@ -105,7 +109,8 @@ public class HidePostsJsonPath {
             final HttpResponse<String> hideResponse =
                     postClient.postMethod(hideMethod, param);
 
-            this.log.debug("response: {}", hideResponse.statusCode());
+            this.log.debug("response: {}",
+                    Integer.valueOf(hideResponse.statusCode()));
         }
 
         String after = null;

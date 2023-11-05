@@ -3,18 +3,23 @@ package com.objecteffects.reddit.method;
 import java.io.IOException;
 import java.net.http.HttpResponse;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.jayway.jsonpath.Configuration;
+import com.jayway.jsonpath.DocumentContext;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.Option;
+import com.jayway.jsonpath.TypeRef;
+import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
+import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditOAuth;
-import com.objecteffects.reddit.data.FriendAbout;
-import com.objecteffects.reddit.data.Friends;
-import com.objecteffects.reddit.data.Friends.Friend;
+import com.objecteffects.reddit.core.RedditOAuthGson;
+import com.objecteffects.reddit.data.Friend;
+import com.objecteffects.reddit.data.FriendAboutJsonPath;
 
 /**
  *
@@ -23,10 +28,16 @@ public class GetFriendsJsonPath {
     private final Logger log =
             LoggerFactory.getLogger(GetFriendsJsonPath.class);
 
-    private final Gson gson = new Gson();
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;
-    private final RedditOAuth redditOAuth = new RedditOAuth();
+    private final RedditOAuthGson redditOAuth = new RedditOAuthGson();
+
+    private final Configuration conf =
+            new Configuration.ConfigurationBuilder()
+                    .jsonProvider(new JacksonJsonProvider())
+                    .mappingProvider(new JacksonMappingProvider())
+                    .options(EnumSet.noneOf(Option.class))
+                    .build();
 
     /**
      * Gets all friends, no karma.
@@ -75,7 +86,8 @@ public class GetFriendsJsonPath {
      * @throws InterruptedException
      */
     @SuppressWarnings("boxing")
-    public List<Friend> getFriends(final int count, final boolean getKarma)
+    public List<Friend> getFriends(final int count,
+            final boolean getKarma)
             throws IOException, InterruptedException {
         final RedditGetMethod client = new RedditGetMethod();
 
@@ -89,25 +101,28 @@ public class GetFriendsJsonPath {
         this.log.debug("friends method response status: {}",
                 Integer.valueOf(methodResponse.statusCode()));
 
-        final TypeToken<List<Friends>> jaType = new TypeToken<>() {
-            // nothing here
+        final String path = "$[0]['data']['children']";
+
+        final TypeRef<List<Friend>> typeRef = new TypeRef<>() {
+            // empty
         };
 
-        final List<Friends> data =
-                this.gson.fromJson(methodResponse.body(), jaType);
+        final DocumentContext jsonContext = JsonPath
+                .using(this.conf).parse(methodResponse.body());
 
-        final List<Friend> friends =
-                data.get(0).getData().getFriendsList();
+        final List<Friend> friends = jsonContext.read(path, typeRef);
 
         this.log.debug("friends length: {}", friends.size());
 
+        List<Friend> result = friends;
+
         if (getKarma) {
-            decodeAbout(friends, count);
+            result = decodeAbout(friends, count);
         }
 
         this.redditOAuth.revokeToken();
 
-        return friends;
+        return result;
     }
 
     private List<Friend> decodeAbout(final List<Friend> friends,
@@ -136,22 +151,22 @@ public class GetFriendsJsonPath {
             else {
                 final String response = aboutMethodResponse.body();
 
-                final FriendAbout fabout = this.gson.fromJson(
-                        response, FriendAbout.class);
+                this.log.debug("about response: {}", response);
 
-                if (fabout.getData() == null) {
-                    this.log.debug("{}: no about data", f.getName());
+                final String path = "$['data']";
 
-                    f.setKarma(0);
-                }
-                else {
-                    this.log.debug("friend about: {}", fabout);
+                final DocumentContext jsonContext = JsonPath
+                        .using(this.conf).parse(response);
 
-                    f.setKarma(fabout.getData().getTotalKarma());
-                }
+                final FriendAboutJsonPath fabout =
+                        jsonContext.read(path, FriendAboutJsonPath.class);
+
+                this.log.debug("fabout: {}", fabout);
+
+                f.setKarma(fabout.getTotalKarma());
             }
         }
 
-        return friends;
+        return sublist;
     }
 }

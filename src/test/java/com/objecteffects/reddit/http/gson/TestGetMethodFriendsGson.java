@@ -15,8 +15,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.objecteffects.reddit.core.RedditDeleteMethod;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditOAuth;
-import com.objecteffects.reddit.data.FriendAbout;
+import com.objecteffects.reddit.core.RedditOAuthGson;
+import com.objecteffects.reddit.data.FriendAboutGson;
 import com.objecteffects.reddit.data.Friends;
 import com.objecteffects.reddit.data.Friends.Friend;
 
@@ -27,7 +27,7 @@ public class TestGetMethodFriendsGson {
     final Logger log =
             LoggerFactory.getLogger(TestGetMethodFriendsGson.class);
 
-    private final RedditOAuth redditOAuth = new RedditOAuth();
+    private final RedditOAuthGson redditOAuth = new RedditOAuthGson();
 
     /**
      * @throws IOException
@@ -91,8 +91,8 @@ public class TestGetMethodFriendsGson {
 
 //            log.debug("about response body: {}", aboutMethodResponse.body());
 
-            final FriendAbout fabout = gson.fromJson(aboutMethodResponse.body(),
-                    FriendAbout.class);
+            final FriendAboutGson fabout = gson.fromJson(aboutMethodResponse.body(),
+                    FriendAboutGson.class);
 
 //            log.debug("friend about: {}", fabout);
 
@@ -183,8 +183,8 @@ public class TestGetMethodFriendsGson {
                 aboutResponse.statusCode());
         this.log.debug("about response body: {}", aboutResponse.body());
 
-        final FriendAbout fabout = gson.fromJson(aboutResponse.body(),
-                FriendAbout.class);
+        final FriendAboutGson fabout = gson.fromJson(aboutResponse.body(),
+                FriendAboutGson.class);
 
         if (fabout.getData() == null) {
             this.log.debug("{}: no about data", userNmae);

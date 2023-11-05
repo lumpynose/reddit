@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.main.Configuration;
+import com.objecteffects.reddit.main.AppConfig;
 
 /**
  *
@@ -22,11 +22,12 @@ public class RedditGetMethod {
     private final Logger log =
             LoggerFactory.getLogger(RedditGetMethod.class);
 
-    private final RedditOAuth redditOAuth = new RedditOAuth();
+    private final RedditOAuthJsonPath redditOAuth =
+            new RedditOAuthJsonPath();
     private final RedditHttpClient redditHttpClient =
             new RedditHttpClient();
-    private final Configuration configuration =
-            new Configuration();
+    private final AppConfig configuration =
+            new AppConfig();
 
     /**
      * @param method
@@ -61,17 +62,19 @@ public class RedditGetMethod {
             this.log.debug("form: {}, {}", formattedParams,
                     formattedParams.length());
 
-            fullUrl = String.format("%s/%s?%s", RedditHttpClient.METHOD_URL,
+            fullUrl = String.format("%s/%s?%s",
+                    RedditHttpClient.METHOD_URL,
                     method, formattedParams);
         }
         else {
-            fullUrl = String.format("%s/%s", RedditHttpClient.METHOD_URL,
+            fullUrl = String.format("%s/%s",
+                    RedditHttpClient.METHOD_URL,
                     method);
         }
 
         this.log.debug("fullUrl: {}", fullUrl);
 
-        // loads the OAuth token for Configuration.getOAuthToken().
+        // loads the OAuth token for AppConfig.getOAuthToken().
         this.redditOAuth.getAuthToken();
 
         final HttpRequest request = HttpRequest.newBuilder()
@@ -104,10 +107,11 @@ public class RedditGetMethod {
 
         if (response == null) {
             for (int i = 1; i < 11; i++) {
-                Thread.sleep(i * 1500);
+                Thread.sleep(i * 500);
 
                 try {
-                    response = client.send(request, BodyHandlers.ofString());
+                    response = client.send(request,
+                            BodyHandlers.ofString());
 
                     if (response == null) {
                         break;

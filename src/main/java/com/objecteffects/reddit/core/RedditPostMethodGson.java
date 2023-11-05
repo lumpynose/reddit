@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
-import java.util.Collections;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -15,10 +14,10 @@ import com.google.gson.Gson;
 /**
  *
  */
-public class RedditPutMethod {
+public class RedditPostMethodGson {
     @SuppressWarnings("unused")
     private final Logger log =
-            LoggerFactory.getLogger(RedditPutMethod.class);
+            LoggerFactory.getLogger(RedditPostMethodGson.class);
 
     private final RedditHttpClient redditHttpClient = new RedditHttpClient();
 
@@ -29,9 +28,15 @@ public class RedditPutMethod {
      * @throws InterruptedException
      * @throws IOException
      */
-    public HttpResponse<String> putMethod(final String method,
+    public HttpResponse<String> postMethod(final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
+//        final String formattedParams = params.entrySet().stream()
+//                .map(entry -> entry.getKey() + "=" + entry.getValue())
+//                .collect(Collectors.joining("&"));
+//
+//        this.log.debug("form: {}, {}", formattedParams,
+//                formattedParams.length());
 
         final Gson gson = new Gson();
 
@@ -39,10 +44,11 @@ public class RedditPutMethod {
 
         // log.debug("json: {}", json);
 
-        final HttpRequest.Builder putBuilder = HttpRequest.newBuilder()
-                .PUT(BodyPublishers.ofString(json));
+        final HttpRequest.Builder getBuilder =
+                HttpRequest.newBuilder()
+                        .POST(BodyPublishers.ofString(json));
 
-        return this.redditHttpClient.clientSend(putBuilder, method,
-                Collections.emptyMap());
+        return this.redditHttpClient.clientSend(getBuilder,
+                method, params);
     }
 }

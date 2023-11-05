@@ -7,8 +7,8 @@ public class Main {
     private final static Logger log =
             LoggerFactory.getLogger(Main.class);
 
-    private final static Configuration configuration =
-            new Configuration();
+    private final static AppConfig configuration =
+            new AppConfig();
 
     public static void main(final String[] args) {
         log.debug("username: {}", configuration.getUsername());

@@ -14,9 +14,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Configuration {
+/**
+ *
+ */
+public class AppConfig {
     private final Logger log =
-            LoggerFactory.getLogger(Configuration.class);
+            LoggerFactory.getLogger(AppConfig.class);
 
     private static String username = null;
     private static String password = null;
@@ -38,6 +41,9 @@ public class Configuration {
                             .setListDelimiterHandler(
                                     new DefaultListDelimiterHandler(',')));
 
+    /**
+     *
+     */
     public void loadConfiguration() {
         try {
             final FileBasedConfiguration config =
@@ -111,7 +117,7 @@ public class Configuration {
     }
 
     public String dumpConfig() {
-        return new ToStringBuilder(Configuration.class)
+        return new ToStringBuilder(AppConfig.class)
                 .append(username)
                 .append(password)
                 .append(clientId)

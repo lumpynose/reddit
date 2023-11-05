@@ -6,17 +6,20 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.core.RedditOAuth;
-import com.objecteffects.reddit.main.Configuration;
+import com.objecteffects.reddit.core.RedditOAuthGson;
+import com.objecteffects.reddit.main.AppConfig;
 
-public class TestAuthToken {
+/**
+ *
+ */
+public class TestAuthTokenGson {
     private final Logger log =
-            LoggerFactory.getLogger(TestAuthToken.class);
+            LoggerFactory.getLogger(TestAuthTokenGson.class);
 
-    private final RedditOAuth redditOAuth = new RedditOAuth();
+    private final RedditOAuthGson redditOAuth = new RedditOAuthGson();
 
-    private final static Configuration configuration =
-            new Configuration();
+    private final static AppConfig configuration =
+            new AppConfig();
 
     /**
      * @throws IOException
