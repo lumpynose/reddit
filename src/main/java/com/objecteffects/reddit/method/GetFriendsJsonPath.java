@@ -86,7 +86,6 @@ public class GetFriendsJsonPath {
      * @throws IOException
      * @throws InterruptedException
      */
-    @SuppressWarnings("boxing")
     public List<Friend> getFriends(final int count,
             final boolean getKarma)
             throws IOException, InterruptedException {
@@ -113,7 +112,8 @@ public class GetFriendsJsonPath {
 
         final List<Friend> friends = jsonContext.read(path, typeRef);
 
-        this.log.debug("friends length: {}", friends.size());
+        this.log.debug("friends length: {}",
+                Integer.valueOf(friends.size()));
 
         List<Friend> result = friends;
 
@@ -160,7 +160,8 @@ public class GetFriendsJsonPath {
                         .using(this.conf).parse(response);
 
                 final FriendAboutJsonPath fabout =
-                        jsonContext.read(path, FriendAboutJsonPath.class);
+                        jsonContext.read(path,
+                                FriendAboutJsonPath.class);
 
                 this.log.debug("fabout: {}", fabout);
 

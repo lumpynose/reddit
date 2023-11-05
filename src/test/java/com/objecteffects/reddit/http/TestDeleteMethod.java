@@ -13,8 +13,10 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.gson.RedditOAuthGson;
 import com.objecteffects.reddit.core.gson.RedditPutMethodGson;
 
+/**
+ *
+ */
 public class TestDeleteMethod {
-    @SuppressWarnings("unused")
     final Logger log =
             LoggerFactory.getLogger(TestDeleteMethod.class);
 

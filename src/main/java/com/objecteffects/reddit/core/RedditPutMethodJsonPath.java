@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class RedditPutMethodJsonPath {
-    @SuppressWarnings("unused")
     private final Logger log =
             LoggerFactory.getLogger(RedditPutMethodJsonPath.class);
 
