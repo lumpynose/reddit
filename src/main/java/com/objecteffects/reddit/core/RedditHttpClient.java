@@ -34,8 +34,8 @@ public class RedditHttpClient {
             .followRedirects(Redirect.NORMAL)
             .build();
 
-    final String AUTH_URL = "https://www.reddit.com";
-    final String METHOD_URL = "https://oauth.reddit.com";
+    public final static String AUTH_URL = "https://www.reddit.com";
+    public final static String METHOD_URL = "https://oauth.reddit.com";
 
     // list of friends
     // public final static String FRIENDS_METHOD = "prefs/friends";
@@ -91,11 +91,11 @@ public class RedditHttpClient {
             this.log.debug("form: {}, {}", form, form.length());
 
             fullUrl = String.format("%s/%s?%s",
-                    this.METHOD_URL, method, form);
+                    RedditHttpClient.METHOD_URL, method, form);
         }
         else {
             fullUrl = String.format("%s/%s",
-                    this.METHOD_URL, method);
+                    RedditHttpClient.METHOD_URL, method);
         }
 
         this.log.debug("fullUrl: {}", fullUrl);
