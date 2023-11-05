@@ -17,7 +17,7 @@ import com.jayway.jsonpath.TypeRef;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.gson.RedditOAuthGson;
+import com.objecteffects.reddit.core.RedditOAuthJsonPath;
 import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.data.FriendAboutJsonPath;
 
@@ -30,7 +30,8 @@ public class GetFriendsJsonPath {
 
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;
-    private final RedditOAuthGson redditOAuth = new RedditOAuthGson();
+    private final RedditOAuthJsonPath redditOAuth =
+            new RedditOAuthJsonPath();
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()

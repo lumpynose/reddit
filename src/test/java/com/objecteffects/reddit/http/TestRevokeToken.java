@@ -7,13 +7,21 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.core.gson.RedditOAuthGson;
+import com.objecteffects.reddit.core.RedditOAuthJsonPath;
 
+/**
+ *
+ */
 public class TestRevokeToken {
     final Logger log = LoggerFactory.getLogger(TestRevokeToken.class);
 
-    private final RedditOAuthGson redditOAuth = new RedditOAuthGson();
+    private final RedditOAuthJsonPath redditOAuth =
+            new RedditOAuthJsonPath();
 
+    /**
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @Test
     public void testRevokeToken()
             throws IOException, InterruptedException {

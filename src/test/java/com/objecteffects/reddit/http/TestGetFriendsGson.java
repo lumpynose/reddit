@@ -10,10 +10,17 @@ import org.slf4j.LoggerFactory;
 import com.objecteffects.reddit.data.Friends.Friend;
 import com.objecteffects.reddit.method.gson.GetFriendsGson;
 
+/**
+ *
+ */
 public class TestGetFriendsGson {
     final Logger log =
             LoggerFactory.getLogger(TestGetFriendsGson.class);
 
+    /**
+     * @throws IOException
+     * @throws InterruptedException
+     */
     @Test
     public void testGetFriends() throws IOException, InterruptedException {
         final GetFriendsGson getFriends = new GetFriendsGson();
