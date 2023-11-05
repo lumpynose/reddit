@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditPostMethodGson;
+import com.objecteffects.reddit.core.gson.RedditPostMethodGson;
 import com.objecteffects.reddit.data.Posts;
 
 public class HidePostsGson {

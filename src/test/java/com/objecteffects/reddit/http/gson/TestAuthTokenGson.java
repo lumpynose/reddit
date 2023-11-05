@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.http;
+package com.objecteffects.reddit.http.gson;
 
 import java.io.IOException;
 
@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.core.RedditOAuthGson;
+import com.objecteffects.reddit.core.gson.RedditOAuthGson;
 import com.objecteffects.reddit.main.AppConfig;
 
 /**

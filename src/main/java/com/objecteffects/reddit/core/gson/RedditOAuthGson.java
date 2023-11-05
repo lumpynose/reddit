@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.core;
+package com.objecteffects.reddit.core.gson;
 
 import java.io.IOException;
 import java.net.URI;
@@ -8,7 +8,6 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import java.util.Base64;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,9 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.jayway.jsonpath.Option;
-import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
-import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
+import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.main.AppConfig;
 
 /**
@@ -32,13 +29,6 @@ public class RedditOAuthGson {
 
     private final AppConfig configuration =
             new AppConfig();
-
-    private final com.jayway.jsonpath.Configuration conf =
-            new com.jayway.jsonpath.Configuration.ConfigurationBuilder()
-                    .jsonProvider(new JacksonJsonProvider())
-                    .mappingProvider(new JacksonMappingProvider())
-                    .options(EnumSet.noneOf(Option.class))
-                    .build();
 
     /**
      * @return HttpResponse
@@ -67,8 +57,8 @@ public class RedditOAuthGson {
 
         final String method = "api/v1/access_token";
 
-        final String fullUrl = String.format("%s/%s", RedditHttpClient.AUTH_URL,
-                method);
+        final String fullUrl = String.format("%s/%s",
+                RedditHttpClient.AUTH_URL, method);
 
         this.log.debug("fullUrl: {}", fullUrl);
 

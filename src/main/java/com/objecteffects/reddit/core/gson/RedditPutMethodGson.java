@@ -1,4 +1,4 @@
-package com.objecteffects.reddit.core;
+package com.objecteffects.reddit.core.gson;
 
 import java.io.IOException;
 import java.net.http.HttpRequest;
@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
+import com.objecteffects.reddit.core.RedditHttpClient;
 
 /**
  *

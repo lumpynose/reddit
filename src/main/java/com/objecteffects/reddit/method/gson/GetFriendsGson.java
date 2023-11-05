@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditOAuthGson;
+import com.objecteffects.reddit.core.gson.RedditOAuthGson;
 import com.objecteffects.reddit.data.FriendAboutGson;
 import com.objecteffects.reddit.data.Friends;
 import com.objecteffects.reddit.data.Friends.Friend;

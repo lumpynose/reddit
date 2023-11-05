@@ -19,7 +19,7 @@ import com.jayway.jsonpath.TypeRef;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditOAuthGson;
+import com.objecteffects.reddit.core.gson.RedditOAuthGson;
 import com.objecteffects.reddit.data.Post;
 
 /**
