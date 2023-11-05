@@ -8,11 +8,11 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.objecteffects.reddit.main.AppConfig;
 
 /**
@@ -55,9 +55,13 @@ public class RedditGetMethod {
         this.log.debug("method: {}", method);
 
         if (!params.isEmpty()) {
-            final String formattedParams = params.entrySet().stream()
-                    .map(entry -> entry.getKey() + "=" + entry.getValue())
-                    .collect(Collectors.joining("&"));
+            final ObjectMapper mapper = new ObjectMapper();
+
+            final String formattedParams = mapper.writeValueAsString(params);
+
+//            final String formattedParams = params.entrySet().stream()
+//                    .map(entry -> entry.getKey() + "=" + entry.getValue())
+//                    .collect(Collectors.joining("&"));
 
             this.log.debug("form: {}, {}", formattedParams,
                     formattedParams.length());

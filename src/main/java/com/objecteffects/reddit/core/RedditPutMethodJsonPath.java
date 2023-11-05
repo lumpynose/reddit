@@ -6,10 +6,11 @@ import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.util.Collections;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  *
@@ -31,16 +32,20 @@ public class RedditPutMethodJsonPath {
             final Map<String, String> params)
             throws InterruptedException, IOException {
 
-        final String pj = params.entrySet().stream()
-                .map(entry -> entry.getKey() + ":" + entry.getValue())
-                .collect(Collectors.joining(","));
+        final ObjectMapper mapper = new ObjectMapper();
 
-        final String paramsJson = "{" + pj + "}";
+        final String pj = mapper.writeValueAsString(params);
 
-        this.log.debug("paramsJson: {}", paramsJson);
+//        final String pj = params.entrySet().stream()
+//                .map(entry -> entry.getKey() + ":" + entry.getValue())
+//                .collect(Collectors.joining(","));
+//
+//        final String paramsJson = "{" + pj + "}";
+
+        this.log.debug("paramsJson: {}", pj);
 
         final HttpRequest.Builder putBuilder = HttpRequest.newBuilder()
-                .PUT(BodyPublishers.ofString(paramsJson));
+                .PUT(BodyPublishers.ofString(pj));
 
         return this.redditHttpClient.clientSend(putBuilder, method,
                 Collections.emptyMap());

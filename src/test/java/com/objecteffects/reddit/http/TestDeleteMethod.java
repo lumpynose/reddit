@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.core.RedditDeleteMethod;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.gson.RedditOAuthGson;
-import com.objecteffects.reddit.core.gson.RedditPutMethodGson;
+import com.objecteffects.reddit.core.RedditOAuthJsonPath;
+import com.objecteffects.reddit.core.RedditPutMethodJsonPath;
 
 /**
  *
@@ -20,7 +20,8 @@ public class TestDeleteMethod {
     final Logger log =
             LoggerFactory.getLogger(TestDeleteMethod.class);
 
-    private final RedditOAuthGson redditOAuth = new RedditOAuthGson();
+    private final RedditOAuthJsonPath redditOAuth =
+            new RedditOAuthJsonPath();
 
     /**
      * @throws IOException
@@ -40,9 +41,11 @@ public class TestDeleteMethod {
 
         /* */
 
-        final RedditPutMethodGson putClient = new RedditPutMethodGson();
+        final RedditPutMethodJsonPath putClient =
+                new RedditPutMethodJsonPath();
 
-        final String putMethod = String.format("api/v1/me/friends/%s", user);
+        final String putMethod = String.format("api/v1/me/friends/%s",
+                user);
 
         final Map<String, String> map = Map.of("name", user /*
                                                              * , "note",
