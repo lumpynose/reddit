@@ -69,12 +69,12 @@ public class TestGetMethodPosts {
         this.log.debug("method response headers: {}", methodResponse.headers());
         // this.log.debug("method response body: {}", methodResponse.body());
 
-        decodeBodyJsonPath(methodResponse.body());
+        decodeBody(methodResponse.body());
 
         this.redditOAuth.revokeToken();
     }
 
-    private void decodeBodyJsonPath(final String body) {
+    private void decodeBody(final String body) {
         final String path = "$['data']['children'][*]['data']";
 
         final TypeRef<List<Post>> typeRef = new TypeRef<>() {
