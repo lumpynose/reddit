@@ -27,9 +27,9 @@ import jakarta.inject.Named;
  *
  */
 @Named
-public class HidePostsJsonPath {
+public class UpVotePosts {
     private final Logger log =
-            LoggerFactory.getLogger(HidePostsJsonPath.class);
+            LoggerFactory.getLogger(UpVotePosts.class);
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()
@@ -42,11 +42,11 @@ public class HidePostsJsonPath {
      * @param name
      * @param count
      * @param lastAfter
-     * @return String after
+     * @return String
      * @throws IOException
      * @throws InterruptedException
      */
-    public String hidePosts(final String name, final int count,
+    public String upVotePosts(final String name, final int count,
             final String lastAfter)
             throws IOException, InterruptedException {
 
@@ -65,22 +65,16 @@ public class HidePostsJsonPath {
             params.put("after", lastAfter);
         }
 
-        final HttpResponse<String> methodResponse =
+        final HttpResponse<String> response =
                 getClient.getMethod(submittedMethod, params);
 
-        if (methodResponse == null) {
+        if (response == null) {
             this.log.debug("null response");
 
-            return "";
+            return null;
         }
 
-        // this.log.debug("posts: {}", methodResponse.body());
-
-        this.log.debug("method response status: {}",
-                Integer.valueOf(methodResponse.statusCode()));
-
-        this.log.debug("method response headers: {}",
-                methodResponse.headers());
+        this.log.debug(response.body());
 
         final String path = "$['data']['children'][*]['data']";
 
@@ -89,33 +83,37 @@ public class HidePostsJsonPath {
         };
 
         final DocumentContext jsonContext =
-                JsonPath.using(this.conf)
-                        .parse(methodResponse.body());
+                JsonPath.using(this.conf).parse(response.body());
 
-        final List<Post> posts = jsonContext.read(path, typeRef);
+        final List<Post> posts =
+                jsonContext.read(path, typeRef);
 
         this.log.debug("list size: {}", Integer.valueOf(posts.size()));
 
         final RedditPostMethod postClient =
                 new RedditPostMethod();
 
-        final String hideMethod = String.format("/api/hide");
+        final String upVoteMethod = String.format("api/vote");
 
-        for (final Post post : posts) {
-            this.log.debug("post: {}", post);
+        for (final Post pd : posts) {
+            this.log.debug("post: {}", pd);
 
             final Map<String, String> param =
-                    Map.of("id", post.getName());
+                    Map.of("id", pd.getName(),
+                            "dir", "1",
+                            "rank", "2");
 
-            if (post.isHidden()) {
+            final HttpResponse<String> upVoteResponse =
+                    postClient.postMethod(upVoteMethod, param);
+
+            if (upVoteResponse == null) {
+                this.log.debug("null response");
+
                 continue;
             }
 
-            final HttpResponse<String> hideResponse =
-                    postClient.postMethod(hideMethod, param);
-
             this.log.debug("response: {}",
-                    Integer.valueOf(hideResponse.statusCode()));
+                    Integer.valueOf(upVoteResponse.statusCode()));
         }
 
         String after = null;

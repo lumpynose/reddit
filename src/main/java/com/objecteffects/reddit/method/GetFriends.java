@@ -27,9 +27,9 @@ import jakarta.inject.Named;
  *
  */
 @Named
-public class GetFriendsJsonPath {
+public class GetFriends {
     private final Logger log =
-            LoggerFactory.getLogger(GetFriendsJsonPath.class);
+            LoggerFactory.getLogger(GetFriends.class);
 
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;

@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.main.AppConfig;
-import com.objecteffects.reddit.method.UpVotePostsJsonPath;
+import com.objecteffects.reddit.method.UpVotePosts;
 
 import jakarta.inject.Inject;
 
@@ -29,10 +29,10 @@ public class TestUpVotePosts {
      */
     @WeldSetup
     public WeldInitiator weld =
-            WeldInitiator.of(UpVotePostsJsonPath.class);
+            WeldInitiator.of(UpVotePosts.class);
 
     @Inject
-    private UpVotePostsJsonPath upVotePosts;
+    private UpVotePosts upVotePosts;
 
     /**
      * @throws IOException
@@ -44,8 +44,8 @@ public class TestUpVotePosts {
         this.log.debug("configuration: {}",
                 this.configuration.dumpConfig());
 
-//        final UpVotePostsJsonPath upVotePosts =
-//                new UpVotePostsJsonPath();
+//        final UpVotePosts upVotePosts =
+//                new UpVotePosts();
 
         this.upVotePosts.upVotePosts("figwax", 1, null);
     }

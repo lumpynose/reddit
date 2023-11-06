@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.main.AppConfig;
-import com.objecteffects.reddit.method.HidePostsJsonPath;
+import com.objecteffects.reddit.method.HidePosts;
 
 import jakarta.inject.Inject;
 
@@ -30,10 +30,10 @@ public class TestHidePostsJsonPath {
      */
     @WeldSetup
     public WeldInitiator weld =
-            WeldInitiator.of(HidePostsJsonPath.class);
+            WeldInitiator.of(HidePosts.class);
 
     @Inject
-    private HidePostsJsonPath hidePosts;
+    private HidePosts hidePosts;
 
     /**
      * @throws IOException
@@ -50,7 +50,7 @@ public class TestHidePostsJsonPath {
             return;
         }
 
-        // final HidePostsJsonPath hidePosts = new HidePostsJsonPath();
+        // final HidePosts hidePosts = new HidePosts();
 
         for (final String user : users) {
             this.hidePosts.hidePosts(user, 3, null);

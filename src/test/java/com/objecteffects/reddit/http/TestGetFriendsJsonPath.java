@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.data.Friend;
-import com.objecteffects.reddit.method.GetFriendsJsonPath;
+import com.objecteffects.reddit.method.GetFriends;
 
 import jakarta.inject.Inject;
 
@@ -28,10 +28,10 @@ public class TestGetFriendsJsonPath {
      */
     @WeldSetup
     public WeldInitiator weld =
-            WeldInitiator.of(GetFriendsJsonPath.class);
+            WeldInitiator.of(GetFriends.class);
 
     @Inject
-    private GetFriendsJsonPath getFriends;
+    private GetFriends getFriends;
 
     /**
      * @throws IOException
@@ -40,7 +40,7 @@ public class TestGetFriendsJsonPath {
     @Test
     public void testGetFriends()
             throws IOException, InterruptedException {
-//        final GetFriendsJsonPath getFriends = new GetFriendsJsonPath();
+//        final GetFriends getFriends = new GetFriends();
 
         final List<Friend> friends = this.getFriends.getFriends(10);
 
