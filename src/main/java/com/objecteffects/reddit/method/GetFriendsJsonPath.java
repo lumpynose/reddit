@@ -17,9 +17,9 @@ import com.jayway.jsonpath.TypeRef;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditOAuthJsonPath;
+import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.Friend;
-import com.objecteffects.reddit.data.FriendAboutJsonPath;
+import com.objecteffects.reddit.data.FriendAbout;
 
 import jakarta.inject.Named;
 
@@ -33,8 +33,8 @@ public class GetFriendsJsonPath {
 
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;
-    private final RedditOAuthJsonPath redditOAuth =
-            new RedditOAuthJsonPath();
+    private final RedditOAuth redditOAuth =
+            new RedditOAuth();
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()
@@ -162,9 +162,9 @@ public class GetFriendsJsonPath {
                 final DocumentContext jsonContext = JsonPath
                         .using(this.conf).parse(response);
 
-                final FriendAboutJsonPath fabout =
+                final FriendAbout fabout =
                         jsonContext.read(path,
-                                FriendAboutJsonPath.class);
+                                FriendAbout.class);
 
                 this.log.debug("fabout: {}", fabout);
 

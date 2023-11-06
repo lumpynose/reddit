@@ -18,7 +18,7 @@ import com.jayway.jsonpath.TypeRef;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditPostMethodJsonPath;
+import com.objecteffects.reddit.core.RedditPostMethod;
 import com.objecteffects.reddit.data.Post;
 
 import jakarta.inject.Named;
@@ -96,8 +96,8 @@ public class HidePostsJsonPath {
 
         this.log.debug("list size: {}", Integer.valueOf(posts.size()));
 
-        final RedditPostMethodJsonPath postClient =
-                new RedditPostMethodJsonPath();
+        final RedditPostMethod postClient =
+                new RedditPostMethod();
 
         final String hideMethod = String.format("/api/hide");
 

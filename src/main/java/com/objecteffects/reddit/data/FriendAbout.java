@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  *
  */
 @JsonIncludeProperties({ "is_suspended", "total_karma" })
-public class FriendAboutJsonPath {
+public class FriendAbout {
     @JsonProperty("is_suspended")
     private boolean isSuspended;
     @JsonProperty("total_karma")

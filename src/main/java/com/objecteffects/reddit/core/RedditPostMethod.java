@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
-import java.util.Collections;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -15,11 +14,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  *
  */
-public class RedditPutMethodJsonPath {
+public class RedditPostMethod {
     private final Logger log =
-            LoggerFactory.getLogger(RedditPutMethodJsonPath.class);
+            LoggerFactory.getLogger(RedditPostMethod.class);
 
-    private final RedditHttpClient redditHttpClient = new RedditHttpClient();
+    private final RedditHttpClient redditHttpClient =
+            new RedditHttpClient();
 
     /**
      * @param method
@@ -28,9 +28,10 @@ public class RedditPutMethodJsonPath {
      * @throws InterruptedException
      * @throws IOException
      */
-    public HttpResponse<String> putMethod(final String method,
+    public HttpResponse<String> postMethod(final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
+        this.log.debug("params: {}", params);
 
         final ObjectMapper mapper = new ObjectMapper();
 
@@ -44,10 +45,11 @@ public class RedditPutMethodJsonPath {
 
         this.log.debug("paramsJson: {}", pj);
 
-        final HttpRequest.Builder putBuilder = HttpRequest.newBuilder()
-                .PUT(BodyPublishers.ofString(pj));
+        final HttpRequest.Builder getBuilder =
+                HttpRequest.newBuilder()
+                        .POST(BodyPublishers.ofString(pj));
 
-        return this.redditHttpClient.clientSend(putBuilder, method,
-                Collections.emptyMap());
+        return this.redditHttpClient.clientSend(getBuilder,
+                method, params);
     }
 }

@@ -28,9 +28,9 @@ import com.objecteffects.reddit.main.AppConfig;
 /**
  *
  */
-public class RedditOAuthJsonPath {
+public class RedditOAuth {
     private final Logger log =
-            LoggerFactory.getLogger(RedditOAuthJsonPath.class);
+            LoggerFactory.getLogger(RedditOAuth.class);
 
     private final AppConfig configuration =
             new AppConfig();

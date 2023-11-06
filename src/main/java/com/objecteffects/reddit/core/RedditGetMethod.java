@@ -22,8 +22,8 @@ public class RedditGetMethod {
     private final Logger log =
             LoggerFactory.getLogger(RedditGetMethod.class);
 
-    private final RedditOAuthJsonPath redditOAuth =
-            new RedditOAuthJsonPath();
+    private final RedditOAuth redditOAuth =
+            new RedditOAuth();
     private final RedditHttpClient redditHttpClient =
             new RedditHttpClient();
     private final AppConfig configuration =

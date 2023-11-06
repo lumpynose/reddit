@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.core.RedditOAuthJsonPath;
+import com.objecteffects.reddit.core.RedditOAuth;
 
 /**
  *
@@ -15,8 +15,8 @@ import com.objecteffects.reddit.core.RedditOAuthJsonPath;
 public class TestRevokeToken {
     final Logger log = LoggerFactory.getLogger(TestRevokeToken.class);
 
-    private final RedditOAuthJsonPath redditOAuth =
-            new RedditOAuthJsonPath();
+    private final RedditOAuth redditOAuth =
+            new RedditOAuth();
 
     /**
      * @throws IOException

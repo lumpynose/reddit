@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.core.RedditDeleteMethod;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditOAuthJsonPath;
-import com.objecteffects.reddit.core.RedditPutMethodJsonPath;
+import com.objecteffects.reddit.core.RedditOAuth;
+import com.objecteffects.reddit.core.RedditPutMethod;
 
 /**
  *
@@ -20,8 +20,8 @@ public class TestDeleteMethod {
     final Logger log =
             LoggerFactory.getLogger(TestDeleteMethod.class);
 
-    private final RedditOAuthJsonPath redditOAuth =
-            new RedditOAuthJsonPath();
+    private final RedditOAuth redditOAuth =
+            new RedditOAuth();
 
     /**
      * @throws IOException
@@ -41,8 +41,8 @@ public class TestDeleteMethod {
 
         /* */
 
-        final RedditPutMethodJsonPath putClient =
-                new RedditPutMethodJsonPath();
+        final RedditPutMethod putClient =
+                new RedditPutMethod();
 
         final String putMethod = String.format("api/v1/me/friends/%s",
                 user);

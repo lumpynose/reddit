@@ -58,8 +58,8 @@ public class RedditHttpClient {
     public final static List<Integer> okCodes =
             Arrays.asList(200, 201, 202, 203, 204);
 
-    private final RedditOAuthJsonPath redditOAuth =
-            new RedditOAuthJsonPath();
+    private final RedditOAuth redditOAuth =
+            new RedditOAuth();
     private final AppConfig appConfig =
             new AppConfig();
 
