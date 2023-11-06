@@ -47,7 +47,7 @@ public class TestGetMethodPosts {
     public void testGetMethodPosts()
             throws InterruptedException, IOException {
         final int count = 5;
-        final String name = "montgranite";
+        final String name = "BotDefense";
 
         final RedditGetMethod getClient = new RedditGetMethod();
 

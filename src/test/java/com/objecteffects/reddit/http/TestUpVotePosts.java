@@ -47,6 +47,6 @@ public class TestUpVotePosts {
 //        final UpVotePosts upVotePosts =
 //                new UpVotePosts();
 
-        this.upVotePosts.upVotePosts("figwax", 1, null);
+        this.upVotePosts.upVotePosts("BotDefense", 1, null);
     }
 }

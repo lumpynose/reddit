@@ -45,7 +45,7 @@ public class TestUpVotedPosts {
     @Test
     public void testUpVotedMethod()
             throws IOException, InterruptedException {
-        final String user = "figwax";
+        final String user = "BotDefense";
 
         log.debug("configuration: {}", configuration.dumpConfig());
 

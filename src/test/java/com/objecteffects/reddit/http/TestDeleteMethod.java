@@ -29,7 +29,7 @@ public class TestDeleteMethod {
      */
     @Test
     public void testGetMethod() throws IOException, InterruptedException {
-        final String user = "daronjay";
+        final String user = "BotDefense";
 
         /* */
 
