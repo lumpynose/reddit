@@ -12,9 +12,9 @@ import com.objecteffects.reddit.main.AppConfig;
 /**
  *
  */
-public class TestAuthTokenJsonPath {
+public class TestAuthToken {
     private final Logger log =
-            LoggerFactory.getLogger(TestAuthTokenJsonPath.class);
+            LoggerFactory.getLogger(TestAuthToken.class);
 
     private final RedditOAuth redditOAuth =
             new RedditOAuth();

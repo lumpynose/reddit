@@ -19,9 +19,9 @@ import jakarta.inject.Inject;
  *
  */
 @EnableWeld
-public class TestHidePostsJsonPath {
+public class TestHidePosts {
     final Logger log =
-            LoggerFactory.getLogger(TestHidePostsJsonPath.class);
+            LoggerFactory.getLogger(TestHidePosts.class);
 
     private final static AppConfig configuration =
             new AppConfig();

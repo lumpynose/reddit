@@ -23,9 +23,9 @@ import com.objecteffects.reddit.main.AppConfig;
 /**
  *
  */
-public class TestUpVotedPostsJsonPath {
+public class TestUpVotedPosts {
     final static Logger log =
-            LoggerFactory.getLogger(TestUpVotedPostsJsonPath.class);
+            LoggerFactory.getLogger(TestUpVotedPosts.class);
 
     private final static AppConfig configuration =
             new AppConfig();

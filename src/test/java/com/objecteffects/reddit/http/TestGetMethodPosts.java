@@ -25,9 +25,9 @@ import com.objecteffects.reddit.data.Post;
 /**
  *
  */
-public class TestGetMethodPostsJsonPath {
+public class TestGetMethodPosts {
     final Logger log =
-            LoggerFactory.getLogger(TestGetMethodPostsJsonPath.class);
+            LoggerFactory.getLogger(TestGetMethodPosts.class);
 
     private final RedditOAuth redditOAuth =
             new RedditOAuth();

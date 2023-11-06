@@ -20,9 +20,9 @@ import jakarta.inject.Inject;
  *
  */
 @EnableWeld
-public class TestGetFriendsJsonPath {
+public class TestGetFriends {
     final Logger log =
-            LoggerFactory.getLogger(TestGetFriendsJsonPath.class);
+            LoggerFactory.getLogger(TestGetFriends.class);
 
     /**
      */

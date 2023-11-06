@@ -1,10 +1,8 @@
 package com.objecteffects.reddit.http;
 
 import java.io.IOException;
-import java.net.http.HttpResponse;
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -19,14 +17,14 @@ import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditOAuth;
-import com.objecteffects.reddit.data.Friend;
+import com.objecteffects.reddit.data.Me;
 
 /**
  *
  */
-public class TestGetMethodFriendsJsonPath {
+public class TestGetMethodMe {
     final Logger log =
-            LoggerFactory.getLogger(TestGetMethodFriendsJsonPath.class);
+            LoggerFactory.getLogger(TestGetMethodMe.class);
 
     private final RedditOAuth redditOAuth =
             new RedditOAuth();
@@ -43,42 +41,26 @@ public class TestGetMethodFriendsJsonPath {
      * @throws InterruptedException
      */
     @Test
-    public void testGetMethodFriends()
-            throws InterruptedException, IOException {
+    public void testGetMethod() throws IOException, InterruptedException {
         final RedditGetMethod client = new RedditGetMethod();
 
-        // doesn't work (ignored) with friends
-        // final Map<String, String> params = Map.of("limit", "15");
+        final String body =
+                client.getMethod("api/v1/me",
+                        Collections.emptyMap()).body();
 
-        final HttpResponse<String> methodResponse = client
-                .getMethod("prefs/friends", Collections.emptyMap());
+        this.log.debug("body: {}", body);
 
-        this.log.debug("method response status: {}",
-                Integer.valueOf(methodResponse.statusCode()));
-
-        this.log.debug("method response headers: {}", methodResponse.headers());
-        // this.log.debug("method response body: {}", methodResponse.body());
-
-        decodeBodyJsonPath(methodResponse.body());
-
-        this.redditOAuth.revokeToken();
-    }
-
-    private void decodeBodyJsonPath(final String body) {
-        final String path = "$[0]['data']['children']";
-
-        final TypeRef<List<Friend>> typeRef = new TypeRef<>() {
+        final TypeRef<Me> typeRef = new TypeRef<>() {
             // empty
         };
 
         final DocumentContext jsonContext =
                 JsonPath.using(this.conf).parse(body);
 
-        final List<Friend> list = jsonContext.read(path, typeRef);
+        final Me me = jsonContext.read("$", typeRef);
 
-        for (final Friend friend : list) {
-            this.log.debug("name: {}, karma: {}", friend.getName(),
-                    friend.getKarma());
-        }
+        this.log.debug("me: {}", me);
+
+        this.redditOAuth.revokeToken();
     }
 }
