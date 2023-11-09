@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AppConfigCommons {
     private final Logger log =
-            LoggerFactory.getLogger(AppConfig.class);
+            LoggerFactory.getLogger(AppConfigCommons.class);
 
     private static String username = null;
     private static String password = null;
