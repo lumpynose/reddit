@@ -100,7 +100,7 @@ public class UpVotePosts {
 
             final Map<String, String> param =
                     Map.of("id", pd.getName(),
-                            "dir", "1",
+                            "dir", "0",
                             "rank", "2");
 
             final HttpResponse<String> upVoteResponse =

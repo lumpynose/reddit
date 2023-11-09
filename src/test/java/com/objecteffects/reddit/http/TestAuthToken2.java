@@ -12,15 +12,12 @@ import com.objecteffects.reddit.main.AppConfig;
 /**
  *
  */
-public class TestAuthToken {
+public class TestAuthToken2 {
     private final Logger log =
-            LoggerFactory.getLogger(TestAuthToken.class);
+            LoggerFactory.getLogger(TestAuthToken2.class);
 
     private final RedditOAuth redditOAuth =
             new RedditOAuth();
-
-    private final static AppConfig configuration =
-            new AppConfig();
 
     /**
      * @throws IOException
@@ -28,10 +25,9 @@ public class TestAuthToken {
      */
     @Test
     public void testGetAuthToken() throws IOException, InterruptedException {
-        this.redditOAuth.getAuthToken();
+        final AppConfig configuration =
+                new AppConfig();
 
-        final String access_token = configuration.getOAuthToken();
-
-        this.log.debug("access_token: {}", access_token);
+        this.log.debug(configuration.dumpConfig());
     }
 }

@@ -45,7 +45,7 @@ public class TestUpVotedPosts {
     @Test
     public void testUpVotedMethod()
             throws IOException, InterruptedException {
-        final String user = "BotDefense";
+        final String user = "lumpynose";
 
         log.debug("configuration: {}", configuration.dumpConfig());
 

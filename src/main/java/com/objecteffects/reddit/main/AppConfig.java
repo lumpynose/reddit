@@ -6,31 +6,49 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  *
  */
 public class AppConfig {
+    private final Logger log =
+            LoggerFactory.getLogger(AppConfig.class);
+
     private final static String configFile =
             "c:/home/lumpy/redditconfig.properties";
 
-    final Properties configProps = new Properties();
-    private String oauthToken = null;
+    private final static Properties configProps = new Properties();
+    private static String oauthToken = null;
 
     /**
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public AppConfig() throws FileNotFoundException, IOException {
-        loadConfiguration();
-    }
+    public void loadConfiguration() {
+        if (configProps.size() != 0) {
+            return;
+        }
 
-    /**
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    public void loadConfiguration() throws FileNotFoundException, IOException {
+        this.log.debug("loading configuration");
+
         try (FileInputStream in = new FileInputStream(configFile)) {
-            this.configProps.load(in);
+            AppConfig.configProps.load(in);
+        }
+        catch (final FileNotFoundException e) {
+            e.printStackTrace();
+
+            throw new IllegalStateException("missing " + configFile);
+        }
+        catch (final IOException e) {
+            e.printStackTrace();
+
+            throw new IllegalStateException("IOException");
+        }
+
+        if (configProps.size() != 4) {
+            throw new IllegalStateException("configProps size != 4");
         }
     }
 
@@ -40,11 +58,13 @@ public class AppConfig {
     public String getUsername() {
         final String key = "username";
 
-        if (!this.configProps.contains(key)) {
-            throw new IllegalStateException("missing " + key);
+        loadConfiguration();
+
+        if (AppConfig.configProps.containsKey(key)) {
+            return AppConfig.configProps.getProperty(key);
         }
 
-        return this.configProps.getProperty(key);
+        throw new IllegalStateException("missing " + key);
     }
 
     /**
@@ -53,11 +73,13 @@ public class AppConfig {
     public String getPassword() {
         final String key = "password";
 
-        if (!this.configProps.contains(key)) {
+        loadConfiguration();
+
+        if (!AppConfig.configProps.containsKey(key)) {
             throw new IllegalStateException("missing " + key);
         }
 
-        return this.configProps.getProperty(key);
+        return AppConfig.configProps.getProperty(key);
     }
 
     /**
@@ -66,11 +88,13 @@ public class AppConfig {
     public String getClientId() {
         final String key = "client_id";
 
-        if (!this.configProps.contains(key)) {
+        loadConfiguration();
+
+        if (!AppConfig.configProps.containsKey(key)) {
             throw new IllegalStateException("missing " + key);
         }
 
-        return this.configProps.getProperty(key);
+        return AppConfig.configProps.getProperty(key);
     }
 
     /**
@@ -79,29 +103,37 @@ public class AppConfig {
     public String getSecret() {
         final String key = "secret";
 
-        if (!this.configProps.contains(key)) {
+        loadConfiguration();
+
+        if (!AppConfig.configProps.containsKey(key)) {
             throw new IllegalStateException("missing " + key);
         }
 
-        return this.configProps.getProperty(key);
+        return AppConfig.configProps.getProperty(key);
     }
 
+    /**
+     * The OAuthToken is not stored in the properties file but created by
+     * RedditOAuth and then stored here.
+     *
+     * @return
+     */
     public String getOAuthToken() {
-        if (this.oauthToken == null) {
-            throw new IllegalStateException("oauthToken not set");
-        }
-
-        return this.oauthToken;
+        return AppConfig.oauthToken;
     }
 
     /**
      * @param _oauthToken
      */
     public void setOAuthToken(final String _oauthToken) {
-        this.oauthToken = _oauthToken;
+        AppConfig.oauthToken = _oauthToken;
     }
 
     public List<String> getHide() {
         return null;
+    }
+
+    public String dumpConfig() {
+        return AppConfig.configProps.toString();
     }
 }

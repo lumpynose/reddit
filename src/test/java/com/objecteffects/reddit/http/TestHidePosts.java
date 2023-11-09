@@ -42,7 +42,8 @@ public class TestHidePosts {
     @Test
     public void testPostMethod()
             throws IOException, InterruptedException {
-        final List<String> users = configuration.getHide();
+        // final List<String> users = configuration.getHide();
+        final List<String> users = List.of("montgranite");
 
         this.log.debug("configuration: {}", configuration.dumpConfig());
 
