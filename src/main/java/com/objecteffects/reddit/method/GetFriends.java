@@ -141,7 +141,7 @@ public class GetFriends {
         }
 
         for (final Friend f : sublist) {
-            Thread.sleep(1000);
+            Thread.sleep(250);
 
             final String aboutMethod =
                     String.format("user/%s/about", f.getName());

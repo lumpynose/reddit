@@ -2,15 +2,17 @@
 <Configuration status="warn">
     <Properties>
         <Property name="logfile">${env:TMP}\reddit.log</Property>
-        <Property name="pattern">%-5level %date{yyyy-MMM-dd HH:mm} [%thread] %logger{2}.%method - %msg%n</Property>
+        <Property name="pattern">%-5level %date{yyyy-MMM-dd HH:mm}
+            [%thread] %logger{2}.%method - %msg%n</Property>
     </Properties>
-    
+
     <Appenders>
-        <File name="file" append="false" immediateFlush="true" fileName="${logfile}">
+        <File name="file" append="false" immediateFlush="true"
+            fileName="${logfile}">
             <PatternLayout pattern="${pattern}" />
         </File>
     </Appenders>
-    
+
     <Loggers>
         <Root level="trace">
             <AppenderRef ref="file" />

@@ -40,9 +40,8 @@ public class TestGetFriends {
     @Test
     public void testGetFriends()
             throws IOException, InterruptedException {
-//        final GetFriends getFriends = new GetFriends();
 
-        final List<Friend> friends = this.getFriends.getFriends(10);
+        final List<Friend> friends = this.getFriends.getFriends(10, true);
 
         Collections.sort(friends, Collections.reverseOrder());
 
