@@ -10,6 +10,7 @@ import org.apache.commons.configuration2.builder.FileBasedConfigurationBuilder;
 import org.apache.commons.configuration2.builder.fluent.Parameters;
 import org.apache.commons.configuration2.convert.DefaultListDelimiterHandler;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.commons.configuration2.io.ConfigurationLogger;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory;
 /**
  *
  */
-public class AppConfig {
+public class AppConfigCommons {
     private final Logger log =
             LoggerFactory.getLogger(AppConfig.class);
 
@@ -37,6 +38,9 @@ public class AppConfig {
             new FileBasedConfigurationBuilder<FileBasedConfiguration>(
                     PropertiesConfiguration.class)
                     .configure(params.properties()
+                            .setLogger(new ConfigurationLogger(
+                                    LoggerFactory.getLogger("reddit")
+                                            .getName()))
                             .setFileName(configFile)
                             .setListDelimiterHandler(
                                     new DefaultListDelimiterHandler(',')));
