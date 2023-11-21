@@ -114,6 +114,8 @@ public class UpVotePosts {
 
             this.log.debug("response: {}",
                     Integer.valueOf(upVoteResponse.statusCode()));
+
+            Thread.sleep(600);
         }
 
         String after = null;

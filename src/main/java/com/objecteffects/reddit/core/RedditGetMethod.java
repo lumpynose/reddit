@@ -111,7 +111,7 @@ public class RedditGetMethod {
 
         if (response == null) {
             for (int i = 1; i < 11; i++) {
-                Thread.sleep(i * 500);
+                Thread.sleep(i * 600);
 
                 try {
                     response = client.send(request,

@@ -116,6 +116,8 @@ public class HidePosts {
 
             this.log.debug("response: {}",
                     Integer.valueOf(hideResponse.statusCode()));
+
+            Thread.sleep(600);
         }
 
         String after = null;

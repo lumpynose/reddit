@@ -138,7 +138,7 @@ public class RedditHttpClient {
 
         if (response == null || !okCodes.contains(response.statusCode())) {
             for (int i = 1; i < 11; i++) {
-                Thread.sleep(i * 500);
+                Thread.sleep(i * 600);
 
                 try {
                     this.log.debug("method: {}", method);
