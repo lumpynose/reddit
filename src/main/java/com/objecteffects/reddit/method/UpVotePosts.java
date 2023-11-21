@@ -29,7 +29,7 @@ import jakarta.inject.Named;
 @Named
 public class UpVotePosts {
     private final Logger log =
-            LoggerFactory.getLogger(UpVotePosts.class);
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()

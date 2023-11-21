@@ -29,7 +29,7 @@ import jakarta.inject.Named;
 @Named
 public class HidePosts {
     private final Logger log =
-            LoggerFactory.getLogger(HidePosts.class);
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()

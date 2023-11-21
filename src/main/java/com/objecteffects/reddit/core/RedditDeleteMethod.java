@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 public class RedditDeleteMethod {
     @SuppressWarnings("unused")
     private final Logger log =
-            LoggerFactory.getLogger(RedditDeleteMethod.class);
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     private final RedditHttpClient redditHttpClient =
             new RedditHttpClient();

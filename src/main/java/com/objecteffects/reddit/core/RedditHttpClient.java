@@ -23,8 +23,8 @@ import com.objecteffects.reddit.main.AppConfig;
  *
  */
 public class RedditHttpClient {
-    final Logger log =
-            LoggerFactory.getLogger(RedditHttpClient.class);
+    private final Logger log =
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     static final int timeoutSeconds = 15;
 

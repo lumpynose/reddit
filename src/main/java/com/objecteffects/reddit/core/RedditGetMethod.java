@@ -20,7 +20,7 @@ import com.objecteffects.reddit.main.AppConfig;
  */
 public class RedditGetMethod {
     private final Logger log =
-            LoggerFactory.getLogger(RedditGetMethod.class);
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     private final RedditOAuth redditOAuth =
             new RedditOAuth();

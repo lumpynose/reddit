@@ -29,7 +29,7 @@ import jakarta.inject.Named;
 @Named
 public class GetFriends {
     private final Logger log =
-            LoggerFactory.getLogger(GetFriends.class);
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;

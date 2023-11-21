@@ -17,7 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  */
 public class RedditPutMethod {
     private final Logger log =
-            LoggerFactory.getLogger(RedditPutMethod.class);
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     private final RedditHttpClient redditHttpClient = new RedditHttpClient();
 

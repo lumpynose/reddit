@@ -30,7 +30,7 @@ import com.objecteffects.reddit.main.AppConfig;
  */
 public class RedditOAuth {
     private final Logger log =
-            LoggerFactory.getLogger(RedditOAuth.class);
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     private final AppConfig configuration =
             new AppConfig();

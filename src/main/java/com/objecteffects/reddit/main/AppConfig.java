@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AppConfig {
     private final Logger log =
-            LoggerFactory.getLogger(AppConfig.class);
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     private final static String configFile =
             "c:/home/lumpy/redditconfig.properties";
