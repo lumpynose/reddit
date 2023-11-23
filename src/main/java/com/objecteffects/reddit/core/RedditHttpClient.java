@@ -58,10 +58,8 @@ public class RedditHttpClient {
     public final static List<Integer> okCodes =
             Arrays.asList(200, 201, 202, 203, 204);
 
-    private final RedditOAuth redditOAuth =
-            new RedditOAuth();
-    private final AppConfig appConfig =
-            new AppConfig();
+    private final RedditOAuth redditOAuth = new RedditOAuth();
+    private final AppConfig appConfig = new AppConfig();
 
     public static HttpClient getHttpClient() {
         return client;
@@ -137,8 +135,8 @@ public class RedditHttpClient {
         }
 
         if (response == null || !okCodes.contains(response.statusCode())) {
-            for (int i = 1; i < 11; i++) {
-                Thread.sleep(i * 600);
+            for (int i = 0; i < 4; i++) {
+                Thread.sleep(600);
 
                 try {
                     this.log.debug("method: {}", method);

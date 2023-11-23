@@ -21,12 +21,14 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditPostMethod;
 import com.objecteffects.reddit.data.Post;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
 
 /**
  *
  */
 @Named
+@ApplicationScoped
 public class HidePosts {
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());

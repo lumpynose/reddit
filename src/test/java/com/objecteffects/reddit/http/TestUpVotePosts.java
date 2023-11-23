@@ -47,6 +47,6 @@ public class TestUpVotePosts {
 //        final UpVotePosts upVotePosts =
 //                new UpVotePosts();
 
-        this.upVotePosts.upVotePosts("montgranite", 1, null);
+        this.upVotePosts.upVotePosts("Dompr19", 1, null);
     }
 }

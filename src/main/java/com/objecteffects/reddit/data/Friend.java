@@ -15,12 +15,58 @@ public class Friend implements Comparable<Friend> {
     private String id;
     private Integer karma;
 
+    private Boolean isBanned;
+    private Boolean isBlocked;
+    private Boolean isSuspended;
+
     public Integer getKarma() {
         return this.karma;
     }
 
     public void setKarma(final Integer _karma) {
         this.karma = _karma;
+    }
+
+    /**
+     * @return
+     */
+    public Boolean getIsSuspended() {
+        return this.isSuspended;
+    }
+
+    /**
+     * @return
+     */
+    public Boolean getIsBanned() {
+        return this.isBanned;
+    }
+
+    /**
+     * @return
+     */
+    public Boolean getIsBlocked() {
+        return this.isBlocked;
+    }
+
+    /**
+     * @param isBanned the isBanned to set
+     */
+    public void setIsBanned(final Boolean isBanned) {
+        this.isBanned = isBanned;
+    }
+
+    /**
+     * @param isBlocked the isBlocked to set
+     */
+    public void setIsBlocked(final Boolean isBlocked) {
+        this.isBlocked = isBlocked;
+    }
+
+    /**
+     * @param isSuspended the isSuspended to set
+     */
+    public void setIsSuspended(final Boolean isSuspended) {
+        this.isSuspended = isSuspended;
     }
 
     public Float getDate() {

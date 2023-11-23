@@ -8,16 +8,22 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Named;
+
 /**
- *
  */
+@Named
+@ApplicationScoped
 public class RedditDeleteMethod {
     @SuppressWarnings("unused")
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    private final RedditHttpClient redditHttpClient =
-            new RedditHttpClient();
+    private final RedditHttpClient redditHttpClient = new RedditHttpClient();
+
+    final HttpRequest.Builder deleteBuilder = HttpRequest.newBuilder()
+            .DELETE();
 
     /**
      * @param method
@@ -30,9 +36,7 @@ public class RedditDeleteMethod {
             final Map<String, String> params)
             throws InterruptedException, IOException {
 
-        final HttpRequest.Builder deleteBuilder = HttpRequest.newBuilder()
-                .DELETE();
-
-        return this.redditHttpClient.clientSend(deleteBuilder, method, params);
+        return this.redditHttpClient.clientSend(this.deleteBuilder, method,
+                params);
     }
 }

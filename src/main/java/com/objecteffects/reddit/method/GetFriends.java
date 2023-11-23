@@ -21,20 +21,23 @@ import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.data.FriendAbout;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;
 
 /**
  *
  */
 @Named
+@ApplicationScoped
 public class GetFriends {
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
+    private final UnFriend unFriend = new UnFriend();
+
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;
-    private final RedditOAuth redditOAuth =
-            new RedditOAuth();
+    private final RedditOAuth redditOAuth = new RedditOAuth();
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()
@@ -129,6 +132,7 @@ public class GetFriends {
         return result;
     }
 
+    @SuppressWarnings("boxing")
     private List<Friend> decodeAbout(final List<Friend> friends,
             final int count)
             throws IOException, InterruptedException {
@@ -150,6 +154,10 @@ public class GetFriends {
                     .getMethod(aboutMethod, Collections.emptyMap());
 
             if (aboutMethodResponse == null) {
+                this.log.debug("null response, unfriending: {}", f.getName());
+
+                this.unFriend.unFriend(f.getName());
+
                 f.setKarma(0);
             }
             else {
@@ -169,6 +177,20 @@ public class GetFriends {
                 this.log.debug("fabout: {}", fabout);
 
                 f.setKarma(fabout.getTotalKarma());
+                f.setIsBlocked(fabout.getIsBlocked());
+
+                if (fabout.getIsSuspended() == null) {
+                    f.setIsSuspended(Boolean.FALSE);
+                }
+                else {
+                    f.setIsSuspended(fabout.getIsSuspended());
+                }
+
+                if (f.getIsSuspended()) {
+                    this.log.debug("unfriending: {}", f.getName());
+
+                    this.unFriend.unFriend(f.getName());
+                }
             }
         }
 
