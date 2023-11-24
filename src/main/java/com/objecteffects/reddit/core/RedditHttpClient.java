@@ -19,9 +19,12 @@ import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.main.AppConfig;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 /**
  *
  */
+@ApplicationScoped
 public class RedditHttpClient {
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());

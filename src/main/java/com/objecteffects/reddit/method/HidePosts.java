@@ -1,6 +1,7 @@
 package com.objecteffects.reddit.method;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.http.HttpResponse;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -22,14 +23,14 @@ import com.objecteffects.reddit.core.RedditPostMethod;
 import com.objecteffects.reddit.data.Post;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Named;
 
 /**
  *
  */
-@Named
 @ApplicationScoped
-public class HidePosts {
+public class HidePosts implements Serializable {
+    private static final long serialVersionUID = -4364873968404701430L;
+
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 

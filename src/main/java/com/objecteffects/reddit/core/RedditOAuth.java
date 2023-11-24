@@ -26,12 +26,10 @@ import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.main.AppConfig;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Named;
 
 /**
  *
  */
-@Named
 @ApplicationScoped
 public class RedditOAuth {
     private final Logger log =

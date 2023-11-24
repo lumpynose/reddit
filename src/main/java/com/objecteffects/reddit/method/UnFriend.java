@@ -1,6 +1,7 @@
 package com.objecteffects.reddit.method;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.http.HttpResponse;
 import java.util.Collections;
 
@@ -11,23 +12,24 @@ import com.objecteffects.reddit.core.RedditDeleteMethod;
 import com.objecteffects.reddit.core.RedditOAuth;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Named;
+import jakarta.inject.Inject;
 
 /**
  */
-@Named
 @ApplicationScoped
-public class UnFriend {
+public class UnFriend implements Serializable {
+    private static final long serialVersionUID = -5354019122848858356L;
+
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-//    @Inject
-//    private RedditOAuth redditOAuth;
-    private final RedditOAuth redditOAuth = new RedditOAuth();
+    @Inject
+    private RedditOAuth redditOAuth;
+//    private final RedditOAuth redditOAuth = new RedditOAuth();
 
-//    @Inject
-//    private RedditDeleteMethod deleteClient;
-    private final RedditDeleteMethod deleteClient = new RedditDeleteMethod();
+    @Inject
+    private RedditDeleteMethod deleteClient;
+//    private final RedditDeleteMethod deleteClient = new RedditDeleteMethod();
 
     /**
      * @param name
@@ -36,7 +38,6 @@ public class UnFriend {
      */
     public void unFriend(final String name)
             throws InterruptedException, IOException {
-
         final String deleteMethod =
                 String.format("/api/v1/me/friends/%s", name);
 

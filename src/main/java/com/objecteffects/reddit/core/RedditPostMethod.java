@@ -11,9 +11,11 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 /**
- *
  */
+@ApplicationScoped
 public class RedditPostMethod {
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());

@@ -1,6 +1,7 @@
 package com.objecteffects.reddit.method;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.http.HttpResponse;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -22,22 +23,25 @@ import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.data.FriendAbout;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Named;
+import jakarta.inject.Inject;
 
 /**
- *
  */
-@Named
 @ApplicationScoped
-public class GetFriends {
+public class GetFriends implements Serializable {
+    private static final long serialVersionUID = 9162663642350966578L;
+
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    private final UnFriend unFriend = new UnFriend();
+    @Inject
+    private UnFriend unFriend;
+
+    @Inject
+    private RedditOAuth redditOAuth;
 
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;
-    private final RedditOAuth redditOAuth = new RedditOAuth();
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()

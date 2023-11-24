@@ -1,8 +1,11 @@
 package com.objecteffects.reddit.core;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 /**
  *
  */
+@ApplicationScoped
 public enum RedditMethod {
     // list of friends
     FriendsMethod("prefs/friends"),
