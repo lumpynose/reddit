@@ -9,6 +9,8 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.objecteffects.reddit.core.RedditOAuth;
+
 /**
  *
  */
@@ -19,6 +21,7 @@ public class AppConfig {
     private final static String configFile =
             "c:/home/lumpy/redditconfig.properties";
 
+    private final static RedditOAuth redditOAuth = new RedditOAuth();
     private final static Properties configProps = new Properties();
     private static String oauthToken = null;
 
@@ -34,7 +37,7 @@ public class AppConfig {
         this.log.debug("loading configuration");
 
         try (FileInputStream in = new FileInputStream(configFile)) {
-            AppConfig.configProps.load(in);
+            configProps.load(in);
         }
         catch (final FileNotFoundException e) {
             e.printStackTrace();
@@ -60,8 +63,8 @@ public class AppConfig {
 
         loadConfiguration();
 
-        if (AppConfig.configProps.containsKey(key)) {
-            return AppConfig.configProps.getProperty(key);
+        if (configProps.containsKey(key)) {
+            return configProps.getProperty(key);
         }
 
         throw new IllegalStateException("missing " + key);
@@ -75,11 +78,11 @@ public class AppConfig {
 
         loadConfiguration();
 
-        if (!AppConfig.configProps.containsKey(key)) {
+        if (!configProps.containsKey(key)) {
             throw new IllegalStateException("missing " + key);
         }
 
-        return AppConfig.configProps.getProperty(key);
+        return configProps.getProperty(key);
     }
 
     /**
@@ -90,11 +93,11 @@ public class AppConfig {
 
         loadConfiguration();
 
-        if (!AppConfig.configProps.containsKey(key)) {
+        if (!configProps.containsKey(key)) {
             throw new IllegalStateException("missing " + key);
         }
 
-        return AppConfig.configProps.getProperty(key);
+        return configProps.getProperty(key);
     }
 
     /**
@@ -105,11 +108,11 @@ public class AppConfig {
 
         loadConfiguration();
 
-        if (!AppConfig.configProps.containsKey(key)) {
+        if (!configProps.containsKey(key)) {
             throw new IllegalStateException("missing " + key);
         }
 
-        return AppConfig.configProps.getProperty(key);
+        return configProps.getProperty(key);
     }
 
     /**
@@ -117,17 +120,33 @@ public class AppConfig {
      * RedditOAuth and then stored here.
      *
      * @return
+     * @throws InterruptedException
+     * @throws IOException
      */
-    public String getOAuthToken() {
-        return AppConfig.oauthToken;
+    public String getOAuthToken() throws IOException, InterruptedException {
+        if (oauthToken == null) {
+            // calls setOAuthToken() below
+            oauthToken = redditOAuth.getAuthToken();
+        }
+
+        return oauthToken;
+    }
+
+    /**
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public void revokeOAuthToken() throws IOException, InterruptedException {
+        redditOAuth.revokeToken();
+        oauthToken = null;
     }
 
     /**
      * @param _oauthToken
      */
-    public void setOAuthToken(final String _oauthToken) {
-        AppConfig.oauthToken = _oauthToken;
-    }
+//    public void setOAuthToken(final String _oauthToken) {
+//        oauthToken = _oauthToken;
+//    }
 
     public List<String> getHide() {
         return null;

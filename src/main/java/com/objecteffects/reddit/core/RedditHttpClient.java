@@ -60,7 +60,7 @@ public class RedditHttpClient {
     public final static List<Integer> okCodes =
             Arrays.asList(200, 201, 202, 203, 204);
 
-    private final RedditOAuth redditOAuth = new RedditOAuth();
+//    private final RedditOAuth redditOAuth = new RedditOAuth();
     private final AppConfig appConfig = new AppConfig();
 
     public static HttpClient getHttpClient() {
@@ -101,7 +101,7 @@ public class RedditHttpClient {
         this.log.debug("fullUrl: {}", fullUrl);
 
         // loads the OAuth token for AppConfig.getOAuthToken().
-        this.redditOAuth.getAuthToken();
+//        this.redditOAuth.getAuthToken();
 
         final HttpRequest buildRequest = request
                 .headers("User-Agent",
@@ -165,6 +165,8 @@ public class RedditHttpClient {
                 }
             }
         }
+
+        this.appConfig.revokeOAuthToken();
 
         if (response == null || !okCodes.contains(response.statusCode())) {
             return null;

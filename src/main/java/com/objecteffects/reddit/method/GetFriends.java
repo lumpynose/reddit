@@ -18,7 +18,6 @@ import com.jayway.jsonpath.TypeRef;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.data.FriendAbout;
 
@@ -34,8 +33,6 @@ public class GetFriends implements Serializable {
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     private final UnFriend unFriend = new UnFriend();
-
-    private final RedditOAuth redditOAuth = new RedditOAuth();
 
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;
@@ -128,7 +125,7 @@ public class GetFriends implements Serializable {
             result = decodeAbout(friends, count);
         }
 
-        this.redditOAuth.revokeToken();
+//        this.redditOAuth.revokeToken();
 
         return result;
     }

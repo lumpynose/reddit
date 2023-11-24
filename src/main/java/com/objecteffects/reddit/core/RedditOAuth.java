@@ -50,13 +50,13 @@ public class RedditOAuth {
      * @throws IOException
      * @throws InterruptedException
      */
-    public HttpResponse<String> getAuthToken()
+    public String getAuthToken()
             throws IOException, InterruptedException {
-        if (this.configuration.getOAuthToken() != null) {
-            this.log.debug("auth token already loaded");
-
-            return null;
-        }
+//        if (this.configuration.getOAuthToken() != null) {
+//            this.log.debug("auth token already loaded");
+//
+//            return null;
+//        }
 
         final Map<String, String> params = new HashMap<>();
 
@@ -104,7 +104,7 @@ public class RedditOAuth {
                 Integer.valueOf(response.statusCode()));
 
         if (response.statusCode() != 200) {
-            this.configuration.setOAuthToken(null);
+//            this.configuration.setOAuthToken(null);
 
             throw new IllegalStateException(
                     "status code: " + response.statusCode());
@@ -138,9 +138,9 @@ public class RedditOAuth {
 
         this.log.debug("access_token: {}", access_token);
 
-        this.configuration.setOAuthToken(access_token);
+//        this.configuration.setOAuthToken(access_token);
 
-        return response;
+        return access_token;
     }
 
     /**
@@ -199,13 +199,13 @@ public class RedditOAuth {
         this.log.debug("revoke response body: {}", response.body());
 
         if (response.statusCode() != 200) {
-            this.configuration.setOAuthToken(null);
+//            this.configuration.setOAuthToken(null);
 
             throw new IllegalStateException(
                     "status code: " + response.statusCode());
         }
 
-        this.configuration.setOAuthToken(null);
+//        this.configuration.setOAuthToken(null);
 
         return response;
     }

@@ -8,8 +8,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.main.AppConfig;
-
 import jakarta.enterprise.context.ApplicationScoped;
 
 /**
@@ -20,12 +18,8 @@ public class RedditGetMethod {
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    private final RedditOAuth redditOAuth =
-            new RedditOAuth();
     private final RedditHttpClient redditHttpClient =
             new RedditHttpClient();
-    private final AppConfig configuration =
-            new AppConfig();
 
     /**
      * @param method
