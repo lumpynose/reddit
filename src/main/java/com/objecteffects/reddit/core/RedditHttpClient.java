@@ -21,8 +21,24 @@ import com.objecteffects.reddit.main.AppConfig;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
+// list of friends
+// public final static String FRIENDS_METHOD = "prefs/friends";
+// info about a user
+// public final static String ABOUT_METHOD = "user/%s/about";
+// friend or unfriend a user
+// public final static String FRIEND_METHOD = "api/v1/me/friends/%s";
+// list of posts by a user
+// public final static String SUBMITTED_METHOD = "/user/%s/submitted";
+// hide a post
+// public final static String HIDE_METHOD = "/api/hide";
+// info about me
+// public final static String ABOUT_ME_METHOD = "api/v1/me";
+// revoke OAuth token
+// public final static String REVOKE_TOKEN_METHOD = "api/v1/revoke_token";
+// get OAuth token
+// public final static String GET_TOKEN_METHOD = "api/v1/access_token";
+
 /**
- *
  */
 @ApplicationScoped
 public class RedditHttpClient {
@@ -39,23 +55,6 @@ public class RedditHttpClient {
 
     public final static String AUTH_URL = "https://www.reddit.com";
     public final static String METHOD_URL = "https://oauth.reddit.com";
-
-    // list of friends
-    // public final static String FRIENDS_METHOD = "prefs/friends";
-    // info about a user
-    // public final static String ABOUT_METHOD = "user/%s/about";
-    // friend or unfriend a user
-    // public final static String FRIEND_METHOD = "api/v1/me/friends/%s";
-    // list of posts by a user
-    // public final static String SUBMITTED_METHOD = "/user/%s/submitted";
-    // hide a post
-    // public final static String HIDE_METHOD = "/api/hide";
-    // info about me
-    // public final static String ABOUT_ME_METHOD = "api/v1/me";
-    // revoke OAuth token
-    // public final static String REVOKE_TOKEN_METHOD = "api/v1/revoke_token";
-    // get OAuth token
-    // public final static String GET_TOKEN_METHOD = "api/v1/access_token";
 
     @SuppressWarnings("boxing")
     public final static List<Integer> okCodes =

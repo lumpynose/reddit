@@ -40,6 +40,8 @@ public class UpVotePosts implements Serializable {
                     .options(EnumSet.noneOf(Option.class))
                     .build();
 
+    final RedditGetMethod getClient = new RedditGetMethod();
+
     /**
      * @param name
      * @param count
@@ -51,9 +53,6 @@ public class UpVotePosts implements Serializable {
     public String upVotePosts(final String name, final int count,
             final String lastAfter)
             throws IOException, InterruptedException {
-
-        final RedditGetMethod getClient = new RedditGetMethod();
-
         final String submittedMethod =
                 String.format("/user/%s/submitted", name);
 
@@ -68,7 +67,7 @@ public class UpVotePosts implements Serializable {
         }
 
         final HttpResponse<String> response =
-                getClient.getMethod(submittedMethod, params);
+                this.getClient.getMethod(submittedMethod, params);
 
         if (response == null) {
             this.log.debug("null response");

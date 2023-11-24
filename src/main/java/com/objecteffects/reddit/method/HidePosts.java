@@ -41,6 +41,8 @@ public class HidePosts implements Serializable {
                     .options(EnumSet.noneOf(Option.class))
                     .build();
 
+    private final RedditGetMethod getClient = new RedditGetMethod();
+
     /**
      * @param name
      * @param count
@@ -52,9 +54,6 @@ public class HidePosts implements Serializable {
     public String hidePosts(final String name, final int count,
             final String lastAfter)
             throws IOException, InterruptedException {
-
-        final RedditGetMethod getClient = new RedditGetMethod();
-
         final String submittedMethod =
                 String.format("/user/%s/submitted", name);
 
@@ -69,7 +68,7 @@ public class HidePosts implements Serializable {
         }
 
         final HttpResponse<String> methodResponse =
-                getClient.getMethod(submittedMethod, params);
+                this.getClient.getMethod(submittedMethod, params);
 
         if (methodResponse == null) {
             this.log.debug("null response");

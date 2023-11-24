@@ -12,7 +12,6 @@ import com.objecteffects.reddit.core.RedditDeleteMethod;
 import com.objecteffects.reddit.core.RedditOAuth;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 /**
  */
@@ -23,13 +22,9 @@ public class UnFriend implements Serializable {
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    @Inject
-    private RedditOAuth redditOAuth;
-//    private final RedditOAuth redditOAuth = new RedditOAuth();
+    private final RedditOAuth redditOAuth = new RedditOAuth();
 
-    @Inject
-    private RedditDeleteMethod deleteClient;
-//    private final RedditDeleteMethod deleteClient = new RedditDeleteMethod();
+    private final RedditDeleteMethod deleteClient = new RedditDeleteMethod();
 
     /**
      * @param name

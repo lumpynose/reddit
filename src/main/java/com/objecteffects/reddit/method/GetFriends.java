@@ -23,7 +23,6 @@ import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.data.FriendAbout;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 /**
  */
@@ -34,11 +33,9 @@ public class GetFriends implements Serializable {
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    @Inject
-    private UnFriend unFriend;
+    private final UnFriend unFriend = new UnFriend();
 
-    @Inject
-    private RedditOAuth redditOAuth;
+    private final RedditOAuth redditOAuth = new RedditOAuth();
 
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;
