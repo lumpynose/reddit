@@ -54,38 +54,38 @@ public class TestDeleteMethod {
         final String user = "BotDefense";
         HttpResponse<String> response;
 
-        final String aboutMethod = String.format("user/%s/about", user);
+        final String aboutUri = String.format("user/%s/about", user);
 
-        response = this.getClient.getMethod(aboutMethod,
+        response = this.getClient.getMethod(aboutUri,
                 Collections.emptyMap());
 
         this.log.debug("response: {}", response);
 
         /* end of GET about */
 
-        final String putMethod = String.format("api/v1/me/friends/%s",
+        final String putUri = String.format("api/v1/me/friends/%s",
                 user);
 
         final Map<String, String> map = Map.of("name", user);
 
-        response = this.putClient.putMethod(putMethod, map);
+        response = this.putClient.putMethod(putUri, map);
 
         this.log.debug("response: {}", response);
 
         /* end of PUT friends */
 
-        final String infoMethod = String.format("api/v1/me/friends/%s",
+        final String infoUri = String.format("api/v1/me/friends/%s",
                 user);
 
-        response = this.getClient.getMethod(infoMethod, Collections.emptyMap());
+        response = this.getClient.getMethod(infoUri, Collections.emptyMap());
 
         this.log.debug("response: {}", response);
 
         /* end of GET friends user */
 
-        final String deleteMethod = String.format("api/v1/me/friends/%s", user);
+        final String deleteUri = String.format("api/v1/me/friends/%s", user);
 
-        response = this.delClient.deleteMethod(deleteMethod,
+        response = this.delClient.deleteMethod(deleteUri,
                 Collections.emptyMap());
 
         this.log.debug("response: {}", response);

@@ -61,7 +61,7 @@ public class TestGetMethodPosts {
         final int count = 5;
         final String name = "BotDefense";
 
-        final String submittedMethod =
+        final String submittedUri =
                 String.format("/user/%s/submitted", name);
 
         final Map<String, String> params =
@@ -71,7 +71,7 @@ public class TestGetMethodPosts {
                                 "type", "links"));
 
         final HttpResponse<String> methodResponse =
-                this.getClient.getMethod(submittedMethod, params);
+                this.getClient.getMethod(submittedUri, params);
 
         this.log.debug("method response status: {}",
                 Integer.valueOf(methodResponse.statusCode()));

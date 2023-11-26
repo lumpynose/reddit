@@ -23,6 +23,8 @@ public class RedditGetMethod implements Serializable {
     @Inject
     private RedditHttpClient redditHttpClient;
 
+    final HttpRequest.Builder getRequest = HttpRequest.newBuilder().GET();
+
     /**
      * @param method
      * @param params
@@ -33,9 +35,7 @@ public class RedditGetMethod implements Serializable {
     public HttpResponse<String> getMethod(final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
-
-        final HttpRequest.Builder getBuilder = HttpRequest.newBuilder().GET();
-
-        return this.redditHttpClient.clientSend(getBuilder, method, params);
+        return this.redditHttpClient.clientSend(this.getRequest, method,
+                params);
     }
 }

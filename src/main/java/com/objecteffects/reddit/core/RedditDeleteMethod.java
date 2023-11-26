@@ -20,11 +20,10 @@ public class RedditDeleteMethod implements Serializable {
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-//    private final RedditHttpClient redditHttpClient = new RedditHttpClient();
     @Inject
     private RedditHttpClient redditHttpClient;
 
-    final HttpRequest.Builder deleteBuilder = HttpRequest.newBuilder()
+    final HttpRequest.Builder deleteRequest = HttpRequest.newBuilder()
             .DELETE();
 
     /**
@@ -37,7 +36,7 @@ public class RedditDeleteMethod implements Serializable {
     public HttpResponse<String> deleteMethod(final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
-        return this.redditHttpClient.clientSend(this.deleteBuilder, method,
+        return this.redditHttpClient.clientSend(this.deleteRequest, method,
                 params);
     }
 }

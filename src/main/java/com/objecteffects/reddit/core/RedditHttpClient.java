@@ -10,7 +10,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -21,21 +20,21 @@ import org.slf4j.LoggerFactory;
 import jakarta.inject.Inject;
 
 // list of friends
-// public final static String FRIENDS_METHOD = "prefs/friends";
+// public final static String FRIENDS_URI = "prefs/friends";
 // info about a user
-// public final static String ABOUT_METHOD = "user/%s/about";
+// public final static String ABOUT_URI = "user/%s/about";
 // friend or unfriend a user
-// public final static String FRIEND_METHOD = "api/v1/me/friends/%s";
+// public final static String FRIEND_URI = "api/v1/me/friends/%s";
 // list of posts by a user
-// public final static String SUBMITTED_METHOD = "/user/%s/submitted";
+// public final static String SUBMITTED_URI = "/user/%s/submitted";
 // hide a post
-// public final static String HIDE_METHOD = "/api/hide";
+// public final static String HIDE_URI = "/api/hide";
 // info about me
-// public final static String ABOUT_ME_METHOD = "api/v1/me";
+// public final static String ABOUT_ME_URI = "api/v1/me";
 // revoke OAuth token
-// public final static String REVOKE_TOKEN_METHOD = "api/v1/revoke_token";
+// public final static String REVOKE_TOKEN_URI = "api/v1/revoke_token";
 // get OAuth token
-// public final static String GET_TOKEN_METHOD = "api/v1/access_token";
+// public final static String GET_TOKEN_URI = "api/v1/access_token";
 
 /**
  */
@@ -54,30 +53,14 @@ public class RedditHttpClient implements Serializable {
             .followRedirects(Redirect.NORMAL)
             .build();
 
-    public final static String METHOD_URL = "https://oauth.reddit.com";
+    private final static String METHOD_URI = "https://oauth.reddit.com";
 
     @SuppressWarnings("boxing")
-    public final static List<Integer> okCodes =
-            Arrays.asList(200, 201, 202, 203, 204);
+    private final static List<Integer> okCodes =
+            List.of(200, 201, 202, 203, 204);
 
-//    private final RedditOAuth redditOAuth = new RedditOAuth();
     @Inject
     private RedditOAuth redditOAuth;
-
-//    private final AppConfig appConfig = new AppConfig();
-
-    /**
-     */
-    public RedditHttpClient() {
-        // empty
-    }
-
-    /**
-     * @return
-     */
-    public HttpClient getHttpClient() {
-        return client;
-    }
 
     /**
      * @param request
@@ -93,7 +76,7 @@ public class RedditHttpClient implements Serializable {
             final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
-        final String fullUrl;
+        final String fullUri;
 
         if (!params.isEmpty()) {
             final String form = params.entrySet().stream()
@@ -102,23 +85,20 @@ public class RedditHttpClient implements Serializable {
 
             this.log.debug("form: {}, {}", form, form.length());
 
-            fullUrl = String.format("%s/%s?%s", METHOD_URL, method, form);
+            fullUri = String.format("%s/%s?%s", METHOD_URI, method, form);
         }
         else {
-            fullUrl = String.format("%s/%s", METHOD_URL, method);
+            fullUri = String.format("%s/%s", METHOD_URI, method);
         }
 
-        this.log.debug("fullUrl: {}", fullUrl);
-
-        // loads the OAuth token
-//        this.redditOAuth.getOAuthToken();
+        this.log.debug("fullUri: {}", fullUri);
 
         final HttpRequest buildRequest = request
                 .headers("User-Agent",
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
                 .header("Authorization",
                         "bearer " + this.redditOAuth.getOAuthToken())
-                .uri(URI.create(fullUrl))
+                .uri(URI.create(fullUri))
                 .timeout(Duration.ofSeconds(timeoutSeconds))
                 .build();
 
@@ -136,24 +116,24 @@ public class RedditHttpClient implements Serializable {
             this.log.debug("response headers: {}", response.headers());
             // this.log.debug("response body: {}", response.body());
         }
-        catch (IOException | InterruptedException e) {
+        catch (IOException | InterruptedException | NullPointerException e) {
             this.log.debug("exception: {}", e);
 
             // fall through to retries below
 
-            // response will be null at this point.
+            // response may be null at this point?
             // response = null;
         }
 
         if (response == null || !okCodes.contains(response.statusCode())) {
-            for (int i = 0; i < 4; i++) {
-                Thread.sleep(600);
+            for (int i = 0; i < 3; i++) {
+                Thread.sleep(600 * i);
 
                 try {
                     this.log.debug("method: {}", method);
 
-                    response =
-                            client.send(buildRequest, BodyHandlers.ofString());
+                    response = client.send(buildRequest,
+                            BodyHandlers.ofString());
 
                     this.log.debug("response status: {}",
                             Integer.valueOf(response.statusCode()));

@@ -143,11 +143,11 @@ public class GetFriends implements Serializable {
         for (final Friend f : sublist) {
             Thread.sleep(600);
 
-            final String aboutMethod =
+            final String aboutUri =
                     String.format("user/%s/about", f.getName());
 
             final HttpResponse<String> aboutMethodResponse = this.client
-                    .getMethod(aboutMethod, Collections.emptyMap());
+                    .getMethod(aboutUri, Collections.emptyMap());
 
             if (aboutMethodResponse == null) {
                 this.log.debug("null response, unfriending: {}", f.getName());

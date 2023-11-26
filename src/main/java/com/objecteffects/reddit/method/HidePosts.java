@@ -53,8 +53,8 @@ public class HidePosts implements Serializable {
     public String hidePosts(final String name, final int count,
             final String lastAfter)
             throws IOException, InterruptedException {
-        final String submittedMethod =
-                String.format("/user/%s/submitted", name);
+        final String submittedUri =
+                String.format("user/%s/submitted", name);
 
         final Map<String, String> params =
                 new HashMap<>(
@@ -67,7 +67,7 @@ public class HidePosts implements Serializable {
         }
 
         final HttpResponse<String> methodResponse =
-                this.getClient.getMethod(submittedMethod, params);
+                this.getClient.getMethod(submittedUri, params);
 
         if (methodResponse == null) {
             this.log.debug("null response");
@@ -100,7 +100,7 @@ public class HidePosts implements Serializable {
         final RedditPostMethod postClient =
                 new RedditPostMethod();
 
-        final String hideMethod = String.format("/api/hide");
+        final String hideUri = String.format("api/hide");
 
         for (final Post post : posts) {
             this.log.debug("post: {}", post);
@@ -113,7 +113,7 @@ public class HidePosts implements Serializable {
             }
 
             final HttpResponse<String> hideResponse =
-                    postClient.postMethod(hideMethod, param);
+                    postClient.postMethod(hideUri, param);
 
             this.log.debug("response: {}",
                     Integer.valueOf(hideResponse.statusCode()));

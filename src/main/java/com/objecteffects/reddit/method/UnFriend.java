@@ -20,9 +20,6 @@ public class UnFriend implements Serializable {
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-//    private final RedditOAuth redditOAuth = new RedditOAuth();
-
-//    private final RedditDeleteMethod deleteClient = new RedditDeleteMethod();
     @Inject
     private RedditDeleteMethod deleteClient;
 
@@ -33,14 +30,16 @@ public class UnFriend implements Serializable {
      */
     public void unFriend(final String name)
             throws InterruptedException, IOException {
-        final String deleteMethod =
-                String.format("/api/v1/me/friends/%s", name);
+        final String deleteUri =
+                String.format("api/v1/me/friends/%s", name);
 
         final HttpResponse<String> methodResponse = this.deleteClient
-                .deleteMethod(deleteMethod, Collections.emptyMap());
+                .deleteMethod(deleteUri, Collections.emptyMap());
 
         if (methodResponse == null) {
-            throw new IllegalStateException("null delete friend respones");
+            this.log.warn("null delete friend respones");
+
+            return;
         }
 
         this.log.debug("delete method response status: {}",

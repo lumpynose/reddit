@@ -44,11 +44,11 @@ public class RedditPostMethod implements Serializable {
 
         this.log.debug("paramsJson: {}", pj);
 
-        final HttpRequest.Builder getBuilder =
+        final HttpRequest.Builder postRequest =
                 HttpRequest.newBuilder()
                         .POST(BodyPublishers.ofString(pj));
 
-        return this.redditHttpClient.clientSend(getBuilder, method, params);
+        return this.redditHttpClient.clientSend(postRequest, method, params);
     }
 
     @SuppressWarnings("unused")

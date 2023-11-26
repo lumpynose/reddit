@@ -56,8 +56,8 @@ public class UpVotePosts implements Serializable {
     public String upVotePosts(final String name, final int count,
             final String lastAfter)
             throws IOException, InterruptedException {
-        final String submittedMethod =
-                String.format("/user/%s/submitted", name);
+        final String submittedUri =
+                String.format("user/%s/submitted", name);
 
         final Map<String, String> params =
                 new HashMap<>(
@@ -70,7 +70,7 @@ public class UpVotePosts implements Serializable {
         }
 
         final HttpResponse<String> response =
-                this.getClient.getMethod(submittedMethod, params);
+                this.getClient.getMethod(submittedUri, params);
 
         if (response == null) {
             this.log.debug("null response");
@@ -94,7 +94,7 @@ public class UpVotePosts implements Serializable {
 
         this.log.debug("list size: {}", Integer.valueOf(posts.size()));
 
-        final String upVoteMethod = String.format("api/vote");
+        final String upVoteUri = String.format("api/vote");
 
         for (final Post pd : posts) {
             this.log.debug("post: {}", pd);
@@ -105,7 +105,7 @@ public class UpVotePosts implements Serializable {
                             "rank", "2");
 
             final HttpResponse<String> upVoteResponse =
-                    this.postClient.postMethod(upVoteMethod, param);
+                    this.postClient.postMethod(upVoteUri, param);
 
             if (upVoteResponse == null) {
                 this.log.debug("null response");

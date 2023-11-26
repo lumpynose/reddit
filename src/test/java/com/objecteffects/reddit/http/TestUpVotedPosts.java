@@ -59,7 +59,7 @@ public class TestUpVotedPosts {
             throws IOException, InterruptedException {
         final String user = "lumpynose";
 
-        final String upvotedMethod = String.format("/user/%s/upvoted",
+        final String upvotedUri = String.format("/user/%s/upvoted",
                 user);
 
         final Map<String, String> params =
@@ -67,7 +67,7 @@ public class TestUpVotedPosts {
                         "links");
 
         final HttpResponse<String> methodResponse =
-                this.getClient.getMethod(upvotedMethod, params);
+                this.getClient.getMethod(upvotedUri, params);
 
         if (methodResponse == null) {
             log.debug("null response");

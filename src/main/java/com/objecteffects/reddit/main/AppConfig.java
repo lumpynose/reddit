@@ -19,9 +19,7 @@ public class AppConfig {
     private final static String configFile =
             "c:/home/lumpy/redditconfig.properties";
 
-//    private final static RedditOAuth redditOAuth = new RedditOAuth();
     private final static Properties configProps = new Properties();
-    private static String oauthToken = null;
 
     /**
      * @throws FileNotFoundException
@@ -114,42 +112,15 @@ public class AppConfig {
     }
 
     /**
-     * The OAuthToken is not stored in the properties file but created by
-     * RedditOAuth and then stored here.
-     *
      * @return
-     * @throws InterruptedException
-     * @throws IOException
      */
-//    public String getOAuthToken() throws IOException, InterruptedException {
-//        if (oauthToken == null) {
-//            // calls setOAuthToken() below
-//            oauthToken = redditOAuth.getOAuthToken();
-//        }
-//
-//        return oauthToken;
-//    }
-
-    /**
-     * @throws IOException
-     * @throws InterruptedException
-     */
-//    public void revokeOAuthToken() throws IOException, InterruptedException {
-//        redditOAuth.revokeToken();
-//        oauthToken = null;
-//    }
-
-    /**
-     * @param _oauthToken
-     */
-//    public void setOAuthToken(final String _oauthToken) {
-//        oauthToken = _oauthToken;
-//    }
-
     public List<String> getHide() {
         return null;
     }
 
+    /**
+     * @return
+     */
     public String dumpConfig() {
         return AppConfig.configProps.toString();
     }
