@@ -22,12 +22,10 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditPostMethod;
 import com.objecteffects.reddit.data.Post;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
- *
  */
-@ApplicationScoped
 public class HidePosts implements Serializable {
     private static final long serialVersionUID = -4364873968404701430L;
 
@@ -41,7 +39,8 @@ public class HidePosts implements Serializable {
                     .options(EnumSet.noneOf(Option.class))
                     .build();
 
-    private final RedditGetMethod getClient = new RedditGetMethod();
+    @Inject
+    private RedditGetMethod getClient;
 
     /**
      * @param name

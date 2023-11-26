@@ -22,11 +22,10 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditPostMethod;
 import com.objecteffects.reddit.data.Post;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  */
-@ApplicationScoped
 public class UpVotePosts implements Serializable {
     private static final long serialVersionUID = 2128161635287212928L;
 
@@ -40,7 +39,11 @@ public class UpVotePosts implements Serializable {
                     .options(EnumSet.noneOf(Option.class))
                     .build();
 
-    final RedditGetMethod getClient = new RedditGetMethod();
+    @Inject
+    private RedditGetMethod getClient;
+
+    @Inject
+    private RedditPostMethod postClient;
 
     /**
      * @param name
@@ -91,9 +94,6 @@ public class UpVotePosts implements Serializable {
 
         this.log.debug("list size: {}", Integer.valueOf(posts.size()));
 
-        final RedditPostMethod postClient =
-                new RedditPostMethod();
-
         final String upVoteMethod = String.format("api/vote");
 
         for (final Post pd : posts) {
@@ -105,7 +105,7 @@ public class UpVotePosts implements Serializable {
                             "rank", "2");
 
             final HttpResponse<String> upVoteResponse =
-                    postClient.postMethod(upVoteMethod, param);
+                    this.postClient.postMethod(upVoteMethod, param);
 
             if (upVoteResponse == null) {
                 this.log.debug("null response");

@@ -1,6 +1,7 @@
 package com.objecteffects.reddit.core;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpClient.Redirect;
@@ -17,9 +18,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.main.AppConfig;
-
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 // list of friends
 // public final static String FRIENDS_METHOD = "prefs/friends";
@@ -40,12 +39,14 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 /**
  */
-@ApplicationScoped
-public class RedditHttpClient {
+//@ApplicationScoped
+public class RedditHttpClient implements Serializable {
+    private static final long serialVersionUID = -2404248317929989018L;
+
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    static final int timeoutSeconds = 15;
+    private static final int timeoutSeconds = 15;
 
     private static final HttpClient client = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(timeoutSeconds))
@@ -53,7 +54,6 @@ public class RedditHttpClient {
             .followRedirects(Redirect.NORMAL)
             .build();
 
-    public final static String AUTH_URL = "https://www.reddit.com";
     public final static String METHOD_URL = "https://oauth.reddit.com";
 
     @SuppressWarnings("boxing")
@@ -61,9 +61,21 @@ public class RedditHttpClient {
             Arrays.asList(200, 201, 202, 203, 204);
 
 //    private final RedditOAuth redditOAuth = new RedditOAuth();
-    private final AppConfig appConfig = new AppConfig();
+    @Inject
+    private RedditOAuth redditOAuth;
 
-    public static HttpClient getHttpClient() {
+//    private final AppConfig appConfig = new AppConfig();
+
+    /**
+     */
+    public RedditHttpClient() {
+        // empty
+    }
+
+    /**
+     * @return
+     */
+    public HttpClient getHttpClient() {
         return client;
     }
 
@@ -90,26 +102,24 @@ public class RedditHttpClient {
 
             this.log.debug("form: {}, {}", form, form.length());
 
-            fullUrl = String.format("%s/%s?%s",
-                    RedditHttpClient.METHOD_URL, method, form);
+            fullUrl = String.format("%s/%s?%s", METHOD_URL, method, form);
         }
         else {
-            fullUrl = String.format("%s/%s",
-                    RedditHttpClient.METHOD_URL, method);
+            fullUrl = String.format("%s/%s", METHOD_URL, method);
         }
 
         this.log.debug("fullUrl: {}", fullUrl);
 
-        // loads the OAuth token for AppConfig.getOAuthToken().
-//        this.redditOAuth.getAuthToken();
+        // loads the OAuth token
+//        this.redditOAuth.getOAuthToken();
 
         final HttpRequest buildRequest = request
                 .headers("User-Agent",
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
                 .header("Authorization",
-                        "bearer " + this.appConfig.getOAuthToken())
+                        "bearer " + this.redditOAuth.getOAuthToken())
                 .uri(URI.create(fullUrl))
-                .timeout(Duration.ofSeconds(RedditHttpClient.timeoutSeconds))
+                .timeout(Duration.ofSeconds(timeoutSeconds))
                 .build();
 
 //        log.debug("headers: {}", request.headers());
@@ -119,8 +129,7 @@ public class RedditHttpClient {
         try {
             this.log.debug("method: {}", method);
 
-            response = RedditHttpClient.client.send(buildRequest,
-                    BodyHandlers.ofString());
+            response = client.send(buildRequest, BodyHandlers.ofString());
 
             this.log.debug("response status: {}",
                     Integer.valueOf(response.statusCode()));
@@ -143,9 +152,8 @@ public class RedditHttpClient {
                 try {
                     this.log.debug("method: {}", method);
 
-                    response = RedditHttpClient.client
-                            .send(buildRequest,
-                                    BodyHandlers.ofString());
+                    response =
+                            client.send(buildRequest, BodyHandlers.ofString());
 
                     this.log.debug("response status: {}",
                             Integer.valueOf(response.statusCode()));
@@ -166,7 +174,7 @@ public class RedditHttpClient {
             }
         }
 
-        this.appConfig.revokeOAuthToken();
+        this.redditOAuth.revokeToken();
 
         if (response == null || !okCodes.contains(response.statusCode())) {
             return null;

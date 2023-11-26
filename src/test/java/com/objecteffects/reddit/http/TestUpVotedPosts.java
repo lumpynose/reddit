@@ -6,6 +6,9 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 
+import org.jboss.weld.junit5.EnableWeld;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,18 +21,19 @@ import com.jayway.jsonpath.TypeRef;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditHttpClient;
+import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.Post;
-import com.objecteffects.reddit.main.AppConfig;
+
+import jakarta.inject.Inject;
 
 /**
  *
  */
+@EnableWeld
 public class TestUpVotedPosts {
     final static Logger log =
             LoggerFactory.getLogger(TestUpVotedPosts.class);
-
-    private final static AppConfig configuration =
-            new AppConfig();
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()
@@ -37,6 +41,14 @@ public class TestUpVotedPosts {
                     .mappingProvider(new JacksonMappingProvider())
                     .options(EnumSet.noneOf(Option.class))
                     .build();
+
+    @WeldSetup
+    private final WeldInitiator weld =
+            WeldInitiator.of(RedditGetMethod.class,
+                    RedditHttpClient.class, RedditOAuth.class);
+
+    @Inject
+    private RedditGetMethod getClient;
 
     /**
      * @throws IOException
@@ -47,10 +59,6 @@ public class TestUpVotedPosts {
             throws IOException, InterruptedException {
         final String user = "lumpynose";
 
-        log.debug("configuration: {}", configuration.dumpConfig());
-
-        final RedditGetMethod getClient = new RedditGetMethod();
-
         final String upvotedMethod = String.format("/user/%s/upvoted",
                 user);
 
@@ -59,7 +67,7 @@ public class TestUpVotedPosts {
                         "links");
 
         final HttpResponse<String> methodResponse =
-                getClient.getMethod(upvotedMethod, params);
+                this.getClient.getMethod(upvotedMethod, params);
 
         if (methodResponse == null) {
             log.debug("null response");

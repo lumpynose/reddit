@@ -9,8 +9,6 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.core.RedditOAuth;
-
 /**
  *
  */
@@ -21,7 +19,7 @@ public class AppConfig {
     private final static String configFile =
             "c:/home/lumpy/redditconfig.properties";
 
-    private final static RedditOAuth redditOAuth = new RedditOAuth();
+//    private final static RedditOAuth redditOAuth = new RedditOAuth();
     private final static Properties configProps = new Properties();
     private static String oauthToken = null;
 
@@ -123,23 +121,23 @@ public class AppConfig {
      * @throws InterruptedException
      * @throws IOException
      */
-    public String getOAuthToken() throws IOException, InterruptedException {
-        if (oauthToken == null) {
-            // calls setOAuthToken() below
-            oauthToken = redditOAuth.getAuthToken();
-        }
-
-        return oauthToken;
-    }
+//    public String getOAuthToken() throws IOException, InterruptedException {
+//        if (oauthToken == null) {
+//            // calls setOAuthToken() below
+//            oauthToken = redditOAuth.getOAuthToken();
+//        }
+//
+//        return oauthToken;
+//    }
 
     /**
      * @throws IOException
      * @throws InterruptedException
      */
-    public void revokeOAuthToken() throws IOException, InterruptedException {
-        redditOAuth.revokeToken();
-        oauthToken = null;
-    }
+//    public void revokeOAuthToken() throws IOException, InterruptedException {
+//        redditOAuth.revokeToken();
+//        oauthToken = null;
+//    }
 
     /**
      * @param _oauthToken

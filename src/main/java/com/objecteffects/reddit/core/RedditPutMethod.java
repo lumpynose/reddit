@@ -1,6 +1,7 @@
 package com.objecteffects.reddit.core;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
@@ -12,16 +13,19 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  */
-@ApplicationScoped
-public class RedditPutMethod {
+public class RedditPutMethod implements Serializable {
+    private static final long serialVersionUID = -7339995311514312150L;
+
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    private final RedditHttpClient redditHttpClient = new RedditHttpClient();
+//    private final RedditHttpClient redditHttpClient = new RedditHttpClient();
+    @Inject
+    private RedditHttpClient redditHttpClient;
 
     /**
      * @param method

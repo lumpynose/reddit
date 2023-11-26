@@ -21,18 +21,21 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.data.FriendAbout;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
  */
-@ApplicationScoped
 public class GetFriends implements Serializable {
     private static final long serialVersionUID = 9162663642350966578L;
 
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    private final UnFriend unFriend = new UnFriend();
+    @Inject
+    private RedditGetMethod client;
+
+    @Inject
+    private UnFriend unFriend;
 
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;
@@ -93,9 +96,8 @@ public class GetFriends implements Serializable {
     public List<Friend> getFriends(final int count,
             final boolean getKarma)
             throws IOException, InterruptedException {
-        final RedditGetMethod client = new RedditGetMethod();
 
-        final HttpResponse<String> methodResponse = client
+        final HttpResponse<String> methodResponse = this.client
                 .getMethod("prefs/friends", Collections.emptyMap());
 
         if (methodResponse == null) {
@@ -125,8 +127,6 @@ public class GetFriends implements Serializable {
             result = decodeAbout(friends, count);
         }
 
-//        this.redditOAuth.revokeToken();
-
         return result;
     }
 
@@ -134,8 +134,6 @@ public class GetFriends implements Serializable {
     private List<Friend> decodeAbout(final List<Friend> friends,
             final int count)
             throws IOException, InterruptedException {
-        final RedditGetMethod client = new RedditGetMethod();
-
         List<Friend> sublist = friends;
 
         if (count > 0 && count < friends.size()) {
@@ -148,7 +146,7 @@ public class GetFriends implements Serializable {
             final String aboutMethod =
                     String.format("user/%s/about", f.getName());
 
-            final HttpResponse<String> aboutMethodResponse = client
+            final HttpResponse<String> aboutMethodResponse = this.client
                     .getMethod(aboutMethod, Collections.emptyMap());
 
             if (aboutMethodResponse == null) {

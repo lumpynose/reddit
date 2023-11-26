@@ -9,7 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.main.AppConfig;
+import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditHttpClient;
+import com.objecteffects.reddit.core.RedditOAuth;
+import com.objecteffects.reddit.core.RedditPostMethod;
 import com.objecteffects.reddit.method.UpVotePosts;
 
 import jakarta.inject.Inject;
@@ -22,14 +25,11 @@ public class TestUpVotePosts {
     final Logger log =
             LoggerFactory.getLogger(TestUpVotePosts.class);
 
-    private final AppConfig configuration =
-            new AppConfig();
-
-    /**
-     */
     @WeldSetup
-    public WeldInitiator weld =
-            WeldInitiator.of(UpVotePosts.class);
+    private final WeldInitiator weld =
+            WeldInitiator.of(UpVotePosts.class, RedditGetMethod.class,
+                    RedditPostMethod.class, RedditHttpClient.class,
+                    RedditOAuth.class);
 
     @Inject
     private UpVotePosts upVotePosts;
@@ -41,11 +41,6 @@ public class TestUpVotePosts {
     @Test
     public void testPostMethod() throws IOException,
             InterruptedException {
-        this.log.debug("configuration: {}",
-                this.configuration.dumpConfig());
-
-//        final UpVotePosts upVotePosts =
-//                new UpVotePosts();
 
         this.upVotePosts.upVotePosts("Dompr19", 1, null);
     }

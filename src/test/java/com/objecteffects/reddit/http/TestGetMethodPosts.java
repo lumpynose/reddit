@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jboss.weld.junit5.EnableWeld;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,18 +22,19 @@ import com.jayway.jsonpath.TypeRef;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.Post;
+
+import jakarta.inject.Inject;
 
 /**
  *
  */
+@EnableWeld
 public class TestGetMethodPosts {
     final Logger log =
             LoggerFactory.getLogger(TestGetMethodPosts.class);
-
-    private final RedditOAuth redditOAuth =
-            new RedditOAuth();
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()
@@ -38,6 +42,14 @@ public class TestGetMethodPosts {
                     .mappingProvider(new JacksonMappingProvider())
                     .options(EnumSet.noneOf(Option.class))
                     .build();
+
+    @WeldSetup
+    private final WeldInitiator weld =
+            WeldInitiator.of(RedditGetMethod.class,
+                    RedditHttpClient.class, RedditOAuth.class);
+
+    @Inject
+    private RedditGetMethod getClient;
 
     /**
      * @throws IOException
@@ -49,8 +61,6 @@ public class TestGetMethodPosts {
         final int count = 5;
         final String name = "BotDefense";
 
-        final RedditGetMethod getClient = new RedditGetMethod();
-
         final String submittedMethod =
                 String.format("/user/%s/submitted", name);
 
@@ -61,7 +71,7 @@ public class TestGetMethodPosts {
                                 "type", "links"));
 
         final HttpResponse<String> methodResponse =
-                getClient.getMethod(submittedMethod, params);
+                this.getClient.getMethod(submittedMethod, params);
 
         this.log.debug("method response status: {}",
                 Integer.valueOf(methodResponse.statusCode()));
@@ -70,8 +80,6 @@ public class TestGetMethodPosts {
         // this.log.debug("method response body: {}", methodResponse.body());
 
         decodeBody(methodResponse.body());
-
-        this.redditOAuth.revokeToken();
     }
 
     private void decodeBody(final String body) {

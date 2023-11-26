@@ -10,7 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.main.AppConfig;
+import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditHttpClient;
+import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.method.HidePosts;
 
 import jakarta.inject.Inject;
@@ -23,14 +25,10 @@ public class TestHidePosts {
     final Logger log =
             LoggerFactory.getLogger(TestHidePosts.class);
 
-    private final static AppConfig configuration =
-            new AppConfig();
-
-    /**
-     */
     @WeldSetup
-    public WeldInitiator weld =
-            WeldInitiator.of(HidePosts.class);
+    private final WeldInitiator weld =
+            WeldInitiator.of(HidePosts.class, RedditGetMethod.class,
+                    RedditHttpClient.class, RedditOAuth.class);
 
     @Inject
     private HidePosts hidePosts;
@@ -45,7 +43,7 @@ public class TestHidePosts {
         // final List<String> users = configuration.getHide();
         final List<String> users = List.of("montgranite");
 
-        this.log.debug("configuration: {}", configuration.dumpConfig());
+//        this.log.debug("configuration: {}", configuration.dumpConfig());
 
         if (users.isEmpty()) {
             return;

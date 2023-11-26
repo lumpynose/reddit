@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 
+import org.jboss.weld.junit5.EnableWeld;
+import org.jboss.weld.junit5.WeldInitiator;
+import org.jboss.weld.junit5.WeldSetup;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,18 +21,19 @@ import com.jayway.jsonpath.TypeRef;
 import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.Friend;
+
+import jakarta.inject.Inject;
 
 /**
  *
  */
+@EnableWeld
 public class TestGetMethodFriends {
     final Logger log =
             LoggerFactory.getLogger(TestGetMethodFriends.class);
-
-    private final RedditOAuth redditOAuth =
-            new RedditOAuth();
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()
@@ -38,6 +42,14 @@ public class TestGetMethodFriends {
                     .options(EnumSet.noneOf(Option.class))
                     .build();
 
+    @WeldSetup
+    private final WeldInitiator weld =
+            WeldInitiator.of(RedditGetMethod.class,
+                    RedditHttpClient.class, RedditOAuth.class);
+
+    @Inject
+    private RedditGetMethod getClient;
+
     /**
      * @throws IOException
      * @throws InterruptedException
@@ -45,12 +57,11 @@ public class TestGetMethodFriends {
     @Test
     public void testGetMethodFriends()
             throws InterruptedException, IOException {
-        final RedditGetMethod client = new RedditGetMethod();
 
         // doesn't work (ignored) with friends
         // final Map<String, String> params = Map.of("limit", "15");
 
-        final HttpResponse<String> methodResponse = client
+        final HttpResponse<String> methodResponse = this.getClient
                 .getMethod("prefs/friends", Collections.emptyMap());
 
         this.log.debug("method response status: {}",
@@ -60,8 +71,6 @@ public class TestGetMethodFriends {
         // this.log.debug("method response body: {}", methodResponse.body());
 
         decodeBody(methodResponse.body());
-
-        this.redditOAuth.revokeToken();
     }
 
     private void decodeBody(final String body) {

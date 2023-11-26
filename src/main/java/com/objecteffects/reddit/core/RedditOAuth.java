@@ -1,6 +1,7 @@
 package com.objecteffects.reddit.core;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -26,17 +27,28 @@ import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.main.AppConfig;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 /**
- *
  */
 @ApplicationScoped
-public class RedditOAuth {
+public class RedditOAuth implements Serializable {
+    private static final long serialVersionUID = -6247653093688160678L;
+
+    public final static String AUTH_URL = "https://www.reddit.com";
+
+    private static final int timeoutSeconds = 15;
+
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
+    @Inject
+    private RedditHttpClient redditHttpClient;
+
     private final AppConfig configuration =
             new AppConfig();
+
+    private String access_token;
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()
@@ -45,18 +57,26 @@ public class RedditOAuth {
                     .options(EnumSet.noneOf(Option.class))
                     .build();
 
+    public RedditOAuth() {
+        // empty
+    }
+
     /**
      * @return HttpResponse
      * @throws IOException
      * @throws InterruptedException
      */
-    public String getAuthToken()
+    public String getOAuthToken()
             throws IOException, InterruptedException {
 //        if (this.configuration.getOAuthToken() != null) {
 //            this.log.debug("auth token already loaded");
 //
 //            return null;
 //        }
+
+        if (this.access_token != null) {
+            return this.access_token;
+        }
 
         final Map<String, String> params = new HashMap<>();
 
@@ -72,8 +92,7 @@ public class RedditOAuth {
 
         final String method = "api/v1/access_token";
 
-        final String fullUrl = String.format("%s/%s", RedditHttpClient.AUTH_URL,
-                method);
+        final String fullUrl = String.format("%s/%s", AUTH_URL, method);
 
         this.log.debug("fullUrl: {}", fullUrl);
 
@@ -90,12 +109,13 @@ public class RedditOAuth {
                 .header("Authorization", basicAuth(username, password))
                 .POST(HttpRequest.BodyPublishers.ofString(form))
                 .uri(URI.create(fullUrl))
-                .timeout(Duration.ofSeconds(RedditHttpClient.timeoutSeconds))
+                .timeout(Duration.ofSeconds(timeoutSeconds))
                 .build();
 
         this.log.debug("request headers: {}", request.headers());
 
-        final HttpClient client = RedditHttpClient.getHttpClient();
+//        final HttpClient client = RedditHttpClient.getHttpClient();
+        final HttpClient client = this.redditHttpClient.getHttpClient();
 
         final HttpResponse<String> response = client.send(request,
                 BodyHandlers.ofString());
@@ -134,13 +154,13 @@ public class RedditOAuth {
             throw new IllegalStateException("no access_token");
         }
 
-        final String access_token = stringMap.get("access_token");
+        this.access_token = stringMap.get("access_token");
 
-        this.log.debug("access_token: {}", access_token);
+        this.log.debug("access_token: {}", this.access_token);
 
 //        this.configuration.setOAuthToken(access_token);
 
-        return access_token;
+        return this.access_token;
     }
 
     /**
@@ -152,13 +172,13 @@ public class RedditOAuth {
             throws IOException, InterruptedException {
         final Map<String, String> params = new HashMap<>();
 
-        final String access_token = this.configuration.getOAuthToken();
+//        final String access_token = this.configuration.getOAuthToken();
 
-        if (access_token == null) {
+        if (this.access_token == null) {
             return null;
         }
 
-        params.put("token", access_token);
+        params.put("token", this.access_token);
         params.put("token_type_hint", "access_token");
 
         final String username = this.configuration.getClientId();
@@ -172,7 +192,7 @@ public class RedditOAuth {
 
         final String method = "api/v1/revoke_token";
         final String fullUrl = String.format("%s/%s",
-                RedditHttpClient.AUTH_URL, method);
+                AUTH_URL, method);
 
         this.log.debug("fullUrl: " + fullUrl);
 
@@ -183,12 +203,12 @@ public class RedditOAuth {
                 .header("Authorization", basicAuth(username, password))
                 .POST(HttpRequest.BodyPublishers.ofString(form))
                 .uri(URI.create(fullUrl))
-                .timeout(Duration.ofSeconds(RedditHttpClient.timeoutSeconds))
+                .timeout(Duration.ofSeconds(timeoutSeconds))
                 .build();
 
         this.log.debug("headers: {}", request.headers());
 
-        final HttpClient client = RedditHttpClient.getHttpClient();
+        final HttpClient client = this.redditHttpClient.getHttpClient();
 
         final HttpResponse<String> response = client.send(request,
                 BodyHandlers.ofString());
@@ -206,6 +226,8 @@ public class RedditOAuth {
         }
 
 //        this.configuration.setOAuthToken(null);
+
+        this.access_token = null;
 
         return response;
     }

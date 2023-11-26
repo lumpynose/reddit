@@ -11,8 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.objecteffects.reddit.core.RedditDeleteMethod;
+import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditHttpClient;
+import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.method.GetFriends;
+import com.objecteffects.reddit.method.UnFriend;
 
 import jakarta.inject.Inject;
 
@@ -27,8 +32,10 @@ public class TestGetFriends {
     /**
      */
     @WeldSetup
-    public WeldInitiator weld =
-            WeldInitiator.of(GetFriends.class);
+    private final WeldInitiator weld =
+            WeldInitiator.of(GetFriends.class, UnFriend.class,
+                    RedditGetMethod.class, RedditDeleteMethod.class,
+                    RedditHttpClient.class, RedditOAuth.class);
 
     @Inject
     private GetFriends getFriends;
@@ -41,7 +48,7 @@ public class TestGetFriends {
     public void testGetFriends()
             throws IOException, InterruptedException {
 
-        final List<Friend> friends = this.getFriends.getFriends(10, true);
+        final List<Friend> friends = this.getFriends.getFriends(5, true);
 
         Collections.sort(friends, Collections.reverseOrder());
 
