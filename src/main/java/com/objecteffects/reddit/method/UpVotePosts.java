@@ -46,6 +46,30 @@ public class UpVotePosts implements Serializable {
     private RedditPostMethod postClient;
 
     /**
+     * @param getClient the getClient to set
+     */
+    public void setGetClient(final RedditGetMethod getClient) {
+        this.getClient = getClient;
+    }
+
+    /**
+     * @param postClient the postClient to set
+     */
+    public void setPostClient(final RedditPostMethod postClient) {
+        this.postClient = postClient;
+    }
+
+//    /**
+//     * @param _getClient
+//     * @param _postClient
+//     */
+//    public UpVotePosts(final RedditGetMethod _getClient,
+//            final RedditPostMethod _postClient) {
+//        this.getClient = _getClient;
+//        this.postClient = _postClient;
+//    }
+
+    /**
      * @param name
      * @param count
      * @param lastAfter
@@ -65,7 +89,7 @@ public class UpVotePosts implements Serializable {
                                 "sort", "new",
                                 "type", "links"));
 
-        if (lastAfter != null) {
+        if (lastAfter != null && !lastAfter.isEmpty()) {
             params.put("after", lastAfter);
         }
 

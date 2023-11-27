@@ -23,7 +23,15 @@ public class RedditGetMethod implements Serializable {
     @Inject
     private RedditHttpClient redditHttpClient;
 
-    final HttpRequest.Builder getRequest = HttpRequest.newBuilder().GET();
+    private final HttpRequest.Builder getRequest =
+            HttpRequest.newBuilder().GET();
+
+    /**
+     * @param redditHttpClient the redditHttpClient to set
+     */
+    public void setRedditHttpClient(final RedditHttpClient redditHttpClient) {
+        this.redditHttpClient = redditHttpClient;
+    }
 
     /**
      * @param method

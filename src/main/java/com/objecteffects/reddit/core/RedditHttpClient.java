@@ -62,6 +62,13 @@ public class RedditHttpClient implements Serializable {
     private RedditOAuth redditOAuth;
 
     /**
+     * @param redditOAuth the redditOAuth to set
+     */
+    public void setRedditOAuth(final RedditOAuth redditOAuth) {
+        this.redditOAuth = redditOAuth;
+    }
+
+    /**
      * @param request
      * @param method
      * @param params
@@ -76,6 +83,7 @@ public class RedditHttpClient implements Serializable {
             final Map<String, String> params)
             throws InterruptedException, IOException {
         final String fullUri;
+        final String token = this.redditOAuth.getOAuthToken();
 
         if (!params.isEmpty()) {
             final String form = params.entrySet().stream()
@@ -96,7 +104,7 @@ public class RedditHttpClient implements Serializable {
                 .headers("User-Agent",
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
                 .header("Authorization",
-                        "bearer " + this.redditOAuth.getOAuthToken())
+                        "bearer " + token)
                 .uri(URI.create(fullUri))
                 .timeout(Duration.ofSeconds(timeoutSeconds))
                 .build();
@@ -153,8 +161,6 @@ public class RedditHttpClient implements Serializable {
                 }
             }
         }
-
-        this.redditOAuth.revokeToken();
 
         if (response == null || !okCodes.contains(response.statusCode())) {
             return null;

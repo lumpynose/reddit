@@ -34,9 +34,6 @@ public class TestDeleteMethod {
                     RedditOAuth.class);
 
     @Inject
-    private RedditOAuth redditOAuth;
-
-    @Inject
     private RedditGetMethod getClient;
 
     @Inject

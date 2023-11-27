@@ -25,8 +25,7 @@ import jakarta.inject.Inject;
 
 /**
  */
-
-public class GetFriends implements GetFriendsMethod, Serializable {
+public class GetFriends implements Serializable {
     private static final long serialVersionUID = 9162663642350966578L;
 
     private final Logger log =
@@ -94,7 +93,6 @@ public class GetFriends implements GetFriendsMethod, Serializable {
      * @throws IOException
      * @throws InterruptedException
      */
-    @Override
     public List<Friend> getFriends(final int count,
             final boolean getKarma)
             throws IOException, InterruptedException {

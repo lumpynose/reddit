@@ -23,7 +23,7 @@ public class RedditDeleteMethod implements Serializable {
     @Inject
     private RedditHttpClient redditHttpClient;
 
-    final HttpRequest.Builder deleteRequest = HttpRequest.newBuilder()
+    private final HttpRequest.Builder deleteRequest = HttpRequest.newBuilder()
             .DELETE();
 
     /**

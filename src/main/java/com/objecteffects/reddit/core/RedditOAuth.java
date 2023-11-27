@@ -28,6 +28,8 @@ import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.main.AppConfig;
 
+import jakarta.inject.Inject;
+
 /**
  */
 public class RedditOAuth implements Serializable {
@@ -43,8 +45,8 @@ public class RedditOAuth implements Serializable {
 //    @Inject
 //    private RedditHttpClient redditHttpClient;
 
-    private final AppConfig appConfig =
-            new AppConfig();
+    @Inject
+    private AppConfig appConfig;
 
     private String access_token;
 
