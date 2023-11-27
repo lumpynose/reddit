@@ -28,9 +28,11 @@ import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.main.AppConfig;
 
+import jakarta.enterprise.context.SessionScoped;
+
 /**
  */
-//@ApplicationScoped
+@SessionScoped
 public class RedditOAuth implements Serializable {
     private static final long serialVersionUID = -6247653093688160678L;
 
@@ -47,7 +49,7 @@ public class RedditOAuth implements Serializable {
     private final AppConfig appConfig =
             new AppConfig();
 
-    private static String access_token;
+    private String access_token;
 
     private final Configuration jsonConf =
             new Configuration.ConfigurationBuilder()
@@ -69,8 +71,8 @@ public class RedditOAuth implements Serializable {
      */
     public String getOAuthToken()
             throws IOException, InterruptedException {
-        if (access_token != null) {
-            return access_token;
+        if (this.access_token != null) {
+            return this.access_token;
         }
 
         final Map<String, String> params = new HashMap<>();
@@ -144,11 +146,11 @@ public class RedditOAuth implements Serializable {
             throw new IllegalStateException("no access_token");
         }
 
-        access_token = stringMap.get("access_token");
+        this.access_token = stringMap.get("access_token");
 
-        this.log.debug("access_token: {}", access_token);
+        this.log.debug("access_token: {}", this.access_token);
 
-        return access_token;
+        return this.access_token;
     }
 
     /**
@@ -158,13 +160,13 @@ public class RedditOAuth implements Serializable {
      */
     public HttpResponse<String> revokeToken()
             throws IOException, InterruptedException {
-        if (access_token == null) {
+        if (this.access_token == null) {
             return null;
         }
 
         final Map<String, String> params = new HashMap<>();
 
-        params.put("token", access_token);
+        params.put("token", this.access_token);
         params.put("token_type_hint", "access_token");
 
         final String username = this.appConfig.getClientId();
@@ -199,7 +201,7 @@ public class RedditOAuth implements Serializable {
         if (response == null) {
             this.log.warn("null response from revoke token");
 
-            access_token = null;
+            this.access_token = null;
 
             return null;
         }
@@ -214,7 +216,7 @@ public class RedditOAuth implements Serializable {
                     "status code: " + response.statusCode());
         }
 
-        access_token = null;
+        this.access_token = null;
 
         return response;
     }

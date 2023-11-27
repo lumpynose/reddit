@@ -9,10 +9,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
 /**
  */
+@RequestScoped
 public class RedditDeleteMethod implements Serializable {
     private static final long serialVersionUID = -2067248916726106902L;
 

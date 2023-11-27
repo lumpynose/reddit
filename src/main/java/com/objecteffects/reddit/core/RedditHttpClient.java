@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
 // list of friends
@@ -38,7 +39,7 @@ import jakarta.inject.Inject;
 
 /**
  */
-//@ApplicationScoped
+@RequestScoped
 public class RedditHttpClient implements Serializable {
     private static final long serialVersionUID = -2404248317929989018L;
 
@@ -107,7 +108,7 @@ public class RedditHttpClient implements Serializable {
         HttpResponse<String> response = null;
 
         try {
-            this.log.debug("method: {}", method);
+            this.log.debug("method: {}, {}", method, buildRequest.method());
 
             response = client.send(buildRequest, BodyHandlers.ofString());
 
@@ -130,7 +131,8 @@ public class RedditHttpClient implements Serializable {
                 Thread.sleep(600 * i);
 
                 try {
-                    this.log.debug("method: {}", method);
+                    this.log.debug("method: {}, {}", method,
+                            buildRequest.method());
 
                     response = client.send(buildRequest,
                             BodyHandlers.ofString());

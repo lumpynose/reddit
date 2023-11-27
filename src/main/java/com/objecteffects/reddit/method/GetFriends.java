@@ -21,11 +21,13 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.data.FriendAbout;
 
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 /**
  */
-public class GetFriends implements Serializable {
+@ApplicationScoped
+public class GetFriends implements GetFriendsMethod, Serializable {
     private static final long serialVersionUID = 9162663642350966578L;
 
     private final Logger log =
@@ -93,6 +95,7 @@ public class GetFriends implements Serializable {
      * @throws IOException
      * @throws InterruptedException
      */
+    @Override
     public List<Friend> getFriends(final int count,
             final boolean getKarma)
             throws IOException, InterruptedException {
@@ -144,15 +147,15 @@ public class GetFriends implements Serializable {
             Thread.sleep(600);
 
             final String aboutUri =
-                    String.format("user/%s/about", f.getName());
+                    String.format("/api/v1/me/friends/%s", f.getName());
 
             final HttpResponse<String> aboutMethodResponse = this.client
                     .getMethod(aboutUri, Collections.emptyMap());
 
             if (aboutMethodResponse == null) {
-                this.log.debug("null response, unfriending: {}", f.getName());
+                this.log.debug("null response: {}", f.getName());
 
-                this.unFriend.unFriend(f.getName());
+                // this.unFriend.unFriend(f.getName());
 
                 f.setKarma(0);
             }
@@ -166,9 +169,8 @@ public class GetFriends implements Serializable {
                 final DocumentContext jsonContext = JsonPath
                         .using(this.conf).parse(response);
 
-                final FriendAbout fabout =
-                        jsonContext.read(path,
-                                FriendAbout.class);
+                final FriendAbout fabout = jsonContext.read(path,
+                        FriendAbout.class);
 
                 this.log.debug("fabout: {}", fabout);
 

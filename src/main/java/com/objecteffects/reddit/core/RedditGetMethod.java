@@ -9,10 +9,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 
 /**
  */
+@RequestScoped
 public class RedditGetMethod implements Serializable {
     private static final long serialVersionUID = -823906022241457997L;
 
