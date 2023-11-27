@@ -21,12 +21,11 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.data.FriendAbout;
 
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 /**
  */
-@ApplicationScoped
+
 public class GetFriends implements GetFriendsMethod, Serializable {
     private static final long serialVersionUID = 9162663642350966578L;
 

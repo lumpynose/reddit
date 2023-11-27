@@ -28,11 +28,8 @@ import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
 import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.main.AppConfig;
 
-import jakarta.enterprise.context.SessionScoped;
-
 /**
  */
-@SessionScoped
 public class RedditOAuth implements Serializable {
     private static final long serialVersionUID = -6247653093688160678L;
 
