@@ -27,7 +27,7 @@ import jakarta.inject.Inject;
 /**
  */
 public class UpVotePosts implements Serializable {
-    private static final long serialVersionUID = 2128161635287212928L;
+    private static final long serialVersionUID = -1L;
 
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -44,6 +44,9 @@ public class UpVotePosts implements Serializable {
 
     @Inject
     private RedditPostMethod postClient;
+
+    public UpVotePosts() {
+    }
 
     /**
      * @param getClient the getClient to set

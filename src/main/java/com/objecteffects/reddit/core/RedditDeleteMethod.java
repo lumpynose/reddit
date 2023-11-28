@@ -14,7 +14,7 @@ import jakarta.inject.Inject;
 /**
  */
 public class RedditDeleteMethod implements Serializable {
-    private static final long serialVersionUID = -2067248916726106902L;
+    private static final long serialVersionUID = -1L;
 
     @SuppressWarnings("unused")
     private final Logger log =
@@ -25,6 +25,18 @@ public class RedditDeleteMethod implements Serializable {
 
     private final HttpRequest.Builder deleteRequest = HttpRequest.newBuilder()
             .DELETE();
+
+    /**
+     */
+    public RedditDeleteMethod() {
+    }
+
+    /**
+     * @param _redditHttpClient the redditHttpClient to set
+     */
+    public void setRedditHttpClient(final RedditHttpClient _redditHttpClient) {
+        this.redditHttpClient = _redditHttpClient;
+    }
 
     /**
      * @param method

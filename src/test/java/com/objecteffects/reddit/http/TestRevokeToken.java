@@ -12,19 +12,21 @@ import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
+import com.objecteffects.reddit.main.AppConfig;
 
 import jakarta.inject.Inject;
 
 /**
- *
  */
 @EnableWeld
 public class TestRevokeToken {
-    final Logger log = LoggerFactory.getLogger(TestRevokeToken.class);
+    private final Logger log =
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @WeldSetup
     private final WeldInitiator weld =
-            WeldInitiator.of(RedditHttpClient.class, RedditOAuth.class);
+            WeldInitiator.of(RedditHttpClient.class, RedditOAuth.class,
+                    AppConfig.class);
 
     @Inject
     private RedditOAuth redditOAuth;

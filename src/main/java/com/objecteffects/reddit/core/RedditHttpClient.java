@@ -39,7 +39,7 @@ import jakarta.inject.Inject;
 /**
  */
 public class RedditHttpClient implements Serializable {
-    private static final long serialVersionUID = -2404248317929989018L;
+    private static final long serialVersionUID = -1L;
 
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -62,10 +62,15 @@ public class RedditHttpClient implements Serializable {
     private RedditOAuth redditOAuth;
 
     /**
-     * @param redditOAuth the redditOAuth to set
      */
-    public void setRedditOAuth(final RedditOAuth redditOAuth) {
-        this.redditOAuth = redditOAuth;
+    public RedditHttpClient() {
+    }
+
+    /**
+     * @param _redditOAuth the redditOAuth to set
+     */
+    public void setRedditOAuth(final RedditOAuth _redditOAuth) {
+        this.redditOAuth = _redditOAuth;
     }
 
     /**

@@ -17,6 +17,7 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.core.RedditPutMethod;
+import com.objecteffects.reddit.main.AppConfig;
 
 import jakarta.inject.Inject;
 
@@ -24,14 +25,14 @@ import jakarta.inject.Inject;
  */
 @EnableWeld
 public class TestDeleteMethod {
-    final Logger log =
-            LoggerFactory.getLogger(TestDeleteMethod.class);
+    private final Logger log =
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @WeldSetup
     private final WeldInitiator weld =
             WeldInitiator.of(RedditGetMethod.class, RedditPutMethod.class,
                     RedditDeleteMethod.class, RedditHttpClient.class,
-                    RedditOAuth.class);
+                    RedditOAuth.class, AppConfig.class);
 
     @Inject
     private RedditGetMethod getClient;
@@ -88,7 +89,5 @@ public class TestDeleteMethod {
         this.log.debug("response: {}", response);
 
         /* end of DELETE friends user */
-
-//        this.redditOAuth.revokeToken();
     }
 }

@@ -15,13 +15,16 @@ import jakarta.inject.Inject;
 /**
  */
 public class UnFriend implements Serializable {
-    private static final long serialVersionUID = -5354019122848858356L;
+    private static final long serialVersionUID = -1L;
 
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Inject
     private RedditDeleteMethod deleteClient;
+
+    public UnFriend() {
+    }
 
     /**
      * @param name

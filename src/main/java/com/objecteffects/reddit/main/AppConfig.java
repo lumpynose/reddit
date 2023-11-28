@@ -3,16 +3,22 @@ package com.objecteffects.reddit.main;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
 /**
  *
  */
-public class AppConfig {
+@ApplicationScoped
+public class AppConfig implements Serializable {
+    private static final long serialVersionUID = -1L;
+
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
@@ -20,6 +26,9 @@ public class AppConfig {
             "c:/home/lumpy/redditconfig.properties";
 
     private final static Properties configProps = new Properties();
+
+    public AppConfig() {
+    }
 
     /**
      * @throws FileNotFoundException

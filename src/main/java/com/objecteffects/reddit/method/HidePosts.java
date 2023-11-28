@@ -27,7 +27,7 @@ import jakarta.inject.Inject;
 /**
  */
 public class HidePosts implements Serializable {
-    private static final long serialVersionUID = -4364873968404701430L;
+    private static final long serialVersionUID = -1L;
 
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -41,6 +41,9 @@ public class HidePosts implements Serializable {
 
     @Inject
     private RedditGetMethod getClient;
+
+    public HidePosts() {
+    }
 
     /**
      * @param name

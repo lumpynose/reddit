@@ -13,22 +13,23 @@ import org.slf4j.LoggerFactory;
 import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
+import com.objecteffects.reddit.main.AppConfig;
 import com.objecteffects.reddit.method.HidePosts;
 
 import jakarta.inject.Inject;
 
 /**
- *
  */
 @EnableWeld
 public class TestHidePosts {
-    final Logger log =
-            LoggerFactory.getLogger(TestHidePosts.class);
+    @SuppressWarnings("unused")
+    private final Logger log =
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @WeldSetup
     private final WeldInitiator weld =
             WeldInitiator.of(HidePosts.class, RedditGetMethod.class,
-                    RedditHttpClient.class, RedditOAuth.class);
+                    RedditHttpClient.class, RedditOAuth.class, AppConfig.class);
 
     @Inject
     private HidePosts hidePosts;
@@ -48,8 +49,6 @@ public class TestHidePosts {
         if (users.isEmpty()) {
             return;
         }
-
-        // final HidePosts hidePosts = new HidePosts();
 
         for (final String user : users) {
             this.hidePosts.hidePosts(user, 3, null);

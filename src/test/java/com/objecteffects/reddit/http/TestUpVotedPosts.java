@@ -24,16 +24,16 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.Post;
+import com.objecteffects.reddit.main.AppConfig;
 
 import jakarta.inject.Inject;
 
 /**
- *
  */
 @EnableWeld
 public class TestUpVotedPosts {
-    final static Logger log =
-            LoggerFactory.getLogger(TestUpVotedPosts.class);
+    private final Logger log =
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()
@@ -45,7 +45,7 @@ public class TestUpVotedPosts {
     @WeldSetup
     private final WeldInitiator weld =
             WeldInitiator.of(RedditGetMethod.class,
-                    RedditHttpClient.class, RedditOAuth.class);
+                    RedditHttpClient.class, RedditOAuth.class, AppConfig.class);
 
     @Inject
     private RedditGetMethod getClient;
@@ -70,7 +70,7 @@ public class TestUpVotedPosts {
                 this.getClient.getMethod(upvotedUri, params);
 
         if (methodResponse == null) {
-            log.debug("null response");
+            this.log.debug("null response");
 
             return;
         }
@@ -86,6 +86,6 @@ public class TestUpVotedPosts {
 
         final List<Post> list = jsonContext.read(path, typeRef);
 
-        log.debug("list length: {}", Integer.valueOf(list.size()));
+        this.log.debug("list length: {}", Integer.valueOf(list.size()));
     }
 }

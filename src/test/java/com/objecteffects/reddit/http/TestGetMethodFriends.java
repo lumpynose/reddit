@@ -24,16 +24,16 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.Friend;
+import com.objecteffects.reddit.main.AppConfig;
 
 import jakarta.inject.Inject;
 
 /**
- *
  */
 @EnableWeld
 public class TestGetMethodFriends {
-    final Logger log =
-            LoggerFactory.getLogger(TestGetMethodFriends.class);
+    private final Logger log =
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()
@@ -45,7 +45,8 @@ public class TestGetMethodFriends {
     @WeldSetup
     private final WeldInitiator weld =
             WeldInitiator.of(RedditGetMethod.class,
-                    RedditHttpClient.class, RedditOAuth.class);
+                    RedditHttpClient.class, RedditOAuth.class,
+                    AppConfig.class);
 
     @Inject
     private RedditGetMethod getClient;
@@ -58,7 +59,8 @@ public class TestGetMethodFriends {
     public void testGetMethodFriends()
             throws InterruptedException, IOException {
 
-        // doesn't work (ignored) with friends
+        // doesn't work (ignored) with friends; always get
+        // the whole enchillada.
         // final Map<String, String> params = Map.of("limit", "15");
 
         final HttpResponse<String> methodResponse = this.getClient

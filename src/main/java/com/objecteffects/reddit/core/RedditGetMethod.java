@@ -14,7 +14,7 @@ import jakarta.inject.Inject;
 /**
  */
 public class RedditGetMethod implements Serializable {
-    private static final long serialVersionUID = -823906022241457997L;
+    private static final long serialVersionUID = -1L;
 
     @SuppressWarnings("unused")
     private final Logger log =
@@ -27,10 +27,15 @@ public class RedditGetMethod implements Serializable {
             HttpRequest.newBuilder().GET();
 
     /**
-     * @param redditHttpClient the redditHttpClient to set
      */
-    public void setRedditHttpClient(final RedditHttpClient redditHttpClient) {
-        this.redditHttpClient = redditHttpClient;
+    public RedditGetMethod() {
+    }
+
+    /**
+     * @param _redditHttpClient the redditHttpClient to set
+     */
+    public void setRedditHttpClient(final RedditHttpClient _redditHttpClient) {
+        this.redditHttpClient = _redditHttpClient;
     }
 
     /**

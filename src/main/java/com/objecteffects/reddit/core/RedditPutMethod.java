@@ -19,13 +19,25 @@ import jakarta.inject.Inject;
 /**
  */
 public class RedditPutMethod implements Serializable {
-    private static final long serialVersionUID = -7339995311514312150L;
+    private static final long serialVersionUID = -1L;
 
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Inject
     private RedditHttpClient redditHttpClient;
+
+    /**
+     */
+    public RedditPutMethod() {
+    }
+
+    /**
+     * @param _redditHttpClient the redditHttpClient to set
+     */
+    public void setRedditHttpClient(final RedditHttpClient _redditHttpClient) {
+        this.redditHttpClient = _redditHttpClient;
+    }
 
     /**
      * @param method

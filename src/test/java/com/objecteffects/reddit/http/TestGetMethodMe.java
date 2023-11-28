@@ -22,16 +22,16 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.Me;
+import com.objecteffects.reddit.main.AppConfig;
 
 import jakarta.inject.Inject;
 
 /**
- *
  */
 @EnableWeld
 public class TestGetMethodMe {
-    final Logger log =
-            LoggerFactory.getLogger(TestGetMethodMe.class);
+    private final Logger log =
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     private final Configuration conf =
             new Configuration.ConfigurationBuilder()
@@ -43,7 +43,7 @@ public class TestGetMethodMe {
     @WeldSetup
     private final WeldInitiator weld =
             WeldInitiator.of(RedditGetMethod.class,
-                    RedditHttpClient.class, RedditOAuth.class);
+                    RedditHttpClient.class, RedditOAuth.class, AppConfig.class);
 
     @Inject
     private RedditGetMethod getClient;

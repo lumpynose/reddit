@@ -16,18 +16,18 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.Friend;
+import com.objecteffects.reddit.main.AppConfig;
 import com.objecteffects.reddit.method.GetFriends;
 import com.objecteffects.reddit.method.UnFriend;
 
 import jakarta.inject.Inject;
 
 /**
- *
  */
 @EnableWeld
 public class TestGetFriends {
-    final Logger log =
-            LoggerFactory.getLogger(TestGetFriends.class);
+    private final Logger log =
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     /**
      */
@@ -35,7 +35,7 @@ public class TestGetFriends {
     private final WeldInitiator weld =
             WeldInitiator.of(GetFriends.class, UnFriend.class,
                     RedditGetMethod.class, RedditDeleteMethod.class,
-                    RedditHttpClient.class, RedditOAuth.class);
+                    RedditHttpClient.class, RedditOAuth.class, AppConfig.class);
 
     @Inject
     private GetFriends getFriends;

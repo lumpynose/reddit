@@ -26,7 +26,7 @@ import jakarta.inject.Inject;
 /**
  */
 public class GetFriends implements Serializable {
-    private static final long serialVersionUID = 9162663642350966578L;
+    private static final long serialVersionUID = -1L;
 
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
@@ -46,6 +46,9 @@ public class GetFriends implements Serializable {
                     .mappingProvider(new JacksonMappingProvider())
                     .options(EnumSet.noneOf(Option.class))
                     .build();
+
+    public GetFriends() {
+    }
 
     /**
      * Gets all friends, no karma.

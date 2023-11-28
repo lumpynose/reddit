@@ -13,23 +13,23 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.core.RedditPostMethod;
+import com.objecteffects.reddit.main.AppConfig;
 import com.objecteffects.reddit.method.UpVotePosts;
 
 import jakarta.inject.Inject;
 
 /**
- *
  */
 @EnableWeld
 public class TestUpVotePosts {
-    final Logger log =
-            LoggerFactory.getLogger(TestUpVotePosts.class);
+    private final Logger log =
+            LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @WeldSetup
     private final WeldInitiator weld =
             WeldInitiator.of(UpVotePosts.class, RedditGetMethod.class,
                     RedditPostMethod.class, RedditHttpClient.class,
-                    RedditOAuth.class);
+                    RedditOAuth.class, AppConfig.class);
 
     @Inject
     private UpVotePosts upVotePosts;
