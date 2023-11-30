@@ -44,8 +44,8 @@ public class TestUpVotedPosts {
 
     @WeldSetup
     private final WeldInitiator weld =
-            WeldInitiator.of(RedditGetMethod.class,
-                    RedditHttpClient.class, RedditOAuth.class, AppConfig.class);
+            WeldInitiator.of(RedditGetMethod.class, RedditHttpClient.class,
+                    RedditOAuth.class, AppConfig.class);
 
     @Inject
     private RedditGetMethod getClient;

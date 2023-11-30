@@ -80,6 +80,8 @@ public class UpVotePosts implements Serializable {
             return null;
         }
 
+        Thread.sleep(600);
+
         final String submittedUri =
                 String.format("user/%s/submitted", name);
 

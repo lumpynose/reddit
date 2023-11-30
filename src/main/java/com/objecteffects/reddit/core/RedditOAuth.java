@@ -54,7 +54,7 @@ public class RedditOAuth implements Serializable {
                     .options(EnumSet.noneOf(Option.class))
                     .build();
 
-    private static final HttpClient client = HttpClient.newBuilder()
+    private final HttpClient client = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(timeoutSeconds))
             .version(Version.HTTP_2)
             .followRedirects(Redirect.NORMAL)
@@ -88,6 +88,7 @@ public class RedditOAuth implements Serializable {
         params.put("grant_type", "password");
         params.put("username", this.appConfig.getUsername());
         params.put("password", this.appConfig.getPassword());
+        params.put("scope", "read,history,mysubreddits,vote,report");
 
         final String clientId = this.appConfig.getClientId();
         final String secret = this.appConfig.getSecret();
@@ -101,6 +102,10 @@ public class RedditOAuth implements Serializable {
 
         this.log.debug("fullUri: {}", fullUri);
 
+        /*
+         * Generates the string
+         * grant_type=password&username=whatever&password=secret etc.
+         */
         final String form = params.entrySet().stream()
                 .map(entry -> entry.getKey() + "=" + entry.getValue())
                 .collect(Collectors.joining("&"));
@@ -119,7 +124,7 @@ public class RedditOAuth implements Serializable {
 
         this.log.debug("request headers: {}", request.headers());
 
-        final HttpResponse<String> response = client.send(request,
+        final HttpResponse<String> response = this.client.send(request,
                 BodyHandlers.ofString());
 
         this.log.debug("auth response status: {}",
@@ -205,7 +210,7 @@ public class RedditOAuth implements Serializable {
 
         this.log.debug("headers: {}", request.headers());
 
-        final HttpResponse<String> response = client.send(request,
+        final HttpResponse<String> response = this.client.send(request,
                 BodyHandlers.ofString());
 
         if (response == null) {

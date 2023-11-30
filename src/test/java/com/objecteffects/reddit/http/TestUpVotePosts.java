@@ -1,6 +1,7 @@
 package com.objecteffects.reddit.http;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
@@ -41,7 +42,11 @@ public class TestUpVotePosts {
     @Test
     public void testPostMethod() throws IOException,
             InterruptedException {
+        final List<String> users =
+                List.of("CulturalAd1195", "ConqueredBino", "Dompr19");
 
-        this.upVotePosts.upVotePosts("Dompr19", 1, null);
+        for (final String user : users) {
+            this.upVotePosts.upVotePosts(user, 1, null);
+        }
     }
 }

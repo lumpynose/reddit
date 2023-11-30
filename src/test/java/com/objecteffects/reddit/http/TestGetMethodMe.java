@@ -42,8 +42,9 @@ public class TestGetMethodMe {
 
     @WeldSetup
     private final WeldInitiator weld =
-            WeldInitiator.of(RedditGetMethod.class,
-                    RedditHttpClient.class, RedditOAuth.class, AppConfig.class);
+            WeldInitiator.of(RedditHttpClient.class,
+                    RedditOAuth.class, AppConfig.class,
+                    RedditGetMethod.class);
 
     @Inject
     private RedditGetMethod getClient;
@@ -54,7 +55,6 @@ public class TestGetMethodMe {
      */
     @Test
     public void testGetMethod() throws IOException, InterruptedException {
-
         final String body =
                 this.getClient.getMethod("api/v1/me",
                         Collections.emptyMap()).body();
@@ -62,7 +62,6 @@ public class TestGetMethodMe {
         this.log.debug("body: {}", body);
 
         final TypeRef<Me> typeRef = new TypeRef<>() {
-            // empty
         };
 
         final DocumentContext jsonContext =

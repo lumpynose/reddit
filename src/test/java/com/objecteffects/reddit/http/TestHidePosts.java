@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
+import com.objecteffects.reddit.core.RedditPostMethod;
 import com.objecteffects.reddit.main.AppConfig;
 import com.objecteffects.reddit.method.HidePosts;
 
@@ -29,7 +30,8 @@ public class TestHidePosts {
     @WeldSetup
     private final WeldInitiator weld =
             WeldInitiator.of(HidePosts.class, RedditGetMethod.class,
-                    RedditHttpClient.class, RedditOAuth.class, AppConfig.class);
+                    RedditPostMethod.class, RedditHttpClient.class,
+                    RedditOAuth.class, AppConfig.class);
 
     @Inject
     private HidePosts hidePosts;
@@ -41,17 +43,15 @@ public class TestHidePosts {
     @Test
     public void testPostMethod()
             throws IOException, InterruptedException {
-        // final List<String> users = configuration.getHide();
-        final List<String> users = List.of("montgranite");
-
-//        this.log.debug("configuration: {}", configuration.dumpConfig());
+        final List<String> users =
+                List.of("CulturalAd1195", "ConqueredBino");
 
         if (users.isEmpty()) {
             return;
         }
 
         for (final String user : users) {
-            this.hidePosts.hidePosts(user, 3, null);
+            this.hidePosts.hidePosts(user, 2, null);
         }
     }
 }

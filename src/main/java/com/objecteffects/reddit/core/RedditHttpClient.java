@@ -107,7 +107,7 @@ public class RedditHttpClient implements Serializable {
         this.log.debug("token: {}", token);
 
         final HttpRequest buildRequest = request
-                .headers("User-Agent",
+                .header("User-Agent",
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
                 .header("Authorization",
                         "bearer " + token)
