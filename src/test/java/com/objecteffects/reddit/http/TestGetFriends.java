@@ -47,7 +47,6 @@ public class TestGetFriends {
     @Test
     public void testGetFriends()
             throws IOException, InterruptedException {
-
         final List<Friend> friends = this.getFriends.getFriends(5, true);
 
         Collections.sort(friends, Collections.reverseOrder());

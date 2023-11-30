@@ -58,7 +58,6 @@ public class TestGetMethodFriends {
     @Test
     public void testGetMethodFriends()
             throws InterruptedException, IOException {
-
         // doesn't work (ignored) with friends; always get
         // the whole enchillada.
         // final Map<String, String> params = Map.of("limit", "15");
