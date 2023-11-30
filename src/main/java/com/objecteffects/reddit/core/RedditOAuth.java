@@ -45,7 +45,7 @@ public class RedditOAuth implements Serializable {
     @Inject
     private AppConfig appConfig;
 
-    private String access_token;
+    private static String access_token;
 
     private final Configuration jsonConf =
             new Configuration.ConfigurationBuilder()
@@ -79,8 +79,8 @@ public class RedditOAuth implements Serializable {
      */
     public String getOAuthToken()
             throws IOException, InterruptedException {
-        if (this.access_token != null) {
-            return this.access_token;
+        if (RedditOAuth.access_token != null) {
+            return RedditOAuth.access_token;
         }
 
         final Map<String, String> params = new HashMap<>();
@@ -89,11 +89,11 @@ public class RedditOAuth implements Serializable {
         params.put("username", this.appConfig.getUsername());
         params.put("password", this.appConfig.getPassword());
 
-        final String username = this.appConfig.getClientId();
-        final String password = this.appConfig.getSecret();
+        final String clientId = this.appConfig.getClientId();
+        final String secret = this.appConfig.getSecret();
 
-        this.log.debug("client_id: {}", username);
-        this.log.debug("secret: {}", password);
+        this.log.debug("client_id: {}", clientId);
+        this.log.debug("secret: {}", secret);
 
         final String uri = "api/v1/access_token";
 
@@ -111,7 +111,7 @@ public class RedditOAuth implements Serializable {
                 .headers("Content-Type", "application/x-www-form-urlencoded")
                 .headers("User-Agent",
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
-                .header("Authorization", basicAuth(username, password))
+                .header("Authorization", basicAuth(clientId, secret))
                 .POST(HttpRequest.BodyPublishers.ofString(form))
                 .uri(URI.create(fullUri))
                 .timeout(Duration.ofSeconds(timeoutSeconds))
@@ -154,11 +154,11 @@ public class RedditOAuth implements Serializable {
             throw new IllegalStateException("no access_token");
         }
 
-        this.access_token = stringMap.get("access_token");
+        RedditOAuth.access_token = stringMap.get("access_token");
 
-        this.log.debug("access_token: {}", this.access_token);
+        this.log.debug("access_token: {}", RedditOAuth.access_token);
 
-        return this.access_token;
+        return RedditOAuth.access_token;
     }
 
     /**
@@ -168,13 +168,15 @@ public class RedditOAuth implements Serializable {
      */
     public HttpResponse<String> revokeToken()
             throws IOException, InterruptedException {
-        if (this.access_token == null) {
+        if (RedditOAuth.access_token == null) {
             return null;
         }
 
+        this.log.debug("revoking: {}", RedditOAuth.access_token);
+
         final Map<String, String> params = new HashMap<>();
 
-        params.put("token", this.access_token);
+        params.put("token", RedditOAuth.access_token);
         params.put("token_type_hint", "access_token");
 
         final String username = this.appConfig.getClientId();
@@ -209,7 +211,7 @@ public class RedditOAuth implements Serializable {
         if (response == null) {
             this.log.warn("null response from revoke token");
 
-            this.access_token = null;
+            RedditOAuth.access_token = null;
 
             return null;
         }
@@ -224,7 +226,7 @@ public class RedditOAuth implements Serializable {
                     "status code: " + response.statusCode());
         }
 
-        this.access_token = null;
+        RedditOAuth.access_token = null;
 
         return response;
     }

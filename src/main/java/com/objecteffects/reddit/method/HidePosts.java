@@ -42,7 +42,26 @@ public class HidePosts implements Serializable {
     @Inject
     private RedditGetMethod getClient;
 
+    @Inject
+    private RedditPostMethod postClient;
+
+    /**
+     */
     public HidePosts() {
+    }
+
+    /**
+     * @param _getClient the getClient to set
+     */
+    public void setGetClient(final RedditGetMethod _getClient) {
+        this.getClient = _getClient;
+    }
+
+    /**
+     * @param _postClient the postClient to set
+     */
+    public void setPostClient(final RedditPostMethod _postClient) {
+        this.postClient = _postClient;
     }
 
     /**
@@ -53,9 +72,14 @@ public class HidePosts implements Serializable {
      * @throws IOException
      * @throws InterruptedException
      */
-    public String hidePosts(final String name, final int count,
+    @SuppressWarnings("boxing")
+    public String hidePosts(final String name, final Integer count,
             final String lastAfter)
             throws IOException, InterruptedException {
+        if (count <= 0) {
+            return null;
+        }
+
         final String submittedUri =
                 String.format("user/%s/submitted", name);
 
@@ -100,28 +124,27 @@ public class HidePosts implements Serializable {
 
         this.log.debug("list size: {}", Integer.valueOf(posts.size()));
 
-        final RedditPostMethod postClient =
-                new RedditPostMethod();
-
         final String hideUri = String.format("api/hide");
 
         for (final Post post : posts) {
+            Thread.sleep(600);
+
             this.log.debug("post: {}", post);
+
+            if (post.isHidden()) {
+                this.log.debug("skipping hidden post");
+
+                continue;
+            }
 
             final Map<String, String> param =
                     Map.of("id", post.getName());
 
-            if (post.isHidden()) {
-                continue;
-            }
-
             final HttpResponse<String> hideResponse =
-                    postClient.postMethod(hideUri, param);
+                    this.postClient.postMethod(hideUri, param);
 
             this.log.debug("response: {}",
                     Integer.valueOf(hideResponse.statusCode()));
-
-            Thread.sleep(600);
         }
 
         String after = null;

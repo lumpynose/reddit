@@ -21,9 +21,18 @@ public class UnFriend implements Serializable {
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Inject
-    private RedditDeleteMethod deleteClient;
+    private RedditDeleteMethod deleteMethod;
 
+    /**
+     */
     public UnFriend() {
+    }
+
+    /**
+     * @param _deleteMethod the deleteMethod to set
+     */
+    public void setDeleteMethod(final RedditDeleteMethod _deleteMethod) {
+        this.deleteMethod = _deleteMethod;
     }
 
     /**
@@ -36,7 +45,7 @@ public class UnFriend implements Serializable {
         final String deleteUri =
                 String.format("api/v1/me/friends/%s", name);
 
-        final HttpResponse<String> methodResponse = this.deleteClient
+        final HttpResponse<String> methodResponse = this.deleteMethod
                 .deleteMethod(deleteUri, Collections.emptyMap());
 
         if (methodResponse == null) {

@@ -45,32 +45,24 @@ public class UpVotePosts implements Serializable {
     @Inject
     private RedditPostMethod postClient;
 
+    /**
+     */
     public UpVotePosts() {
     }
 
     /**
-     * @param getClient the getClient to set
+     * @param _getClient the getClient to set
      */
-    public void setGetClient(final RedditGetMethod getClient) {
-        this.getClient = getClient;
+    public void setGetClient(final RedditGetMethod _getClient) {
+        this.getClient = _getClient;
     }
 
     /**
-     * @param postClient the postClient to set
+     * @param _postClient the postClient to set
      */
-    public void setPostClient(final RedditPostMethod postClient) {
-        this.postClient = postClient;
+    public void setPostClient(final RedditPostMethod _postClient) {
+        this.postClient = _postClient;
     }
-
-//    /**
-//     * @param _getClient
-//     * @param _postClient
-//     */
-//    public UpVotePosts(final RedditGetMethod _getClient,
-//            final RedditPostMethod _postClient) {
-//        this.getClient = _getClient;
-//        this.postClient = _postClient;
-//    }
 
     /**
      * @param name
@@ -80,15 +72,20 @@ public class UpVotePosts implements Serializable {
      * @throws IOException
      * @throws InterruptedException
      */
-    public String upVotePosts(final String name, final int count,
+    @SuppressWarnings("boxing")
+    public String upVotePosts(final String name, final Integer count,
             final String lastAfter)
             throws IOException, InterruptedException {
+        if (count <= 0) {
+            return null;
+        }
+
         final String submittedUri =
                 String.format("user/%s/submitted", name);
 
         final Map<String, String> params =
                 new HashMap<>(
-                        Map.of("limit", String.valueOf(count),
+                        Map.of("limit", count.toString(),
                                 "sort", "new",
                                 "type", "links"));
 
@@ -124,11 +121,13 @@ public class UpVotePosts implements Serializable {
         final String upVoteUri = String.format("api/vote");
 
         for (final Post pd : posts) {
+            Thread.sleep(600);
+
             this.log.debug("post: {}", pd);
 
             final Map<String, String> param =
                     Map.of("id", pd.getName(),
-                            "dir", "0",
+                            "dir", "1",
                             "rank", "2");
 
             final HttpResponse<String> upVoteResponse =
@@ -142,8 +141,6 @@ public class UpVotePosts implements Serializable {
 
             this.log.debug("response: {}",
                     Integer.valueOf(upVoteResponse.statusCode()));
-
-            Thread.sleep(600);
         }
 
         String after = null;

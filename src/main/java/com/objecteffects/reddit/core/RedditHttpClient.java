@@ -104,6 +104,7 @@ public class RedditHttpClient implements Serializable {
         }
 
         this.log.debug("fullUri: {}", fullUri);
+        this.log.debug("token: {}", token);
 
         final HttpRequest buildRequest = request
                 .headers("User-Agent",
@@ -166,6 +167,8 @@ public class RedditHttpClient implements Serializable {
                 }
             }
         }
+
+        this.redditOAuth.revokeToken();
 
         if (response == null || !okCodes.contains(response.statusCode())) {
             return null;

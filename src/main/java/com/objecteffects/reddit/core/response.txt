@@ -1,0 +1,72 @@
+{
+    {
+        :status=[200],
+        accept-ranges=[bytes],
+        cache-control=[
+            private,
+            max-age=3600
+        ],
+        content-length=[840],
+        content-type=[
+            application/json;
+            charset=UTF-8
+        ],
+        date=[Thu, 30 Nov 2023 02:14:27 GMT],
+        nel=[ {
+                "report_to": "w3-reporting-nel",
+                "max_age": 14400,
+                "include_subdomains": false,
+                "success_fraction": 1.0,
+                "failure_fraction": 1.0}],
+                report-to=[ {
+                    "group":
+                    "w3-reporting-nel",
+                    "max_age": 14400,
+                    "include_subdomains": true,
+                     "endpoints": [ {
+                         "url": "https://w3-reporting-nel.reddit.com/reports"
+                    } ]
+                },
+                {
+                    "group": "w3-reporting",
+                    "max_age": 14400,
+                    "include_subdomains": true,
+                    "endpoints": [ {
+                        "url": "https://w3-reporting.reddit.com/reports"
+                    } ]
+                },
+                {
+                    "group": "w3-reporting-csp",
+                    "max_age": 14400,
+                    "include_subdomains": true,
+                    "endpoints": [ {
+                        "url": "https://w3-reporting-csp.reddit.com/reports"
+                    } ]
+                }
+            ],
+        server=[snooserv],
+        set-cookie=[
+            edgebucket=qRKa4KtxCtDQOh8IEw;
+            Domain=reddit.com; Max-Age=63071999;
+            Path=/;
+            secure
+        ],
+        strict-transport-security=[
+            max-age=31536000;
+            includeSubdomains
+        ],
+        vary=[
+            accept-encoding,
+            Accept-Encoding
+        ],
+        via=[
+            1.1 varnish
+        ],
+        x-content-type-options=[ nosniff ],
+        x-frame-options=[ SAMEORIGIN ],
+        x-xss-protection=[
+            1;
+            mode=block
+        ]
+    }
+}

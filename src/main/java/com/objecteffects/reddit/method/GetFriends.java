@@ -32,7 +32,7 @@ public class GetFriends implements Serializable {
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Inject
-    private RedditGetMethod client;
+    private RedditGetMethod getMethod;
 
     @Inject
     private UnFriend unFriend;
@@ -48,6 +48,20 @@ public class GetFriends implements Serializable {
                     .build();
 
     public GetFriends() {
+    }
+
+    /**
+     * @param _getMethod the getMethod to set
+     */
+    public void setGetMethod(final RedditGetMethod _getMethod) {
+        this.getMethod = _getMethod;
+    }
+
+    /**
+     * @param _unFriend the unFriend to set
+     */
+    public void setUnFriend(final UnFriend _unFriend) {
+        this.unFriend = _unFriend;
     }
 
     /**
@@ -99,16 +113,15 @@ public class GetFriends implements Serializable {
     public List<Friend> getFriends(final int count,
             final boolean getKarma)
             throws IOException, InterruptedException {
-
-        final HttpResponse<String> methodResponse = this.client
+        final HttpResponse<String> response = this.getMethod
                 .getMethod("prefs/friends", Collections.emptyMap());
 
-        if (methodResponse == null) {
+        if (response == null) {
             throw new IllegalStateException("null friends respones");
         }
 
         this.log.debug("friends method response status: {}",
-                Integer.valueOf(methodResponse.statusCode()));
+                Integer.valueOf(response.statusCode()));
 
         final String path = "$[0]['data']['children']";
 
@@ -117,20 +130,18 @@ public class GetFriends implements Serializable {
         };
 
         final DocumentContext jsonContext = JsonPath
-                .using(this.conf).parse(methodResponse.body());
+                .using(this.conf).parse(response.body());
 
         final List<Friend> friends = jsonContext.read(path, typeRef);
 
         this.log.debug("friends length: {}",
                 Integer.valueOf(friends.size()));
 
-        List<Friend> result = friends;
-
         if (getKarma) {
-            result = decodeAbout(friends, count);
+            return decodeAbout(friends, count);
         }
 
-        return result;
+        return friends;
     }
 
     @SuppressWarnings("boxing")
@@ -139,6 +150,10 @@ public class GetFriends implements Serializable {
             throws IOException, InterruptedException {
         List<Friend> sublist = friends;
 
+        /*
+         * getFriends above always returns all friends so we trim it here if
+         * necessary.
+         */
         if (count > 0 && count < friends.size()) {
             sublist = friends.subList(0, count);
         }
@@ -149,46 +164,47 @@ public class GetFriends implements Serializable {
             final String aboutUri =
                     String.format("/api/v1/me/friends/%s", f.getName());
 
-            final HttpResponse<String> aboutMethodResponse = this.client
+            final HttpResponse<String> response = this.getMethod
                     .getMethod(aboutUri, Collections.emptyMap());
 
-            if (aboutMethodResponse == null) {
+            if (response == null) {
                 this.log.debug("null response: {}", f.getName());
 
                 // this.unFriend.unFriend(f.getName());
 
                 f.setKarma(0);
+
+                continue;
+            }
+
+            final String body = response.body();
+
+            this.log.debug("about response: {}", body);
+
+            final String path = "$['data']";
+
+            final DocumentContext jsonContext = JsonPath
+                    .using(this.conf).parse(body);
+
+            final FriendAbout fabout = jsonContext.read(path,
+                    FriendAbout.class);
+
+            this.log.debug("fabout: {}", fabout);
+
+            f.setKarma(fabout.getTotalKarma());
+            f.setIsBlocked(fabout.getIsBlocked());
+
+            if (fabout.getIsSuspended() == null) {
+                f.setIsSuspended(Boolean.FALSE);
             }
             else {
-                final String response = aboutMethodResponse.body();
+                f.setIsSuspended(fabout.getIsSuspended());
+            }
 
-                this.log.debug("about response: {}", response);
+            if (f.getIsSuspended()) {
+                this.log.debug("unfriending: {}", f.getName());
 
-                final String path = "$['data']";
-
-                final DocumentContext jsonContext = JsonPath
-                        .using(this.conf).parse(response);
-
-                final FriendAbout fabout = jsonContext.read(path,
-                        FriendAbout.class);
-
-                this.log.debug("fabout: {}", fabout);
-
-                f.setKarma(fabout.getTotalKarma());
-                f.setIsBlocked(fabout.getIsBlocked());
-
-                if (fabout.getIsSuspended() == null) {
-                    f.setIsSuspended(Boolean.FALSE);
-                }
-                else {
-                    f.setIsSuspended(fabout.getIsSuspended());
-                }
-
-                if (f.getIsSuspended()) {
-                    this.log.debug("unfriending: {}", f.getName());
-
-                    this.unFriend.unFriend(f.getName());
-                }
+                this.unFriend.unFriend(f.getName());
             }
         }
 
