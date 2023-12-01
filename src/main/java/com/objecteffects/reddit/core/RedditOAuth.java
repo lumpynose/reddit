@@ -54,7 +54,7 @@ public class RedditOAuth implements Serializable {
                     .options(EnumSet.noneOf(Option.class))
                     .build();
 
-    private final HttpClient client = HttpClient.newBuilder()
+    private static final HttpClient client = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(timeoutSeconds))
             .version(Version.HTTP_2)
             .followRedirects(Redirect.NORMAL)
