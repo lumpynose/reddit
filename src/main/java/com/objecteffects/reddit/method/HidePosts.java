@@ -105,7 +105,7 @@ public class HidePosts implements Serializable {
         // this.log.debug("posts: {}", methodResponse.body());
 
         this.log.debug("method response status: {}",
-                Integer.valueOf(methodResponse.statusCode()));
+                methodResponse.statusCode());
 
         this.log.debug("method response headers: {}",
                 methodResponse.headers());
@@ -122,7 +122,7 @@ public class HidePosts implements Serializable {
 
         final List<Post> posts = jsonContext.read(path, typeRef);
 
-        this.log.debug("list size: {}", Integer.valueOf(posts.size()));
+        this.log.debug("list size: {}", posts.size());
 
         final String hideUri = String.format("api/hide");
 
@@ -144,7 +144,7 @@ public class HidePosts implements Serializable {
                     this.postClient.postMethod(hideUri, param);
 
             this.log.debug("response: {}",
-                    Integer.valueOf(hideResponse.statusCode()));
+                    hideResponse.statusCode());
         }
 
         String after = null;

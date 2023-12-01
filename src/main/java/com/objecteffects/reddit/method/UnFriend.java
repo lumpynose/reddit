@@ -55,6 +55,6 @@ public class UnFriend implements Serializable {
         }
 
         this.log.debug("delete method response status: {}",
-                Integer.valueOf(methodResponse.statusCode()));
+                methodResponse.statusCode());
     }
 }

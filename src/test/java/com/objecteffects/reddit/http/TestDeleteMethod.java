@@ -49,7 +49,7 @@ public class TestDeleteMethod {
      */
     @Test
     public void testDeleteMethod() throws IOException, InterruptedException {
-        final String user = "BotDefense";
+        final String user = "user";
         HttpResponse<String> response;
 
         final String aboutUri = String.format("user/%s/about", user);

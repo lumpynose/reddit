@@ -1,6 +1,7 @@
 package com.objecteffects.reddit.http;
 
 import java.io.IOException;
+import java.net.http.HttpResponse;
 
 import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
@@ -39,5 +40,12 @@ public class TestAuthToken {
         final String access_token = this.redditOAuth.getOAuthToken();
 
         this.log.debug("access_token: {}", access_token);
+
+        final HttpResponse<String> response = this.redditOAuth.revokeToken();
+
+        this.log.debug("revoke response status: {}",
+                response.statusCode());
+        this.log.debug("revoke response headers: {}", response.headers());
+        this.log.debug("revoke response body: {}", response.body());
     }
 }

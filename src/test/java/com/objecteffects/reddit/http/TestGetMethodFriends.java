@@ -66,7 +66,7 @@ public class TestGetMethodFriends {
                 .getMethod("prefs/friends", Collections.emptyMap());
 
         this.log.debug("method response status: {}",
-                Integer.valueOf(methodResponse.statusCode()));
+                methodResponse.statusCode());
 
         this.log.debug("method response headers: {}", methodResponse.headers());
         // this.log.debug("method response body: {}", methodResponse.body());

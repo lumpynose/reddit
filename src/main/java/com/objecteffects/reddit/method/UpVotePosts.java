@@ -118,7 +118,7 @@ public class UpVotePosts implements Serializable {
         final List<Post> posts =
                 jsonContext.read(path, typeRef);
 
-        this.log.debug("list size: {}", Integer.valueOf(posts.size()));
+        this.log.debug("list size: {}", posts.size());
 
         final String upVoteUri = String.format("api/vote");
 
@@ -142,7 +142,7 @@ public class UpVotePosts implements Serializable {
             }
 
             this.log.debug("response: {}",
-                    Integer.valueOf(upVoteResponse.statusCode()));
+                    upVoteResponse.statusCode());
         }
 
         String after = null;

@@ -3,9 +3,6 @@ package com.objecteffects.reddit.core;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpClient.Redirect;
-import java.net.http.HttpClient.Version;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
@@ -46,11 +43,11 @@ public class RedditHttpClient implements Serializable {
 
     private static final int timeoutSeconds = 15;
 
-    private static final HttpClient client = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(timeoutSeconds))
-            .version(Version.HTTP_2)
-            .followRedirects(Redirect.NORMAL)
-            .build();
+//    private static final HttpClient client = HttpClient.newBuilder()
+//            .connectTimeout(Duration.ofSeconds(timeoutSeconds))
+//            .version(Version.HTTP_2)
+//            .followRedirects(Redirect.NORMAL)
+//            .build();
 
     private final static String METHOD_URI = "https://oauth.reddit.com";
 
@@ -95,7 +92,7 @@ public class RedditHttpClient implements Serializable {
                     .map(entry -> entry.getKey() + "=" + entry.getValue())
                     .collect(Collectors.joining("&"));
 
-            this.log.debug("form: {}, {}", form, form.length());
+            this.log.debug("form, length: {}, {}", form, form.length());
 
             fullUri = String.format("%s/%s?%s", METHOD_URI, method, form);
         }
@@ -122,10 +119,10 @@ public class RedditHttpClient implements Serializable {
         try {
             this.log.debug("method: {}, {}", method, buildRequest.method());
 
-            response = client.send(buildRequest, BodyHandlers.ofString());
+            response = this.redditOAuth.getClient().send(buildRequest,
+                    BodyHandlers.ofString());
 
-            this.log.debug("response status: {}",
-                    Integer.valueOf(response.statusCode()));
+            this.log.debug("response status: {}", response.statusCode());
             this.log.debug("response headers: {}", response.headers());
             // this.log.debug("response body: {}", response.body());
         }
@@ -138,39 +135,47 @@ public class RedditHttpClient implements Serializable {
             // response = null;
         }
 
-        if (response == null || !okCodes.contains(response.statusCode())) {
-            for (int i = 0; i < 3; i++) {
-                Thread.sleep(600 * i);
-
-                try {
-                    this.log.debug("method: {}, {}", method,
-                            buildRequest.method());
-
-                    response = client.send(buildRequest,
-                            BodyHandlers.ofString());
-
-                    this.log.debug("response status: {}",
-                            Integer.valueOf(response.statusCode()));
-                    this.log.debug("response headers: {}", response.headers());
-                    this.log.debug("response body: {}", response.body());
-
-                    if (okCodes.contains(response.statusCode())) {
-                        break;
-                    }
-                }
-                catch (IOException | InterruptedException e) {
-                    this.log.debug("exception: {}", e);
-
-                    // keep retrying
-
-                    response = null;
-                }
-            }
-        }
+//        if (response == null || !okCodes.contains(response.statusCode())) {
+//            for (int i = 0; i < 3; i++) {
+//                Thread.sleep(600 * i);
+//
+//                try {
+//                    this.log.debug("method: {}, {}", method,
+//                            buildRequest.method());
+//
+//                    response = this.redditOAuth.getClient()
+//                            .send(buildRequest, BodyHandlers.ofString());
+//
+//                    this.log.debug("response status: {}",
+//                            Integer.valueOf(response.statusCode()));
+//                    this.log.debug("response headers: {}", response.headers());
+//                    this.log.debug("response body: {}", response.body());
+//
+//                    if (okCodes.contains(response.statusCode())) {
+//                        break;
+//                    }
+//                }
+//                catch (IOException | InterruptedException e) {
+//                    this.log.debug("exception: {}", e);
+//
+//                    // keep retrying
+//
+//                    response = null;
+//                }
+//            }
+//        }
 
         this.redditOAuth.revokeToken();
 
-        if (response == null || !okCodes.contains(response.statusCode())) {
+        if (response == null) {
+            this.log.debug("null response");
+
+            return null;
+        }
+
+        if (!okCodes.contains(response.statusCode())) {
+            this.log.debug("bad status code: {}", response.statusCode());
+
             return null;
         }
 

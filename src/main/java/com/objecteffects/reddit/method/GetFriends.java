@@ -121,7 +121,7 @@ public class GetFriends implements Serializable {
         }
 
         this.log.debug("friends method response status: {}",
-                Integer.valueOf(response.statusCode()));
+                response.statusCode());
 
         final String path = "$[0]['data']['children']";
 
@@ -135,7 +135,7 @@ public class GetFriends implements Serializable {
         final List<Friend> friends = jsonContext.read(path, typeRef);
 
         this.log.debug("friends length: {}",
-                Integer.valueOf(friends.size()));
+                friends.size());
 
         if (getKarma) {
             return decodeAbout(friends, count);

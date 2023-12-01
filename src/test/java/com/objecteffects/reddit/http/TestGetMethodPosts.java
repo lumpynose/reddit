@@ -74,7 +74,7 @@ public class TestGetMethodPosts {
                 this.getClient.getMethod(submittedUri, params);
 
         this.log.debug("method response status: {}",
-                Integer.valueOf(methodResponse.statusCode()));
+                methodResponse.statusCode());
 
         this.log.debug("method response headers: {}", methodResponse.headers());
         // this.log.debug("method response body: {}", methodResponse.body());
@@ -94,7 +94,7 @@ public class TestGetMethodPosts {
 
         final List<Post> list = jsonContext.read(path, typeRef);
 
-        this.log.debug("list size: {}", Integer.valueOf(list.size()));
+        this.log.debug("list size: {}", list.size());
 
         for (final Post post : list) {
             this.log.debug("name: {}", post.getName());

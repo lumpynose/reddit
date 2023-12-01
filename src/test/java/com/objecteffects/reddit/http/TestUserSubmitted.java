@@ -44,12 +44,12 @@ public class TestUserSubmitted {
     public void testGetMethodFriends()
             throws InterruptedException, IOException {
         final List<String> users =
-                List.of("KeyserSosa", "user", "reddit");
+                List.of("user", "reddit", "KeyserSosa");
 
         for (final String user : users) {
             Thread.sleep(600);
 
-            final String uri =
+            final String uri1 =
                     String.format("user/%s/submitted", user);
 
             final Map<String, String> params =
@@ -58,16 +58,50 @@ public class TestUserSubmitted {
                                     "sort", "new",
                                     "type", "links"));
 
-            final HttpResponse<String> response = this.getClient
-                    .getMethod(uri, params);
+            final HttpResponse<String> response1 = this.getClient
+                    .getMethod(uri1, params);
 
-            this.log.debug("method response status: {}",
-                    Integer.valueOf(response.statusCode()));
-
-            this.log.debug("method response headers: {}",
-                    response.headers());
-
-            this.log.debug("method response body: {}", response.body());
+            debug(response1);
         }
+    }
+
+    private void debug(final HttpResponse<String> response) {
+        if (response == null) {
+            this.log.debug("null response");
+
+            return;
+        }
+
+        this.log.debug("method response status: {}",
+                response.statusCode());
+
+        this.log.debug("method response headers: {}",
+                response.headers());
+
+        this.log.debug("method response body: {}", response.body());
+    }
+
+    @SuppressWarnings("unused")
+    private void debug3(final String user, final Map<String, String> params)
+            throws InterruptedException, IOException {
+        final String uri3 =
+                String.format("/api/multi/user/%s", user);
+
+        final HttpResponse<String> response3 = this.getClient
+                .getMethod(uri3, params);
+
+        debug(response3);
+    }
+
+    @SuppressWarnings("unused")
+    private void debug2(final String user, final Map<String, String> params)
+            throws InterruptedException, IOException {
+        final String uri2 =
+                String.format("/api/v1/user/%s/trophies", user);
+
+        final HttpResponse<String> response2 = this.getClient
+                .getMethod(uri2, params);
+
+        debug(response2);
     }
 }

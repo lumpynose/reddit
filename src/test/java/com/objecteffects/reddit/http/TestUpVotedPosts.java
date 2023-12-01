@@ -86,6 +86,6 @@ public class TestUpVotedPosts {
 
         final List<Post> list = jsonContext.read(path, typeRef);
 
-        this.log.debug("list length: {}", Integer.valueOf(list.size()));
+        this.log.debug("list length: {}", list.size());
     }
 }
