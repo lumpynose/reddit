@@ -161,10 +161,12 @@ public class GetFriends implements Serializable {
         for (final Friend f : sublist) {
             Thread.sleep(600);
 
+            // none of these work when used with successive users
+            // and I can't figure out why.
 //            String.format("/api/v1/me/friends/%s", f.getName());
-//            String.format("/user/%s/about", f.getName());
+//            String.format("/user/%s/overview", f.getName());
             final String aboutUri =
-                    String.format("/user/%s/overview", f.getName());
+                    String.format("/user/%s/about", f.getName());
 
             final HttpResponse<String> response = this.getMethod
                     .getMethod(aboutUri, Collections.emptyMap());
