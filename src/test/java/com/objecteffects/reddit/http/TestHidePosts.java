@@ -44,7 +44,7 @@ public class TestHidePosts {
     public void testPostMethod()
             throws IOException, InterruptedException {
         final List<String> users =
-                List.of("KeyserSosa", "lurker");
+                List.of("KeyserSosa", "user", "reddit");
 
         if (users.isEmpty()) {
             return;

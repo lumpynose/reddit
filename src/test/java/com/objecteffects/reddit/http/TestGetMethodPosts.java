@@ -59,7 +59,7 @@ public class TestGetMethodPosts {
     public void testGetMethodPosts()
             throws InterruptedException, IOException {
         final int count = 5;
-        final String name = "BotDefense";
+        final String name = "user";
 
         final String submittedUri =
                 String.format("/user/%s/submitted", name);

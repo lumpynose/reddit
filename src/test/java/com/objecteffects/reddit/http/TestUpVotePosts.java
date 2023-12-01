@@ -43,7 +43,7 @@ public class TestUpVotePosts {
     public void testPostMethod() throws IOException,
             InterruptedException {
         final List<String> users =
-                List.of("KeyserSosa", "pl00h", "lurker");
+                List.of("KeyserSosa", "user", "reddit");
 
         for (final String user : users) {
             this.upVotePosts.upVotePosts(user, 1, null);
