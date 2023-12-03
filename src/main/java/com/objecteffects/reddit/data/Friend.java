@@ -51,22 +51,22 @@ public class Friend implements Comparable<Friend> {
     /**
      * @param isBanned the isBanned to set
      */
-    public void setIsBanned(final Boolean isBanned) {
-        this.isBanned = isBanned;
+    public void setIsBanned(final Boolean _isBanned) {
+        this.isBanned = _isBanned;
     }
 
     /**
      * @param isBlocked the isBlocked to set
      */
-    public void setIsBlocked(final Boolean isBlocked) {
-        this.isBlocked = isBlocked;
+    public void setIsBlocked(final Boolean _isBlocked) {
+        this.isBlocked = _isBlocked;
     }
 
     /**
      * @param isSuspended the isSuspended to set
      */
-    public void setIsSuspended(final Boolean isSuspended) {
-        this.isSuspended = isSuspended;
+    public void setIsSuspended(final Boolean _isSuspended) {
+        this.isSuspended = _isSuspended;
     }
 
     public Float getDate() {

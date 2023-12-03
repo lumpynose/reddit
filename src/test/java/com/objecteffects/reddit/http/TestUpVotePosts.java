@@ -23,6 +23,7 @@ import jakarta.inject.Inject;
  */
 @EnableWeld
 public class TestUpVotePosts {
+    @SuppressWarnings("unused")
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
@@ -43,10 +44,10 @@ public class TestUpVotePosts {
     public void testPostMethod() throws IOException,
             InterruptedException {
         final List<String> users =
-                List.of("KeyserSosa", "user", "reddit");
+                List.of("user", "KeyserSosa", "reddit");
 
         for (final String user : users) {
-            this.upVotePosts.upVotePosts(user, 1, null);
+            this.upVotePosts.upVotePosts(user, 3, null);
         }
     }
 }

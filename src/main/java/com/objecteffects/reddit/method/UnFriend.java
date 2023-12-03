@@ -10,10 +10,12 @@ import org.slf4j.LoggerFactory;
 
 import com.objecteffects.reddit.core.RedditDeleteMethod;
 
+import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
 
 /**
  */
+@Default
 public class UnFriend implements Serializable {
     private static final long serialVersionUID = -1L;
 

@@ -62,8 +62,9 @@ public class TestGetMethodFriends {
         // the whole enchillada.
         // final Map<String, String> params = Map.of("limit", "15");
 
+// .getMethod("prefs/friends", Collections.emptyMap());
         final HttpResponse<String> methodResponse = this.getClient
-                .getMethod("prefs/friends", Collections.emptyMap());
+                .getMethod("api/v1/me/friends", Collections.emptyMap());
 
         this.log.debug("method response status: {}",
                 methodResponse.statusCode());

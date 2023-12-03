@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
 
 // list of friends
@@ -35,6 +36,7 @@ import jakarta.inject.Inject;
 
 /**
  */
+@Default
 public class RedditHttpClient implements Serializable {
     private static final long serialVersionUID = -1L;
 
@@ -71,7 +73,7 @@ public class RedditHttpClient implements Serializable {
     }
 
     /**
-     * @param request
+     * @param requestBuilder
      * @param method
      * @param params
      * @return HttpResponse
@@ -80,7 +82,7 @@ public class RedditHttpClient implements Serializable {
      */
     @SuppressWarnings("boxing")
     public HttpResponse<String> clientSend(
-            final HttpRequest.Builder request,
+            final HttpRequest.Builder requestBuilder,
             final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
@@ -103,23 +105,22 @@ public class RedditHttpClient implements Serializable {
         this.log.debug("fullUri: {}", fullUri);
         this.log.debug("token: {}", token);
 
-        final HttpRequest buildRequest = request
-                .header("User-Agent",
+        final HttpRequest request = requestBuilder
+                .setHeader("User-Agent",
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
-                .header("Authorization",
-                        "bearer " + token)
+                .setHeader("Authorization", "bearer " + token)
                 .uri(URI.create(fullUri))
                 .timeout(Duration.ofSeconds(timeoutSeconds))
                 .build();
 
-//        log.debug("headers: {}", request.headers());
+        this.log.debug("request headers: {}", request.headers());
 
         HttpResponse<String> response = null;
 
         try {
-            this.log.debug("method: {}, {}", method, buildRequest.method());
+            this.log.debug("method: {}, {}", method, request.method());
 
-            response = this.redditOAuth.getClient().send(buildRequest,
+            response = this.redditOAuth.getClient().send(request,
                     BodyHandlers.ofString());
 
             this.log.debug("response status: {}", response.statusCode());
@@ -174,7 +175,8 @@ public class RedditHttpClient implements Serializable {
         }
 
         if (!okCodes.contains(response.statusCode())) {
-            this.log.debug("bad status code: {}", response.statusCode());
+            this.log.debug("bad status code: {}, {}",
+                    response.statusCode(), method);
 
             return null;
         }

@@ -1,0 +1,76 @@
+{
+    {
+        :status=[401],
+        accept-ranges=[bytes],
+        cache-control=[private, max-age=3600],
+        content-length=[32085],
+        content-type=[text/html; charset=UTF-8],
+        date=[Fri, 01 Dec 2023 17:31:44 GMT],
+        nel=[{
+            "report_to": "w3-reporting-nel",
+            "max_age": 14400,
+            "include_subdomains": false,
+            "success_fraction": 1.0,
+            "failure_fraction": 1.0}],
+            report-to=[{
+                "group": "w3-reporting-nel",
+                "max_age": 14400,
+                "include_subdomains": true,
+                "endpoints": [{
+                    "url": "https://w3-reporting-nel.reddit.com/reports"
+                }]
+        },
+        {
+            "group": "w3-reporting",
+            "max_age": 14400,
+            "include_subdomains": true,
+            "endpoints": [{
+                "url": "https://w3-reporting.reddit.com/reports"
+            }]
+        },
+        {
+            "group": "w3-reporting-csp",
+            "max_age": 14400,
+            "include_subdomains": true,
+            "endpoints": [{
+                "url": "https://w3-reporting-csp.reddit.com/reports"
+            }]
+        }],
+        server=[snooserv],
+        set-cookie=[
+            loid=???;
+            Domain=reddit.com;
+            Max-Age=63071999;
+            Path=/;
+            expires=Sun, 30-Nov-2025 17:31:44 GMT;
+            secure;
+            SameSite=None;
+            Secure, session_tracker=???;
+            Domain=reddit.com;
+            Max-Age=7199;
+            Path=/;
+            expires=Fri, 01-Dec-2023 19:31:44 GMT;
+            secure;
+            SameSite=None;
+            Secure, csv=2;
+            Max-Age=63072000;
+            Domain=.reddit.com;
+            Path=/;
+            Secure;
+            SameSite=None, edgebucket=???;
+            Domain=reddit.com;
+            Max-Age=63071999;
+            Path=/; 
+            secure
+        ],
+        strict-transport-security=[max-age=31536000; includeSubdomains],
+        vary=[accept-encoding, Accept-Encoding],
+        via=[1.1 varnish],
+        www-authenticate=[Bearer realm="reddit", error="invalid_token"],
+        x-content-type-options=[nosniff],
+        x-frame-options=[SAMEORIGIN],
+        x-ua-compatible=[IE=edge],
+        x-xss-protection=[1; mode=block]
+     }
+ }
+ 

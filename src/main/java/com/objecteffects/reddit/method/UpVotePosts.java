@@ -22,10 +22,12 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditPostMethod;
 import com.objecteffects.reddit.data.Post;
 
+import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
 
 /**
  */
+@Default
 public class UpVotePosts implements Serializable {
     private static final long serialVersionUID = -1L;
 

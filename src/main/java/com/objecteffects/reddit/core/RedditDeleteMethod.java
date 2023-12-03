@@ -9,10 +9,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
 
 /**
  */
+@Default
 public class RedditDeleteMethod implements Serializable {
     private static final long serialVersionUID = -1L;
 
@@ -22,9 +24,6 @@ public class RedditDeleteMethod implements Serializable {
 
     @Inject
     private RedditHttpClient redditHttpClient;
-
-    private final HttpRequest.Builder deleteRequest =
-            HttpRequest.newBuilder().DELETE();
 
     /**
      */
@@ -48,7 +47,10 @@ public class RedditDeleteMethod implements Serializable {
     public HttpResponse<String> deleteMethod(final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
-        return this.redditHttpClient.clientSend(this.deleteRequest, method,
+        final HttpRequest.Builder deleteRequest =
+                HttpRequest.newBuilder().DELETE();
+
+        return this.redditHttpClient.clientSend(deleteRequest, method,
                 params);
     }
 }

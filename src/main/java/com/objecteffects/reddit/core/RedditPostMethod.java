@@ -13,10 +13,12 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
 
 /**
  */
+@Default
 public class RedditPostMethod implements Serializable {
     private static final long serialVersionUID = -1L;
 
@@ -58,6 +60,8 @@ public class RedditPostMethod implements Serializable {
 
         final HttpRequest.Builder postRequest =
                 HttpRequest.newBuilder()
+                        .setHeader("Content-Type",
+                                "application/x-www-form-urlencoded")
                         .POST(BodyPublishers.ofString(pj));
 
         return this.redditHttpClient.clientSend(postRequest, method, params);

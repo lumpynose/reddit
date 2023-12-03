@@ -21,10 +21,12 @@ import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.data.FriendAbout;
 
+import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
 
 /**
  */
+@Default
 public class GetFriends implements Serializable {
     private static final long serialVersionUID = -1L;
 
@@ -113,8 +115,9 @@ public class GetFriends implements Serializable {
     public List<Friend> getFriends(final int count,
             final boolean getKarma)
             throws IOException, InterruptedException {
+        // .getMethod("prefs/friends", Collections.emptyMap());
         final HttpResponse<String> response = this.getMethod
-                .getMethod("prefs/friends", Collections.emptyMap());
+                .getMethod("api/v1/me/friends", Collections.emptyMap());
 
         if (response == null) {
             throw new IllegalStateException("null friends respones");

@@ -14,10 +14,12 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
 
 /**
  */
+@Default
 public class RedditPutMethod implements Serializable {
     private static final long serialVersionUID = -1L;
 

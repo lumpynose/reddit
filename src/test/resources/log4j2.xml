@@ -4,6 +4,7 @@
         <Property name="logfile">${env:TMP}\temperature.log</Property>
         <Property name="pattern">%-5level %date{yyyy-MMM-dd HH:mm}
             [%thread] %logger{2}.%method - %msg%n</Property>
+        <Property name="bufferedIO">false</Property>
     </Properties>
 
     <Appenders>
