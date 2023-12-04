@@ -58,7 +58,7 @@ public class RedditOAuth implements Serializable {
 
     private final HttpClient client = HttpClient.newBuilder()
             .connectTimeout(Duration.ofSeconds(timeoutSeconds))
-            .version(Version.HTTP_2)
+            .version(Version.HTTP_1_1)
             .followRedirects(Redirect.NORMAL)
             .build();
 
@@ -125,7 +125,6 @@ public class RedditOAuth implements Serializable {
 //        this.log.debug("form: {}", form);
 
         final HttpRequest request = HttpRequest.newBuilder()
-                .setHeader("Content-Type", "application/x-www-form-urlencoded")
                 .setHeader("User-Agent",
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
                 .setHeader("Authorization", basicAuth(clientId, secret))
@@ -138,6 +137,12 @@ public class RedditOAuth implements Serializable {
 
         final HttpResponse<String> response = this.client
                 .send(request, BodyHandlers.ofString());
+
+        if (response == null) {
+            this.log.error("null respones");
+
+            throw new IllegalStateException("null response");
+        }
 
         this.log.debug("auth response status: {}", response.statusCode());
 
@@ -159,9 +164,6 @@ public class RedditOAuth implements Serializable {
 
         final Map<String, String> stringMap =
                 jsonContext.read(path, typeRef);
-
-//        this.log.debug("stringMap size: {}",
-//                stringMap.size());
 
         if (!stringMap.containsKey("access_token")) {
             this.log.error("no access_token");
@@ -222,8 +224,8 @@ public class RedditOAuth implements Serializable {
 
         this.log.debug("fullUrl: " + fullUri);
 
+//      .setHeader("Content-Type", "application/x-www-form-urlencoded")
         final HttpRequest request = HttpRequest.newBuilder()
-                .setHeader("Content-Type", "application/x-www-form-urlencoded")
                 .setHeader("User-Agent",
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
                 .setHeader("Authorization", basicAuth(username, password))

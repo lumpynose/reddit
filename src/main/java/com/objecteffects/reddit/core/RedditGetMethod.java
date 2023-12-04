@@ -47,10 +47,10 @@ public class RedditGetMethod implements Serializable {
     public HttpResponse<String> getMethod(final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
-        final HttpRequest.Builder getRequest =
+        final HttpRequest.Builder requestBuilder =
                 HttpRequest.newBuilder().GET();
 
-        return this.redditHttpClient.clientSend(getRequest, method,
+        return this.redditHttpClient.clientSend(requestBuilder, method,
                 params);
     }
 }

@@ -58,10 +58,10 @@ public class RedditPutMethod implements Serializable {
 
         this.log.debug("paramsJson: {}", pj);
 
-        final HttpRequest.Builder putRequest = HttpRequest.newBuilder()
+        final HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
                 .PUT(BodyPublishers.ofString(pj));
 
-        return this.redditHttpClient.clientSend(putRequest, method,
+        return this.redditHttpClient.clientSend(requestBuilder, method,
                 Collections.emptyMap());
     }
 

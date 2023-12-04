@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uwyn.urlencoder.UrlEncoder;
 
 import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
@@ -54,21 +55,34 @@ public class RedditPostMethod implements Serializable {
 
         final ObjectMapper mapper = new ObjectMapper();
 
-        final String pj = mapper.writeValueAsString(params);
+//        final String pj = mapper.writeValueAsString(params);
+        final String pj = paramsJoined(params);
 
-        this.log.debug("paramsJson: {}", pj);
+        this.log.debug("params joined: {}", pj);
 
-        final HttpRequest.Builder postRequest =
+        final var encoded = UrlEncoder.encode(pj);
+        this.log.debug("params urlencoded: {}", encoded);
+
+        final HttpRequest.Builder requestBuilder =
                 HttpRequest.newBuilder()
                         .setHeader("Content-Type",
                                 "application/x-www-form-urlencoded")
                         .POST(BodyPublishers.ofString(pj));
 
-        return this.redditHttpClient.clientSend(postRequest, method, params);
+        return this.redditHttpClient.clientSend(requestBuilder, method,
+                params /* Collections.emptyMap() */);
+    }
+
+    private static String paramsJoined(final Map<String, String> params) {
+        final String pj = params.entrySet().stream()
+                .map(entry -> entry.getKey() + "=" + entry.getValue())
+                .collect(Collectors.joining("&"));
+
+        return pj;
     }
 
     @SuppressWarnings("unused")
-    private String paramsJson(final Map<String, String> params) {
+    private static String paramsJson(final Map<String, String> params) {
         final String pj = params.entrySet().stream()
                 .map(entry -> entry.getKey() + ":" + entry.getValue())
                 .collect(Collectors.joining(","));

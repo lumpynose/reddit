@@ -3,6 +3,9 @@ package com.objecteffects.reddit.core;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpClient.Redirect;
+import java.net.http.HttpClient.Version;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
@@ -45,11 +48,11 @@ public class RedditHttpClient implements Serializable {
 
     private static final int timeoutSeconds = 15;
 
-//    private static final HttpClient client = HttpClient.newBuilder()
-//            .connectTimeout(Duration.ofSeconds(timeoutSeconds))
-//            .version(Version.HTTP_2)
-//            .followRedirects(Redirect.NORMAL)
-//            .build();
+    private static final HttpClient client = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofSeconds(timeoutSeconds))
+            .version(Version.HTTP_1_1)
+            .followRedirects(Redirect.NORMAL)
+            .build();
 
     private final static String METHOD_URI = "https://oauth.reddit.com";
 
@@ -86,13 +89,11 @@ public class RedditHttpClient implements Serializable {
             final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
-        final String fullUri;
+        String fullUri;
         final String token = this.redditOAuth.getOAuthToken();
 
         if (!params.isEmpty()) {
-            final String form = params.entrySet().stream()
-                    .map(entry -> entry.getKey() + "=" + entry.getValue())
-                    .collect(Collectors.joining("&"));
+            final String form = urlParameters(params);
 
             this.log.debug("form, length: {}, {}", form, form.length());
 
@@ -101,6 +102,12 @@ public class RedditHttpClient implements Serializable {
         else {
             fullUri = String.format("%s/%s", METHOD_URI, method);
         }
+
+//        final HttpRequest copy = requestBuilder.copy().build();
+//
+//        if ("POST".compareTo(copy.method()) == 0) {
+//            fullUri = "http://localhost:9090/";
+//        }
 
         this.log.debug("fullUri: {}", fullUri);
         this.log.debug("token: {}", token);
@@ -120,7 +127,7 @@ public class RedditHttpClient implements Serializable {
         try {
             this.log.debug("method: {}, {}", method, request.method());
 
-            response = this.redditOAuth.getClient().send(request,
+            response = RedditHttpClient.client.send(request,
                     BodyHandlers.ofString());
 
             this.log.debug("response status: {}", response.statusCode());
@@ -182,5 +189,16 @@ public class RedditHttpClient implements Serializable {
         }
 
         return response;
+    }
+
+    /**
+     * @param params
+     * @return
+     */
+    private static String urlParameters(final Map<String, String> params) {
+        final String form = params.entrySet().stream()
+                .map(entry -> entry.getKey() + "=" + entry.getValue())
+                .collect(Collectors.joining("&"));
+        return form;
     }
 }

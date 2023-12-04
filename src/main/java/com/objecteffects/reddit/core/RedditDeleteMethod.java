@@ -47,10 +47,10 @@ public class RedditDeleteMethod implements Serializable {
     public HttpResponse<String> deleteMethod(final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
-        final HttpRequest.Builder deleteRequest =
+        final HttpRequest.Builder requestBuilder =
                 HttpRequest.newBuilder().DELETE();
 
-        return this.redditHttpClient.clientSend(deleteRequest, method,
+        return this.redditHttpClient.clientSend(requestBuilder, method,
                 params);
     }
 }

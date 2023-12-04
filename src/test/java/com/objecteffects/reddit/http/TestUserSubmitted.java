@@ -44,7 +44,7 @@ public class TestUserSubmitted {
     public void testGetMethodFriends()
             throws InterruptedException, IOException {
         final List<String> users =
-                List.of("user", "reddit", "KeyserSosa");
+                List.of("user", "reddit", "figwax");
 
         for (final String user : users) {
             Thread.sleep(600);
