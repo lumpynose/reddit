@@ -14,9 +14,6 @@ public class FriendAbout {
     @JsonProperty("total_karma")
     private Integer totalKarma;
 
-//    @JsonProperty("user_is_banned")
-//    private Boolean isBanned;
-
     @JsonProperty("is_blocked")
     private Boolean isBlocked;
 
@@ -37,13 +34,6 @@ public class FriendAbout {
     /**
      * @return
      */
-//    public Boolean getIsBanned() {
-//        return this.isBanned;
-//    }
-
-    /**
-     * @return
-     */
     public Boolean getIsBlocked() {
         return this.isBlocked;
     }
@@ -54,7 +44,17 @@ public class FriendAbout {
                 + this.totalKarma + ", this.isBlocked=" + this.isBlocked + "]";
     }
 
-//    @Override
+//  @JsonProperty("user_is_banned")
+//  private Boolean isBanned;
+
+    /**
+     * @return
+     */
+//    public Boolean getIsBanned() {
+//        return this.isBanned;
+//    }
+
+    // @Override
 //    public String toString() {
 //        return "[isSuspended=" + this.isSuspended
 //                + ", totalKarma=" + this.totalKarma + "]";

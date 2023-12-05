@@ -3,15 +3,12 @@ package com.objecteffects.reddit.core;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpClient.Redirect;
-import java.net.http.HttpClient.Version;
 import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.time.Duration;
 import java.util.Base64;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,13 +16,9 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.TypeRef;
-import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
-import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.main.AppConfig;
 
 import jakarta.enterprise.inject.Default;
@@ -39,8 +32,6 @@ public class RedditOAuth implements Serializable {
 
     private final static String AUTH_URI = "https://www.reddit.com";
 
-    private static final int timeoutSeconds = 15;
-
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
@@ -48,19 +39,6 @@ public class RedditOAuth implements Serializable {
     private AppConfig appConfig;
 
     private static String access_token;
-
-    private final Configuration jsonConf =
-            new Configuration.ConfigurationBuilder()
-                    .jsonProvider(new JacksonJsonProvider())
-                    .mappingProvider(new JacksonMappingProvider())
-                    .options(EnumSet.noneOf(Option.class))
-                    .build();
-
-    private final HttpClient client = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(timeoutSeconds))
-            .version(Version.HTTP_1_1)
-            .followRedirects(Redirect.NORMAL)
-            .build();
 
     /**
      */
@@ -74,12 +52,12 @@ public class RedditOAuth implements Serializable {
         this.appConfig = _appConfig;
     }
 
-    /**
-     * @return the client
-     */
-    public HttpClient getClient() {
-        return this.client;
-    }
+//    /**
+//     * @return the client
+//     */
+//    public HttpClient getClient() {
+//        return this.client;
+//    }
 
     /**
      * @return HttpResponse
@@ -96,12 +74,13 @@ public class RedditOAuth implements Serializable {
 
         final Map<String, String> params = new HashMap<>();
 
-//        params.put("grant_type", "password");
-//        params.put("username", this.appConfig.getUsername());
-//        params.put("password", this.appConfig.getPassword());
-        params.put("grant_type", "client_credentials");
-        params.put("scope",
-                "identity,read,history,mysubreddits,vote,report,subscribe");
+        params.put("grant_type", "password");
+        params.put("username", this.appConfig.getUsername());
+        params.put("password", this.appConfig.getPassword());
+
+//        params.put("grant_type", "client_credentials");
+//        params.put("scope",
+//                "identity,read,history,mysubreddits,vote,report,subscribe");
 
         final String clientId = this.appConfig.getClientId();
         final String secret = this.appConfig.getSecret();
@@ -118,9 +97,7 @@ public class RedditOAuth implements Serializable {
         /*
          * Generates the string grant_type=whatever&scope=whatever etc.
          */
-        final String form = params.entrySet().stream()
-                .map(entry -> entry.getKey() + "=" + entry.getValue())
-                .collect(Collectors.joining("&"));
+        final String postParams = RedditHttpClient.urlParams(params);
 
 //        this.log.debug("form: {}", form);
 
@@ -129,13 +106,13 @@ public class RedditOAuth implements Serializable {
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
                 .setHeader("Authorization", basicAuth(clientId, secret))
                 .uri(URI.create(fullUri))
-                .timeout(Duration.ofSeconds(timeoutSeconds))
-                .POST(HttpRequest.BodyPublishers.ofString(form))
+                .timeout(Duration.ofSeconds(Utils.timeoutSeconds))
+                .POST(BodyPublishers.ofString(postParams))
                 .build();
 
 //        this.log.debug("request headers: {}", request.headers());
 
-        final HttpResponse<String> response = this.client
+        final HttpResponse<String> response = Utils.httpClient()
                 .send(request, BodyHandlers.ofString());
 
         if (response == null) {
@@ -159,7 +136,7 @@ public class RedditOAuth implements Serializable {
         final TypeRef<Map<String, String>> typeRef = new TypeRef<>() {
         };
 
-        final DocumentContext jsonContext = JsonPath.using(this.jsonConf)
+        final DocumentContext jsonContext = JsonPath.using(Utils.jsonConf())
                 .parse(response.body());
 
         final Map<String, String> stringMap =
@@ -178,6 +155,7 @@ public class RedditOAuth implements Serializable {
         return RedditOAuth.access_token;
     }
 
+    @SuppressWarnings("unused")
     private Boolean alwaysTrue() {
         return Boolean.TRUE;
     }
@@ -230,13 +208,13 @@ public class RedditOAuth implements Serializable {
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
                 .setHeader("Authorization", basicAuth(username, password))
                 .uri(URI.create(fullUri))
-                .timeout(Duration.ofSeconds(timeoutSeconds))
+                .timeout(Duration.ofSeconds(Utils.timeoutSeconds))
                 .POST(HttpRequest.BodyPublishers.ofString(form))
                 .build();
 
         this.log.debug("headers: {}", request.headers());
 
-        final HttpResponse<String> response = this.client
+        final HttpResponse<String> response = Utils.httpClient()
                 .send(request, BodyHandlers.ofString());
 
         if (response == null) {

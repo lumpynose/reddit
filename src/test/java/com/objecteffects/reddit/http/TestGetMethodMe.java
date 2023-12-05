@@ -1,8 +1,8 @@
 package com.objecteffects.reddit.http;
 
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.util.Collections;
-import java.util.EnumSet;
 
 import org.jboss.weld.junit5.EnableWeld;
 import org.jboss.weld.junit5.WeldInitiator;
@@ -14,13 +14,11 @@ import org.slf4j.LoggerFactory;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.TypeRef;
-import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
-import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
+import com.objecteffects.reddit.core.Utils;
 import com.objecteffects.reddit.data.Me;
 import com.objecteffects.reddit.main.AppConfig;
 
@@ -33,12 +31,7 @@ public class TestGetMethodMe {
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
-    private final Configuration conf =
-            new Configuration.ConfigurationBuilder()
-                    .jsonProvider(new JacksonJsonProvider())
-                    .mappingProvider(new JacksonMappingProvider())
-                    .options(EnumSet.noneOf(Option.class))
-                    .build();
+    private final Configuration conf = Utils.jsonConf();
 
     @WeldSetup
     private final WeldInitiator weld =
@@ -55,17 +48,17 @@ public class TestGetMethodMe {
      */
     @Test
     public void testGetMethod() throws IOException, InterruptedException {
-        final String body =
+        final HttpResponse<String> response =
                 this.getClient.getMethod("api/v1/me",
-                        Collections.emptyMap()).body();
+                        Collections.emptyMap());
 
-        this.log.debug("body: {}", body);
+        this.log.debug("body: {}", response.body());
 
         final TypeRef<Me> typeRef = new TypeRef<>() {
         };
 
         final DocumentContext jsonContext =
-                JsonPath.using(this.conf).parse(body);
+                JsonPath.using(this.conf).parse(response.body());
 
         final Me me = jsonContext.read("$", typeRef);
 

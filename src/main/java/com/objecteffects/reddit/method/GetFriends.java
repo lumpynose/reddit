@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.http.HttpResponse;
 import java.util.Collections;
-import java.util.EnumSet;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -13,11 +12,9 @@ import org.slf4j.LoggerFactory;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.Option;
 import com.jayway.jsonpath.TypeRef;
-import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
-import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
 import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.Utils;
 import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.data.FriendAbout;
 
@@ -42,13 +39,10 @@ public class GetFriends implements Serializable {
     private final int defaultCount = 0;
     private final boolean defaultGetKarma = false;
 
-    private final Configuration conf =
-            new Configuration.ConfigurationBuilder()
-                    .jsonProvider(new JacksonJsonProvider())
-                    .mappingProvider(new JacksonMappingProvider())
-                    .options(EnumSet.noneOf(Option.class))
-                    .build();
+    private final Configuration conf = Utils.jsonConf();
 
+    /**
+     */
     public GetFriends() {
     }
 
@@ -116,8 +110,9 @@ public class GetFriends implements Serializable {
             final boolean getKarma)
             throws IOException, InterruptedException {
         // .getMethod("prefs/friends", Collections.emptyMap());
+        // .getMethod("api/v1/me/friends", Collections.emptyMap());
         final HttpResponse<String> response = this.getMethod
-                .getMethod("api/v1/me/friends", Collections.emptyMap());
+                .getMethod("prefs/friends", Collections.emptyMap());
 
         if (response == null) {
             throw new IllegalStateException("null friends respones");

@@ -3,9 +3,7 @@ package com.objecteffects.reddit.core;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpClient.Redirect;
-import java.net.http.HttpClient.Version;
+import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
@@ -43,16 +41,8 @@ import jakarta.inject.Inject;
 public class RedditHttpClient implements Serializable {
     private static final long serialVersionUID = -1L;
 
-    private final Logger log =
-            LoggerFactory.getLogger(this.getClass().getSimpleName());
-
-    private static final int timeoutSeconds = 15;
-
-    private static final HttpClient client = HttpClient.newBuilder()
-            .connectTimeout(Duration.ofSeconds(timeoutSeconds))
-            .version(Version.HTTP_1_1)
-            .followRedirects(Redirect.NORMAL)
-            .build();
+    private final static Logger log =
+            LoggerFactory.getLogger(RedditHttpClient.class);
 
     private final static String METHOD_URI = "https://oauth.reddit.com";
 
@@ -93,9 +83,10 @@ public class RedditHttpClient implements Serializable {
         final String token = this.redditOAuth.getOAuthToken();
 
         if (!params.isEmpty()) {
-            final String form = urlParameters(params);
+            final String form = urlParams(params);
 
-            this.log.debug("form, length: {}, {}", form, form.length());
+            log.debug("form, length: {}, {}", form,
+                    form.length());
 
             fullUri = String.format("%s/%s?%s", METHOD_URI, method, form);
         }
@@ -109,80 +100,43 @@ public class RedditHttpClient implements Serializable {
 //            fullUri = "http://localhost:9090/";
 //        }
 
-        this.log.debug("fullUri: {}", fullUri);
-        this.log.debug("token: {}", token);
+        log.debug("fullUri: {}", fullUri);
+        log.debug("token: {}", token);
 
         final HttpRequest request = requestBuilder
                 .setHeader("User-Agent",
                         "java:com.objecteffects.reddit:v0.0.1 (by /u/lumpynose)")
                 .setHeader("Authorization", "bearer " + token)
                 .uri(URI.create(fullUri))
-                .timeout(Duration.ofSeconds(timeoutSeconds))
+                .timeout(Duration.ofSeconds(Utils.timeoutSeconds))
                 .build();
 
-        this.log.debug("request headers: {}", request.headers());
+        log.debug("request headers: {}", request.headers());
+        log.debug("uri: {}", request.uri());
 
         HttpResponse<String> response = null;
 
-        try {
-            this.log.debug("method: {}, {}", method, request.method());
+        log.debug("method: {}, {}", method, request.method());
 
-            response = RedditHttpClient.client.send(request,
-                    BodyHandlers.ofString());
-
-            this.log.debug("response status: {}", response.statusCode());
-            this.log.debug("response headers: {}", response.headers());
-            // this.log.debug("response body: {}", response.body());
-        }
-        catch (IOException | InterruptedException | NullPointerException e) {
-            this.log.debug("exception: {}", e);
-
-            // fall through to retries below
-
-            // response may be null at this point?
-            // response = null;
-        }
-
-//        if (response == null || !okCodes.contains(response.statusCode())) {
-//            for (int i = 0; i < 3; i++) {
-//                Thread.sleep(600 * i);
-//
-//                try {
-//                    this.log.debug("method: {}, {}", method,
-//                            buildRequest.method());
-//
-//                    response = this.redditOAuth.getClient()
-//                            .send(buildRequest, BodyHandlers.ofString());
-//
-//                    this.log.debug("response status: {}",
-//                            Integer.valueOf(response.statusCode()));
-//                    this.log.debug("response headers: {}", response.headers());
-//                    this.log.debug("response body: {}", response.body());
-//
-//                    if (okCodes.contains(response.statusCode())) {
-//                        break;
-//                    }
-//                }
-//                catch (IOException | InterruptedException e) {
-//                    this.log.debug("exception: {}", e);
-//
-//                    // keep retrying
-//
-//                    response = null;
-//                }
-//            }
-//        }
-
-        this.redditOAuth.revokeToken();
+        response = Utils.httpClient().send(request, BodyHandlers.ofString());
 
         if (response == null) {
-            this.log.debug("null response");
+            log.debug("null response");
 
             return null;
         }
 
+        log.debug("response status: {}",
+                response.statusCode());
+        log.debug("response headers: {}", response.headers());
+        // this.log.debug("response body: {}", response.body());
+
+        debugHeaders(response.headers());
+
+        this.redditOAuth.revokeToken();
+
         if (!okCodes.contains(response.statusCode())) {
-            this.log.debug("bad status code: {}, {}",
+            log.debug("bad status code: {}, {}",
                     response.statusCode(), method);
 
             return null;
@@ -191,14 +145,40 @@ public class RedditHttpClient implements Serializable {
         return response;
     }
 
+    public static boolean validResponse(final HttpResponse<String> response) {
+        return okCodes.contains(response.statusCode());
+    }
+
     /**
      * @param params
      * @return
      */
-    private static String urlParameters(final Map<String, String> params) {
+    static String urlParams(final Map<String, String> params) {
         final String form = params.entrySet().stream()
                 .map(entry -> entry.getKey() + "=" + entry.getValue())
                 .collect(Collectors.joining("&"));
+
         return form;
+    }
+
+    static String urlParamsJson(final Map<String, String> params) {
+        final String pj = params.entrySet().stream()
+                .map(entry -> entry.getKey() + ":" + entry.getValue())
+                .collect(Collectors.joining(","));
+
+        return "{" + pj + "}";
+    }
+
+    /**
+     * @param headers
+     */
+    public static void debugHeaders(final HttpHeaders headers) {
+        final Map<String, List<String>> map = headers.map();
+        for (final Map.Entry<String, List<String>> entry : map.entrySet()) {
+            log.debug("entry: {}, {}", entry.getKey(), entry.getValue());
+//            for (final String entryValue : entry.getValue()) {
+//                log.debug("value: {}", entryValue);
+//            }
+        }
     }
 }
