@@ -19,7 +19,7 @@ import jakarta.inject.Inject;
 /**
  */
 @Default
-public class RedditPutMethod implements Serializable {
+public class RedditPut implements Serializable {
     private static final long serialVersionUID = -1L;
 
     private final Logger log =
@@ -30,7 +30,7 @@ public class RedditPutMethod implements Serializable {
 
     /**
      */
-    public RedditPutMethod() {
+    public RedditPut() {
     }
 
     /**

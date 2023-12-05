@@ -3,15 +3,11 @@ package com.objecteffects.reddit.core;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.http.HttpRequest;
-import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.uwyn.urlencoder.UrlEncoder;
 
 import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
@@ -19,9 +15,10 @@ import jakarta.inject.Inject;
 /**
  */
 @Default
-public class RedditPostMethod implements Serializable {
+public class RedditDelete implements Serializable {
     private static final long serialVersionUID = -1L;
 
+    @SuppressWarnings("unused")
     private final Logger log =
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
@@ -30,7 +27,7 @@ public class RedditPostMethod implements Serializable {
 
     /**
      */
-    public RedditPostMethod() {
+    public RedditDelete() {
     }
 
     /**
@@ -47,28 +44,13 @@ public class RedditPostMethod implements Serializable {
      * @throws InterruptedException
      * @throws IOException
      */
-    public HttpResponse<String> postMethod(final String method,
+    public HttpResponse<String> deleteMethod(final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
-        this.log.debug("params: {}", params);
-
-        final ObjectMapper mapper = new ObjectMapper();
-
-//        final String pj = mapper.writeValueAsString(params);
-        final String pj = RedditHttpClient.urlParams(params);
-
-        this.log.debug("params joined: {}", pj);
-
-        final var encoded = UrlEncoder.encode(pj);
-        this.log.debug("params urlencoded: {}", encoded);
-
         final HttpRequest.Builder requestBuilder =
-                HttpRequest.newBuilder()
-                        .setHeader("Content-Type",
-                                "application/x-www-form-urlencoded")
-                        .POST(BodyPublishers.ofString(pj));
+                HttpRequest.newBuilder().DELETE();
 
         return this.redditHttpClient.clientSend(requestBuilder, method,
-                params /* Collections.emptyMap() */);
+                params);
     }
 }

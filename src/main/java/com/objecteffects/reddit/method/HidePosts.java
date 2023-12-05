@@ -3,7 +3,6 @@ package com.objecteffects.reddit.method;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.http.HttpResponse;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,11 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.TypeRef;
-import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditPostMethod;
+import com.objecteffects.reddit.core.RedditPost;
 import com.objecteffects.reddit.core.Utils;
 import com.objecteffects.reddit.data.Post;
 
@@ -34,10 +29,10 @@ public class HidePosts implements Serializable {
     private final Configuration conf = Utils.jsonConf();
 
     @Inject
-    private RedditGetMethod getClient;
+    private RedditPost postClient;
 
     @Inject
-    private RedditPostMethod postClient;
+    private GetPosts getPosts;
 
     /**
      */
@@ -47,14 +42,13 @@ public class HidePosts implements Serializable {
     /**
      * @param _getClient the getClient to set
      */
-    public void setGetClient(final RedditGetMethod _getClient) {
-        this.getClient = _getClient;
+    public void setGetPostsClient(final GetPosts _getPosts) {
     }
 
     /**
      * @param _postClient the postClient to set
      */
-    public void setPostClient(final RedditPostMethod _postClient) {
+    public void setPostClient(final RedditPost _postClient) {
         this.postClient = _postClient;
     }
 
@@ -74,51 +68,10 @@ public class HidePosts implements Serializable {
             return null;
         }
 
-        final String submittedUri =
-                String.format("user/%s/submitted", name);
+        final List<Post> posts = this.getPosts
+                .getPosts(name, count, lastAfter);
 
-        final Map<String, String> params =
-                new HashMap<>(
-                        Map.of("limit", String.valueOf(count),
-                                "sort", "new",
-                                "type", "links"));
-
-        if (lastAfter != null) {
-            params.put("after", lastAfter);
-        }
-
-        final HttpResponse<String> methodResponse =
-                this.getClient.getMethod(submittedUri, params);
-
-        if (methodResponse == null) {
-            this.log.debug("null response");
-
-            return "";
-        }
-
-        // this.log.debug("posts: {}", methodResponse.body());
-
-        this.log.debug("method response status: {}",
-                methodResponse.statusCode());
-
-        this.log.debug("method response headers: {}",
-                methodResponse.headers());
-
-        final String path = "$['data']['children'][*]['data']";
-
-        final TypeRef<List<Post>> typeRef = new TypeRef<>() {
-            // empty
-        };
-
-        final DocumentContext jsonContext =
-                JsonPath.using(this.conf)
-                        .parse(methodResponse.body());
-
-        final List<Post> posts = jsonContext.read(path, typeRef);
-
-        this.log.debug("list size: {}", posts.size());
-
-        final String hideUri = String.format("api/hide");
+        final String hideUri = "api/hide";
 
         for (final Post post : posts) {
             Thread.sleep(600);

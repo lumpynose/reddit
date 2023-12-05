@@ -10,11 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditGet;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
-import com.objecteffects.reddit.core.RedditPostMethod;
+import com.objecteffects.reddit.core.RedditPost;
 import com.objecteffects.reddit.main.AppConfig;
+import com.objecteffects.reddit.method.GetPosts;
 import com.objecteffects.reddit.method.UpVotePosts;
 
 import jakarta.inject.Inject;
@@ -29,9 +30,9 @@ public class TestUpVotePosts {
 
     @WeldSetup
     private final WeldInitiator weld =
-            WeldInitiator.of(UpVotePosts.class, RedditGetMethod.class,
-                    RedditPostMethod.class, RedditHttpClient.class,
-                    RedditOAuth.class, AppConfig.class);
+            WeldInitiator.of(UpVotePosts.class, RedditGet.class,
+                    RedditPost.class, RedditHttpClient.class,
+                    RedditOAuth.class, GetPosts.class, AppConfig.class);
 
     @Inject
     private UpVotePosts upVotePosts;

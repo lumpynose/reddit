@@ -176,9 +176,6 @@ public class RedditHttpClient implements Serializable {
         final Map<String, List<String>> map = headers.map();
         for (final Map.Entry<String, List<String>> entry : map.entrySet()) {
             log.debug("entry: {}, {}", entry.getKey(), entry.getValue());
-//            for (final String entryValue : entry.getValue()) {
-//                log.debug("value: {}", entryValue);
-//            }
         }
     }
 }

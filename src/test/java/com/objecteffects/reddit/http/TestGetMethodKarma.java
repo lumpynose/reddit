@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jayway.jsonpath.Configuration;
-import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditGet;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.core.Utils;
@@ -32,12 +32,12 @@ public class TestGetMethodKarma {
 
     @WeldSetup
     private final WeldInitiator weld =
-            WeldInitiator.of(RedditGetMethod.class,
+            WeldInitiator.of(RedditGet.class,
                     RedditHttpClient.class, RedditOAuth.class,
                     AppConfig.class);
 
     @Inject
-    private RedditGetMethod getClient;
+    private RedditGet getClient;
 
     /**
      * @throws IOException

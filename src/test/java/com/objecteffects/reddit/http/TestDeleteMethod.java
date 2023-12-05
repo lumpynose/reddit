@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.core.RedditDeleteMethod;
-import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditDelete;
+import com.objecteffects.reddit.core.RedditGet;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
-import com.objecteffects.reddit.core.RedditPutMethod;
+import com.objecteffects.reddit.core.RedditPut;
 import com.objecteffects.reddit.main.AppConfig;
 
 import jakarta.inject.Inject;
@@ -30,18 +30,18 @@ public class TestDeleteMethod {
 
     @WeldSetup
     private final WeldInitiator weld =
-            WeldInitiator.of(RedditGetMethod.class, RedditPutMethod.class,
-                    RedditDeleteMethod.class, RedditHttpClient.class,
+            WeldInitiator.of(RedditGet.class, RedditPut.class,
+                    RedditDelete.class, RedditHttpClient.class,
                     RedditOAuth.class, AppConfig.class);
 
     @Inject
-    private RedditGetMethod getClient;
+    private RedditGet getClient;
 
     @Inject
-    private RedditPutMethod putClient;
+    private RedditPut putClient;
 
     @Inject
-    private RedditDeleteMethod delClient;
+    private RedditDelete delClient;
 
     /**
      * @throws IOException

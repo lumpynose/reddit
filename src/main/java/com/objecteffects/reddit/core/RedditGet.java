@@ -15,7 +15,7 @@ import jakarta.inject.Inject;
 /**
  */
 @Default
-public class RedditDeleteMethod implements Serializable {
+public class RedditGet implements Serializable {
     private static final long serialVersionUID = -1L;
 
     @SuppressWarnings("unused")
@@ -27,7 +27,7 @@ public class RedditDeleteMethod implements Serializable {
 
     /**
      */
-    public RedditDeleteMethod() {
+    public RedditGet() {
     }
 
     /**
@@ -44,13 +44,11 @@ public class RedditDeleteMethod implements Serializable {
      * @throws InterruptedException
      * @throws IOException
      */
-    public HttpResponse<String> deleteMethod(final String method,
+    public HttpResponse<String> getMethod(final String method,
             final Map<String, String> params)
             throws InterruptedException, IOException {
-        final HttpRequest.Builder requestBuilder =
-                HttpRequest.newBuilder().DELETE();
+        final HttpRequest.Builder builder = HttpRequest.newBuilder().GET();
 
-        return this.redditHttpClient.clientSend(requestBuilder, method,
-                params);
+        return this.redditHttpClient.clientSend(builder, method, params);
     }
 }

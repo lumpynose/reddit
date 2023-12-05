@@ -15,7 +15,7 @@ import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.TypeRef;
-import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditGet;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.core.Utils;
@@ -37,10 +37,10 @@ public class TestGetMethodMe {
     private final WeldInitiator weld =
             WeldInitiator.of(RedditHttpClient.class,
                     RedditOAuth.class, AppConfig.class,
-                    RedditGetMethod.class);
+                    RedditGet.class);
 
     @Inject
-    private RedditGetMethod getClient;
+    private RedditGet getClient;
 
     /**
      * @throws IOException

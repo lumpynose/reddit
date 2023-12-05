@@ -3,7 +3,6 @@ package com.objecteffects.reddit.method;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.http.HttpResponse;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,11 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jayway.jsonpath.Configuration;
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.TypeRef;
-import com.objecteffects.reddit.core.RedditGetMethod;
-import com.objecteffects.reddit.core.RedditPostMethod;
+import com.objecteffects.reddit.core.RedditGet;
+import com.objecteffects.reddit.core.RedditPost;
 import com.objecteffects.reddit.core.Utils;
 import com.objecteffects.reddit.data.Post;
 
@@ -34,10 +30,13 @@ public class UpVotePosts implements Serializable {
     private final Configuration conf = Utils.jsonConf();
 
     @Inject
-    private RedditGetMethod getClient;
+    private RedditGet getClient;
 
     @Inject
-    private RedditPostMethod postClient;
+    private RedditPost postClient;
+
+    @Inject
+    GetPosts getPosts;
 
     /**
      */
@@ -47,14 +46,14 @@ public class UpVotePosts implements Serializable {
     /**
      * @param _getClient the getClient to set
      */
-    public void setGetClient(final RedditGetMethod _getClient) {
+    public void setGetClient(final RedditGet _getClient) {
         this.getClient = _getClient;
     }
 
     /**
      * @param _postClient the postClient to set
      */
-    public void setPostClient(final RedditPostMethod _postClient) {
+    public void setPostClient(final RedditPost _postClient) {
         this.postClient = _postClient;
     }
 
@@ -76,43 +75,8 @@ public class UpVotePosts implements Serializable {
 
         Thread.sleep(600);
 
-        final String submittedUri =
-                String.format("user/%s/submitted", name);
-
-        final Map<String, String> params =
-                new HashMap<>(
-                        Map.of("limit", count.toString(),
-                                "sort", "new",
-                                "type", "links"));
-
-        if (lastAfter != null && !lastAfter.isEmpty()) {
-            params.put("after", lastAfter);
-        }
-
-        final HttpResponse<String> response =
-                this.getClient.getMethod(submittedUri, params);
-
-        if (response == null) {
-            this.log.debug("null response");
-
-            return null;
-        }
-
-        this.log.debug(response.body());
-
-        final String path = "$['data']['children'][*]['data']";
-
-        final TypeRef<List<Post>> typeRef = new TypeRef<>() {
-            // empty
-        };
-
-        final DocumentContext jsonContext =
-                JsonPath.using(this.conf).parse(response.body());
-
-        final List<Post> posts =
-                jsonContext.read(path, typeRef);
-
-        this.log.debug("list size: {}", posts.size());
+        final List<Post> posts = this.getPosts
+                .getPosts(name, count, lastAfter);
 
         final String upVoteUri = String.format("api/vote");
 

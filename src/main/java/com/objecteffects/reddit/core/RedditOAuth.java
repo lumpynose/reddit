@@ -39,6 +39,7 @@ public class RedditOAuth implements Serializable {
     private AppConfig appConfig;
 
     private static String access_token;
+    private static Integer expires;
 
     /**
      */
@@ -74,6 +75,7 @@ public class RedditOAuth implements Serializable {
 
         final Map<String, String> params = new HashMap<>();
 
+        params.put("duration", "permanent");
         params.put("grant_type", "password");
         params.put("username", this.appConfig.getUsername());
         params.put("password", this.appConfig.getPassword());
@@ -148,16 +150,21 @@ public class RedditOAuth implements Serializable {
             throw new IllegalStateException("no access_token");
         }
 
+//        dumpStringMap(stringMap);
+
         RedditOAuth.access_token = stringMap.get("access_token");
 
 //        this.log.debug("access_token: {}", RedditOAuth.access_token);
 
-        return RedditOAuth.access_token;
-    }
+        if (!stringMap.containsKey("expires_in")) {
+            this.log.error("no expires_in");
 
-    @SuppressWarnings("unused")
-    private Boolean alwaysTrue() {
-        return Boolean.TRUE;
+            throw new IllegalStateException("no expires_in");
+        }
+
+        RedditOAuth.expires = Integer.valueOf(stringMap.get("expires_in"));
+
+        return RedditOAuth.access_token;
     }
 
     /**
@@ -242,5 +249,21 @@ public class RedditOAuth implements Serializable {
     private String basicAuth(final String username, final String password) {
         return "Basic " + Base64.getEncoder()
                 .encodeToString((username + ":" + password).getBytes());
+    }
+
+    /**
+     * @param stringMap
+     */
+    private void dumpStringMap(final Map<String, String> stringMap) {
+        final Map<String, String> map = stringMap;
+        for (final Map.Entry<String, String> entry : map.entrySet()) {
+            this.log.debug("stringMap: {}, {}", entry.getKey(),
+                    entry.getValue());
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private Boolean alwaysTrue() {
+        return Boolean.TRUE;
     }
 }

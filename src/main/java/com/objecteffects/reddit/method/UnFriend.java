@@ -8,7 +8,7 @@ import java.util.Collections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.core.RedditDeleteMethod;
+import com.objecteffects.reddit.core.RedditDelete;
 
 import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
@@ -23,7 +23,7 @@ public class UnFriend implements Serializable {
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Inject
-    private RedditDeleteMethod deleteMethod;
+    private RedditDelete deleteMethod;
 
     /**
      */
@@ -33,7 +33,7 @@ public class UnFriend implements Serializable {
     /**
      * @param _deleteMethod the deleteMethod to set
      */
-    public void setDeleteMethod(final RedditDeleteMethod _deleteMethod) {
+    public void setDeleteMethod(final RedditDelete _deleteMethod) {
         this.deleteMethod = _deleteMethod;
     }
 

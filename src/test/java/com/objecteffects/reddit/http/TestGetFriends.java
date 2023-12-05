@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.objecteffects.reddit.core.RedditDeleteMethod;
-import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditDelete;
+import com.objecteffects.reddit.core.RedditGet;
 import com.objecteffects.reddit.core.RedditHttpClient;
 import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.Friend;
@@ -34,7 +34,7 @@ public class TestGetFriends {
     @WeldSetup
     private final WeldInitiator weld =
             WeldInitiator.of(GetFriends.class, UnFriend.class,
-                    RedditGetMethod.class, RedditDeleteMethod.class,
+                    RedditGet.class, RedditDelete.class,
                     RedditHttpClient.class, RedditOAuth.class, AppConfig.class);
 
     @Inject

@@ -13,7 +13,7 @@ import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.TypeRef;
-import com.objecteffects.reddit.core.RedditGetMethod;
+import com.objecteffects.reddit.core.RedditGet;
 import com.objecteffects.reddit.core.Utils;
 import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.data.FriendAbout;
@@ -31,7 +31,7 @@ public class GetFriends implements Serializable {
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Inject
-    private RedditGetMethod getMethod;
+    private RedditGet getMethod;
 
     @Inject
     private UnFriend unFriend;
@@ -49,7 +49,7 @@ public class GetFriends implements Serializable {
     /**
      * @param _getMethod the getMethod to set
      */
-    public void setGetMethod(final RedditGetMethod _getMethod) {
+    public void setGetMethod(final RedditGet _getMethod) {
         this.getMethod = _getMethod;
     }
 
