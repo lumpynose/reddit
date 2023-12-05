@@ -52,6 +52,10 @@ public class TestGetMethodMe {
                 this.getClient.getMethod("api/v1/me",
                         Collections.emptyMap());
 
+        if (response == null) {
+            throw new IllegalStateException("null respone");
+        }
+
         this.log.debug("body: {}", response.body());
 
         final TypeRef<Me> typeRef = new TypeRef<>() {

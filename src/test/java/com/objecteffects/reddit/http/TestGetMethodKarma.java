@@ -52,7 +52,7 @@ public class TestGetMethodKarma {
                 .getMethod("api/v1/me/karma", params);
 
         if (response == null) {
-            throw new IllegalStateException("null karma respones");
+            throw new IllegalStateException("null karma respone");
         }
 
         this.log.debug("method response status: {}",

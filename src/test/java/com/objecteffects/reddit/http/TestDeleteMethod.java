@@ -59,6 +59,10 @@ public class TestDeleteMethod {
 
         this.log.debug("response: {}", response);
 
+        if (response == null) {
+            throw new IllegalStateException("null respone");
+        }
+
         /* end of GET about */
 
         final String putUri = String.format("api/v1/me/friends/%s",
@@ -70,6 +74,10 @@ public class TestDeleteMethod {
 
         this.log.debug("response: {}", response);
 
+        if (response == null) {
+            throw new IllegalStateException("null respone");
+        }
+
         /* end of PUT friends */
 
         final String infoUri = String.format("api/v1/me/friends/%s",
@@ -79,6 +87,10 @@ public class TestDeleteMethod {
 
         this.log.debug("response: {}", response);
 
+        if (response == null) {
+            throw new IllegalStateException("null respone");
+        }
+
         /* end of GET friends user */
 
         final String deleteUri = String.format("api/v1/me/friends/%s", user);
@@ -87,6 +99,10 @@ public class TestDeleteMethod {
                 Collections.emptyMap());
 
         this.log.debug("response: {}", response);
+
+        if (response == null) {
+            throw new IllegalStateException("null respone");
+        }
 
         /* end of DELETE friends user */
     }

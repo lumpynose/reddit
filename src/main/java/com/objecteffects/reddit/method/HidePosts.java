@@ -42,13 +42,13 @@ public class HidePosts implements Serializable {
     /**
      * @param _getClient the getClient to set
      */
-    public void setGetPostsClient(final GetPosts _getPosts) {
+    public void setGetPosts(final GetPosts _getPosts) {
     }
 
     /**
      * @param _postClient the postClient to set
      */
-    public void setPostClient(final RedditPost _postClient) {
+    public void setPost(final RedditPost _postClient) {
         this.postClient = _postClient;
     }
 

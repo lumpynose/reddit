@@ -52,7 +52,7 @@ public class TestGetMethodPrefs {
                 .getMethod("api/v1/me/prefs/", params);
 
         if (response == null) {
-            throw new IllegalStateException("null prefs respones");
+            throw new IllegalStateException("null response");
         }
 
         this.log.debug("method response status: {}",

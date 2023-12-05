@@ -62,16 +62,20 @@ public class TestGetMethodPosts {
                                 "sort", "new",
                                 "type", "links"));
 
-        final HttpResponse<String> methodResponse =
+        final HttpResponse<String> response =
                 this.getClient.getMethod(submittedUri, params);
 
+        if (response == null) {
+            throw new IllegalStateException("null response");
+        }
+
         this.log.debug("method response status: {}",
-                methodResponse.statusCode());
+                response.statusCode());
 
-        this.log.debug("method response headers: {}", methodResponse.headers());
-        // this.log.debug("method response body: {}", methodResponse.body());
+        this.log.debug("method response headers: {}", response.headers());
+        // this.log.debug("method response body: {}", response.body());
 
-        decodeBody(methodResponse.body());
+        decodeBody(response.body());
     }
 
     private void decodeBody(final String body) {

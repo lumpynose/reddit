@@ -67,9 +67,7 @@ public class TestUserSubmitted {
 
     private void debug(final HttpResponse<String> response) {
         if (response == null) {
-            this.log.debug("null response");
-
-            return;
+            throw new IllegalStateException("null response");
         }
 
         this.log.debug("method response status: {}",

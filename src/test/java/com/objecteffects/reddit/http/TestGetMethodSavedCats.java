@@ -64,7 +64,7 @@ public class TestGetMethodSavedCats {
                 .getMethod("api/saved_categories", params);
 
         if (response == null) {
-            throw new IllegalStateException("null saved categories respone");
+            throw new IllegalStateException("null response");
         }
 
         this.log.debug("saved categories: {}", response.body());

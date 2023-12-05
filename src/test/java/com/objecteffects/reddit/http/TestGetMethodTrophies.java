@@ -52,7 +52,7 @@ public class TestGetMethodTrophies {
                 .getMethod("api/v1/me/trophies", params);
 
         if (response == null) {
-            throw new IllegalStateException("null trophies respones");
+            throw new IllegalStateException("null response");
         }
 
         this.log.debug("method response status: {}",

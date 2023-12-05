@@ -58,13 +58,11 @@ public class TestUpVotedPosts {
                 Map.of("limit", "100", "sort", "new", "type",
                         "links");
 
-        final HttpResponse<String> methodResponse =
+        final HttpResponse<String> response =
                 this.getClient.getMethod(upvotedUri, params);
 
-        if (methodResponse == null) {
-            this.log.debug("null response");
-
-            return;
+        if (response == null) {
+            throw new IllegalStateException("null response");
         }
 
         final String path = "$['data']['children'][*]['data']";
@@ -74,7 +72,7 @@ public class TestUpVotedPosts {
         };
 
         final DocumentContext jsonContext =
-                JsonPath.using(this.conf).parse(methodResponse.body());
+                JsonPath.using(this.conf).parse(response.body());
 
         final List<Post> list = jsonContext.read(path, typeRef);
 

@@ -5,12 +5,12 @@ import java.io.Serializable;
 import java.net.http.HttpRequest;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
+import java.util.Collections;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.uwyn.urlencoder.UrlEncoder;
 
 import jakarta.enterprise.inject.Default;
@@ -52,9 +52,9 @@ public class RedditPost implements Serializable {
             throws InterruptedException, IOException {
         this.log.debug("params: {}", params);
 
-        final ObjectMapper mapper = new ObjectMapper();
-
+//        final ObjectMapper mapper = new ObjectMapper();
 //        final String pj = mapper.writeValueAsString(params);
+
         final String pj = RedditHttpClient.urlParams(params);
 
         this.log.debug("params joined: {}", pj);
@@ -69,6 +69,6 @@ public class RedditPost implements Serializable {
                         .POST(BodyPublishers.ofString(pj));
 
         return this.redditHttpClient.clientSend(requestBuilder, method,
-                params /* Collections.emptyMap() */);
+                Collections.emptyMap());
     }
 }

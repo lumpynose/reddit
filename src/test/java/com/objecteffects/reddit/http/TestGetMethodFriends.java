@@ -62,7 +62,7 @@ public class TestGetMethodFriends {
                 .getMethod("prefs/friends", params);
 
         if (response == null) {
-            throw new IllegalStateException("null friends respones");
+            throw new IllegalStateException("null friends respone");
         }
 
         this.log.debug("method response status: {}",
