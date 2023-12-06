@@ -182,7 +182,7 @@ public class RedditOAuth implements Serializable {
             return null;
         }
 
-        this.log.debug("revoking: {}", RedditOAuth.access_token);
+//        this.log.debug("revoking: {}", RedditOAuth.access_token);
 
         final Map<String, String> params = new HashMap<>();
 
@@ -202,7 +202,7 @@ public class RedditOAuth implements Serializable {
                 .map(entry -> entry.getKey() + "=" + entry.getValue())
                 .collect(Collectors.joining("&"));
 
-        this.log.debug("form: {}", form);
+//        this.log.debug("form: {}", form);
 
         final String uri = "api/v1/revoke_token";
         final String fullUri = String.format("%s/%s", AUTH_URI, uri);
@@ -219,7 +219,7 @@ public class RedditOAuth implements Serializable {
                 .POST(HttpRequest.BodyPublishers.ofString(form))
                 .build();
 
-        this.log.debug("headers: {}", request.headers());
+//        this.log.debug("headers: {}", request.headers());
 
         final HttpResponse<String> response = Utils.httpClient()
                 .send(request, BodyHandlers.ofString());
@@ -233,8 +233,8 @@ public class RedditOAuth implements Serializable {
         }
 
         this.log.debug("revoke response status: {}", response.statusCode());
-        this.log.debug("revoke response headers: {}", response.headers());
-        this.log.debug("revoke response body: {}", response.body());
+//        this.log.debug("revoke response headers: {}", response.headers());
+//        this.log.debug("revoke response body: {}", response.body());
 
         if (response.statusCode() != 200) {
             throw new IllegalStateException(

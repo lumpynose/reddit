@@ -1,6 +1,8 @@
 package com.objecteffects.reddit.http;
 
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 
@@ -18,6 +20,7 @@ import com.objecteffects.reddit.core.RedditOAuth;
 import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.main.AppConfig;
 import com.objecteffects.reddit.method.GetFriends;
+import com.objecteffects.reddit.method.GetPosts;
 import com.objecteffects.reddit.method.UnFriend;
 
 import jakarta.inject.Inject;
@@ -34,7 +37,7 @@ public class TestGetFriends {
     @WeldSetup
     private final WeldInitiator weld =
             WeldInitiator.of(GetFriends.class, UnFriend.class,
-                    RedditGet.class, RedditDelete.class,
+                    RedditGet.class, RedditDelete.class, GetPosts.class,
                     RedditHttpClient.class, RedditOAuth.class, AppConfig.class);
 
     @Inject
@@ -49,9 +52,12 @@ public class TestGetFriends {
         final List<Friend> friends = this.getFriends.getFriends(5, true);
 
         Collections.sort(friends, Collections.reverseOrder());
+        final DecimalFormat df = new DecimalFormat("0");
+        df.setRoundingMode(RoundingMode.HALF_UP);
 
         for (final Friend f : friends) {
-            this.log.debug("{}, {}", f.getName(), f.getKarma());
+            this.log.debug("{}, {}, {}",
+                    f.getName(), f.getKarma(), df.format(f.getPercentage()));
         }
     }
 }

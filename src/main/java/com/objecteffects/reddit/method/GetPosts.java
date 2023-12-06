@@ -19,10 +19,12 @@ import com.objecteffects.reddit.core.RedditGet;
 import com.objecteffects.reddit.core.Utils;
 import com.objecteffects.reddit.data.Post;
 
+import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
 
 /**
  */
+@Default
 public class GetPosts implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -35,16 +37,23 @@ public class GetPosts implements Serializable {
     private RedditGet getClient;
 
     /**
+     * @param _get
+     */
+    public void setGet(final RedditGet _get) {
+        this.getClient = _get;
+    }
+
+    /**
      * @param name
-     * @param count
+     * @param limit
      * @param lastAfter
      * @return
      * @throws IOException
      * @throws InterruptedException
      */
-    public List<Post> getPosts(final String name, final Integer count,
+    public List<Post> getPosts(final String name, final Integer limit,
             final String lastAfter) throws InterruptedException, IOException {
-        if (count <= 0) {
+        if (limit <= 0) {
             return null;
         }
 
@@ -53,7 +62,7 @@ public class GetPosts implements Serializable {
 
         final Map<String, String> params =
                 new HashMap<>(
-                        Map.of("limit", String.valueOf(count),
+                        Map.of("limit", String.valueOf(limit),
                                 "sort", "new",
                                 "type", "links"));
 
@@ -75,8 +84,8 @@ public class GetPosts implements Serializable {
         this.log.debug("method response status: {}",
                 methodResponse.statusCode());
 
-        this.log.debug("method response headers: {}",
-                methodResponse.headers());
+//        this.log.debug("method response headers: {}",
+//                methodResponse.headers());
 
         final String path = "$['data']['children'][*]['data']";
 

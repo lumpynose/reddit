@@ -3,7 +3,9 @@ package com.objecteffects.reddit.method;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.http.HttpResponse;
+import java.text.DateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,6 +19,7 @@ import com.objecteffects.reddit.core.RedditGet;
 import com.objecteffects.reddit.core.Utils;
 import com.objecteffects.reddit.data.Friend;
 import com.objecteffects.reddit.data.FriendAbout;
+import com.objecteffects.reddit.data.Post;
 
 import jakarta.enterprise.inject.Default;
 import jakarta.inject.Inject;
@@ -36,7 +39,10 @@ public class GetFriends implements Serializable {
     @Inject
     private UnFriend unFriend;
 
-    private final int defaultCount = 0;
+    @Inject
+    private GetPosts getPosts;
+
+    private final int defaultLimit = 0;
     private final boolean defaultGetKarma = false;
 
     private final Configuration conf = Utils.jsonConf();
@@ -61,6 +67,13 @@ public class GetFriends implements Serializable {
     }
 
     /**
+     * @param _getPosts
+     */
+    public void setGetPosts(final GetPosts _getPosts) {
+        this.getPosts = _getPosts;
+    }
+
+    /**
      * Gets all friends, no karma.
      *
      * @return List of Friend
@@ -68,7 +81,7 @@ public class GetFriends implements Serializable {
      * @throws InterruptedException
      */
     public List<Friend> getFriends() throws IOException, InterruptedException {
-        return getFriends(this.defaultCount, this.defaultGetKarma);
+        return getFriends(this.defaultLimit, this.defaultGetKarma);
     }
 
     /**
@@ -81,7 +94,7 @@ public class GetFriends implements Serializable {
      */
     public List<Friend> getFriends(final boolean getKarma)
             throws IOException, InterruptedException {
-        return getFriends(this.defaultCount, getKarma);
+        return getFriends(this.defaultLimit, getKarma);
     }
 
     /**
@@ -156,7 +169,7 @@ public class GetFriends implements Serializable {
             sublist = friends.subList(0, count);
         }
 
-        for (final Friend f : sublist) {
+        for (final Friend friend : sublist) {
             Thread.sleep(600);
 
             // none of these work when used with successive users
@@ -164,24 +177,24 @@ public class GetFriends implements Serializable {
 //            String.format("/api/v1/me/friends/%s", f.getName());
 //            String.format("/user/%s/overview", f.getName());
             final String aboutUri =
-                    String.format("/user/%s/about", f.getName());
+                    String.format("/user/%s/about", friend.getName());
 
             final HttpResponse<String> response = this.getMethod
                     .getMethod(aboutUri, Collections.emptyMap());
 
             if (response == null) {
-                this.log.debug("null response: {}", f.getName());
+                this.log.debug("null response: {}", friend.getName());
 
                 // this.unFriend.unFriend(f.getName());
 
-                f.setKarma(0);
+                friend.setKarma(0);
 
                 continue;
             }
 
             final String body = response.body();
 
-            this.log.debug("about response: {}", body);
+//            this.log.debug("about response: {}", body);
 
             final String path = "$['data']";
 
@@ -191,25 +204,72 @@ public class GetFriends implements Serializable {
             final FriendAbout fabout = jsonContext.read(path,
                     FriendAbout.class);
 
-            this.log.debug("fabout: {}", fabout);
+//            this.log.debug("fabout: {}", fabout);
 
-            f.setKarma(fabout.getTotalKarma());
-            f.setIsBlocked(fabout.getIsBlocked());
+            friend.setKarma(fabout.getTotalKarma());
+            friend.setIsBlocked(fabout.getIsBlocked());
 
             if (fabout.getIsSuspended() == null) {
-                f.setIsSuspended(Boolean.FALSE);
+                friend.setIsSuspended(Boolean.FALSE);
             }
             else {
-                f.setIsSuspended(fabout.getIsSuspended());
+                friend.setIsSuspended(fabout.getIsSuspended());
             }
 
-            if (f.getIsSuspended()) {
-                this.log.debug("unfriending: {}", f.getName());
+            if (friend.getIsSuspended()) {
+                this.log.debug("unfriending: {}", friend.getName());
 
-                this.unFriend.unFriend(f.getName());
+                this.unFriend.unFriend(friend.getName());
             }
+
+            getLatest(friend);
         }
 
         return sublist;
+    }
+
+    private void getLatest(final Friend friend)
+            throws InterruptedException, IOException {
+        final List<Post> posts = this.getPosts
+                .getPosts(friend.getName(), 500, null);
+
+        if (posts.isEmpty()) {
+            friend.setLatest("none");
+            friend.setPercentage((float) 0);
+
+            return;
+        }
+
+        final Post post0 = posts.get(0);
+
+//        this.log.debug("post: {}", post0);
+
+        final Date date = new Date(post0.getCreated() * 1000L);
+
+        final String df = DateFormat.getDateInstance().format(date);
+        this.log.debug("post created: {}", df);
+
+        friend.setLatest(df);
+
+        int upCount = 0;
+
+        for (final Post post : posts) {
+            if (post.getLikes())
+                upCount++;
+        }
+
+        // ratio = ups / (ups + downs)
+        double ratio;
+
+        if (posts.size() == 0) {
+            ratio = 0;
+        }
+        else {
+            ratio = (double) upCount / posts.size();
+        }
+
+        friend.setPercentage((float) (ratio * 100));
+
+        this.log.debug("ratio: {}", friend.getPercentage());
     }
 }

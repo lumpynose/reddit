@@ -2,6 +2,7 @@ package com.objecteffects.reddit.data;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -10,14 +11,19 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class Friend implements Comparable<Friend> {
     @JsonProperty("rel_id")
     private String relId;
-    private Float date;
+    private Long date;
     private String name;
     private String id;
     private Integer karma;
-
     private Boolean isBanned;
     private Boolean isBlocked;
     private Boolean isSuspended;
+
+    @JsonIgnore
+    private String latest;
+
+    @JsonIgnore
+    private Float percentage;
 
     public Integer getKarma() {
         return this.karma;
@@ -69,7 +75,7 @@ public class Friend implements Comparable<Friend> {
         this.isSuspended = _isSuspended;
     }
 
-    public Float getDate() {
+    public Long getDate() {
         return this.date;
     }
 
@@ -85,6 +91,34 @@ public class Friend implements Comparable<Friend> {
         return this.id;
     }
 
+    /**
+     * @return the latest
+     */
+    public String getLatest() {
+        return this.latest;
+    }
+
+    /**
+     * @param latest the latest to set
+     */
+    public void setLatest(final String latest) {
+        this.latest = latest;
+    }
+
+    /**
+     * @return
+     */
+    public Float getPercentage() {
+        return this.percentage;
+    }
+
+    /**
+     * @param percentage
+     */
+    public void setPercentage(final Float _percentage) {
+        this.percentage = _percentage;
+    }
+
     @Override
     public int compareTo(final Friend friend) {
         return this.karma.intValue() - friend.karma.intValue();
@@ -92,9 +126,12 @@ public class Friend implements Comparable<Friend> {
 
     @Override
     public String toString() {
-        return "Friend [date=" + this.date + ", relId=" + this.relId
-                + ", name=" + this.name + ", id=" + this.id + ", karma="
-                + this.karma + "]";
+        return "Friend [relId=" + this.relId + ", date=" + this.date + ", name="
+                + this.name + ", id=" + this.id + ", karma=" + this.karma
+                + ", isBanned=" + this.isBanned + ", isBlocked="
+                + this.isBlocked + ", isSuspended=" + this.isSuspended
+                + ", latest=" + this.latest + ", percentage=" + this.percentage
+                + "]";
     }
 
     @Override
@@ -122,5 +159,4 @@ public class Friend implements Comparable<Friend> {
                 && Objects.equals(this.name, other.name)
                 && Objects.equals(this.relId, other.relId);
     }
-
 }

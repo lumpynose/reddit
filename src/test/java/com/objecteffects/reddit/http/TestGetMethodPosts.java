@@ -51,7 +51,7 @@ public class TestGetMethodPosts {
     public void testGetMethodPosts()
             throws InterruptedException, IOException {
         final int count = 5;
-        final String name = "user";
+        final String name = "reddit";
 
         final String submittedUri =
                 String.format("/user/%s/submitted", name);
@@ -94,6 +94,7 @@ public class TestGetMethodPosts {
 
         for (final Post post : list) {
             this.log.debug("name: {}", post.getName());
+            this.log.debug("post: {}", post);
         }
     }
 }

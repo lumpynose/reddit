@@ -101,7 +101,7 @@ public class RedditHttpClient implements Serializable {
 //        }
 
         log.debug("fullUri: {}", fullUri);
-        log.debug("token: {}", token);
+//        log.debug("token: {}", token);
 
         final HttpRequest request = requestBuilder
                 .setHeader("User-Agent",
@@ -111,7 +111,7 @@ public class RedditHttpClient implements Serializable {
                 .timeout(Duration.ofSeconds(Utils.timeoutSeconds))
                 .build();
 
-        log.debug("request headers: {}", request.headers());
+//        log.debug("request headers: {}", request.headers());
         log.debug("uri: {}", request.uri());
 
         HttpResponse<String> response = null;
@@ -128,10 +128,10 @@ public class RedditHttpClient implements Serializable {
 
         log.debug("response status: {}",
                 response.statusCode());
-        log.debug("response headers: {}", response.headers());
+//        log.debug("response headers: {}", response.headers());
         // this.log.debug("response body: {}", response.body());
 
-        debugHeaders(response.headers());
+        // debugHeaders(response.headers());
 
         this.redditOAuth.revokeToken();
 
