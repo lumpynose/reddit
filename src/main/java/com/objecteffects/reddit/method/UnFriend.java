@@ -23,7 +23,7 @@ public class UnFriend implements Serializable {
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Inject
-    private RedditDelete deleteMethod;
+    private RedditDelete redditDelete;
 
     /**
      */
@@ -31,10 +31,10 @@ public class UnFriend implements Serializable {
     }
 
     /**
-     * @param _deleteMethod the deleteMethod to set
+     * @param _deleteMethod the redditDelete to set
      */
-    public void setDeleteMethod(final RedditDelete _deleteMethod) {
-        this.deleteMethod = _deleteMethod;
+    public void setDeleteMethod(final RedditDelete _redditDelete) {
+        this.redditDelete = _redditDelete;
     }
 
     /**
@@ -47,16 +47,16 @@ public class UnFriend implements Serializable {
         final String deleteUri =
                 String.format("api/v1/me/friends/%s", name);
 
-        final HttpResponse<String> methodResponse = this.deleteMethod
+        final HttpResponse<String> response = this.redditDelete
                 .deleteMethod(deleteUri, Collections.emptyMap());
 
-        if (methodResponse == null) {
+        if (response == null) {
             this.log.warn("null delete friend respones");
 
             return;
         }
 
         this.log.debug("delete method response status: {}",
-                methodResponse.statusCode());
+                response.statusCode());
     }
 }

@@ -34,13 +34,13 @@ public class GetPosts implements Serializable {
     private final Configuration conf = Utils.jsonConf();
 
     @Inject
-    private RedditGet getClient;
+    private RedditGet redditGet;
 
     /**
      * @param _get
      */
-    public void setGet(final RedditGet _get) {
-        this.getClient = _get;
+    public void setGet(final RedditGet _redditGet) {
+        this.redditGet = _redditGet;
     }
 
     /**
@@ -70,10 +70,10 @@ public class GetPosts implements Serializable {
             params.put("after", lastAfter);
         }
 
-        final HttpResponse<String> methodResponse =
-                this.getClient.getMethod(submittedUri, params);
+        final HttpResponse<String> response =
+                this.redditGet.getMethod(submittedUri, params);
 
-        if (methodResponse == null) {
+        if (response == null) {
             this.log.debug("null response");
 
             return Collections.emptyList();
@@ -82,7 +82,7 @@ public class GetPosts implements Serializable {
         // this.log.debug("posts: {}", methodResponse.body());
 
         this.log.debug("method response status: {}",
-                methodResponse.statusCode());
+                response.statusCode());
 
 //        this.log.debug("method response headers: {}",
 //                methodResponse.headers());
@@ -95,7 +95,7 @@ public class GetPosts implements Serializable {
 
         final DocumentContext jsonContext =
                 JsonPath.using(this.conf)
-                        .parse(methodResponse.body());
+                        .parse(response.body());
 
         final List<Post> posts = jsonContext.read(path, typeRef);
 

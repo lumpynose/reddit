@@ -29,7 +29,7 @@ public class HidePosts implements Serializable {
     private final Configuration conf = Utils.jsonConf();
 
     @Inject
-    private RedditPost postClient;
+    private RedditPost redditPost;
 
     @Inject
     private GetPosts getPosts;
@@ -46,10 +46,10 @@ public class HidePosts implements Serializable {
     }
 
     /**
-     * @param _postClient the postClient to set
+     * @param _postClient the redditPost to set
      */
-    public void setPost(final RedditPost _postClient) {
-        this.postClient = _postClient;
+    public void setPost(final RedditPost _redditPost) {
+        this.redditPost = _redditPost;
     }
 
     /**
@@ -87,11 +87,10 @@ public class HidePosts implements Serializable {
             final Map<String, String> param =
                     Map.of("id", post.getName());
 
-            final HttpResponse<String> hideResponse =
-                    this.postClient.postMethod(hideUri, param);
+            final HttpResponse<String> response =
+                    this.redditPost.postMethod(hideUri, param);
 
-            this.log.debug("response: {}",
-                    hideResponse.statusCode());
+            this.log.debug("response: {}", response.statusCode());
         }
 
         String after = null;

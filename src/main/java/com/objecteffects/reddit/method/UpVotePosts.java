@@ -30,10 +30,10 @@ public class UpVotePosts implements Serializable {
     private final Configuration conf = Utils.jsonConf();
 
     @Inject
-    private RedditGet getClient;
+    private RedditGet redditGet;
 
     @Inject
-    private RedditPost postClient;
+    private RedditPost redditPost;
 
     @Inject
     GetPosts getPosts;
@@ -44,17 +44,17 @@ public class UpVotePosts implements Serializable {
     }
 
     /**
-     * @param _getClient the getClient to set
+     * @param _getClient the redditGet to set
      */
-    public void setGetClient(final RedditGet _getClient) {
-        this.getClient = _getClient;
+    public void setGetClient(final RedditGet _redditGet) {
+        this.redditGet = _redditGet;
     }
 
     /**
      * @param _postClient the postClient to set
      */
-    public void setPostClient(final RedditPost _postClient) {
-        this.postClient = _postClient;
+    public void setPostClient(final RedditPost _redditPost) {
+        this.redditPost = _redditPost;
     }
 
     /**
@@ -90,17 +90,16 @@ public class UpVotePosts implements Serializable {
                             "dir", "1",
                             "rank", "2");
 
-            final HttpResponse<String> upVoteResponse =
-                    this.postClient.postMethod(upVoteUri, param);
+            final HttpResponse<String> response =
+                    this.redditPost.postMethod(upVoteUri, param);
 
-            if (upVoteResponse == null) {
+            if (response == null) {
                 this.log.debug("null response");
 
                 continue;
             }
 
-            this.log.debug("response: {}",
-                    upVoteResponse.statusCode());
+            this.log.debug("response: {}", response.statusCode());
         }
 
         String after = null;

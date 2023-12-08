@@ -34,7 +34,7 @@ public class GetFriends implements Serializable {
             LoggerFactory.getLogger(this.getClass().getSimpleName());
 
     @Inject
-    private RedditGet getMethod;
+    private RedditGet redditGet;
 
     @Inject
     private UnFriend unFriend;
@@ -53,10 +53,10 @@ public class GetFriends implements Serializable {
     }
 
     /**
-     * @param _getMethod the getMethod to set
+     * @param _getMethod the redditGet to set
      */
-    public void setGetMethod(final RedditGet _getMethod) {
-        this.getMethod = _getMethod;
+    public void setGetMethod(final RedditGet _redditGet) {
+        this.redditGet = _redditGet;
     }
 
     /**
@@ -124,7 +124,7 @@ public class GetFriends implements Serializable {
             throws IOException, InterruptedException {
         // .getMethod("prefs/friends", Collections.emptyMap());
         // .getMethod("api/v1/me/friends", Collections.emptyMap());
-        final HttpResponse<String> response = this.getMethod
+        final HttpResponse<String> response = this.redditGet
                 .getMethod("prefs/friends", Collections.emptyMap());
 
         if (response == null) {
@@ -148,38 +148,39 @@ public class GetFriends implements Serializable {
         this.log.debug("friends length: {}",
                 friends.size());
 
-        if (getKarma) {
-            return decodeAbout(friends, count);
-        }
-
-        return friends;
-    }
-
-    @SuppressWarnings("boxing")
-    private List<Friend> decodeAbout(final List<Friend> friends,
-            final int count)
-            throws IOException, InterruptedException {
         List<Friend> sublist = friends;
 
         /*
-         * getFriends above always returns all friends so we trim it here if
+         * getFriends always returns all friends so we trim it here if
          * necessary.
          */
         if (count > 0 && count < friends.size()) {
             sublist = friends.subList(0, count);
         }
 
-        for (final Friend friend : sublist) {
+        if (getKarma) {
+            decodeAbout(sublist);
+
+            getLatest(sublist);
+
+        }
+
+        return friends;
+    }
+
+    @SuppressWarnings("boxing")
+    private void decodeAbout(final List<Friend> friends)
+            throws IOException, InterruptedException {
+
+        for (final Friend friend : friends) {
             Thread.sleep(600);
 
-            // none of these work when used with successive users
-            // and I can't figure out why.
 //            String.format("/api/v1/me/friends/%s", f.getName());
 //            String.format("/user/%s/overview", f.getName());
             final String aboutUri =
                     String.format("/user/%s/about", friend.getName());
 
-            final HttpResponse<String> response = this.getMethod
+            final HttpResponse<String> response = this.redditGet
                     .getMethod(aboutUri, Collections.emptyMap());
 
             if (response == null) {
@@ -221,55 +222,55 @@ public class GetFriends implements Serializable {
 
                 this.unFriend.unFriend(friend.getName());
             }
-
-            getLatest(friend);
         }
-
-        return sublist;
     }
 
-    private void getLatest(final Friend friend)
+    private void getLatest(final List<Friend> friends)
             throws InterruptedException, IOException {
-        final List<Post> posts = this.getPosts
-                .getPosts(friend.getName(), 500, null);
+        for (final Friend friend : friends) {
+            Thread.sleep(600);
 
-        if (posts.isEmpty()) {
-            friend.setLatest("none");
-            friend.setPercentage((float) 0);
+            final List<Post> posts = this.getPosts
+                    .getPosts(friend.getName(), 500, null);
 
-            return;
-        }
+            if (posts.isEmpty()) {
+                friend.setLatest("none");
+                friend.setPercentage((float) 0);
 
-        final Post post0 = posts.get(0);
+                return;
+            }
+
+            final Post post0 = posts.get(0);
 
 //        this.log.debug("post: {}", post0);
 
-        final Date date = new Date(post0.getCreated() * 1000L);
+            final Date date = new Date(post0.getCreated() * 1000L);
 
-        final String df = DateFormat.getDateInstance().format(date);
-        this.log.debug("post created: {}", df);
+            final String df = DateFormat.getDateInstance().format(date);
+            this.log.debug("post created: {}", df);
 
-        friend.setLatest(df);
+            friend.setLatest(df);
 
-        int upCount = 0;
+            int upCount = 0;
 
-        for (final Post post : posts) {
-            if (post.getLikes())
-                upCount++;
+            for (final Post post : posts) {
+                if (post.getLikes())
+                    upCount++;
+            }
+
+            // ratio = ups / (ups + downs)
+            double ratio;
+
+            if (posts.size() == 0) {
+                ratio = 0;
+            }
+            else {
+                ratio = (double) upCount / posts.size();
+            }
+
+            friend.setPercentage((float) (ratio * 100));
+
+            this.log.debug("ratio: {}", friend.getPercentage());
         }
-
-        // ratio = ups / (ups + downs)
-        double ratio;
-
-        if (posts.size() == 0) {
-            ratio = 0;
-        }
-        else {
-            ratio = (double) upCount / posts.size();
-        }
-
-        friend.setPercentage((float) (ratio * 100));
-
-        this.log.debug("ratio: {}", friend.getPercentage());
     }
 }
