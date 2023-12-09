@@ -52,9 +52,6 @@ public class RedditPost implements Serializable {
             throws InterruptedException, IOException {
         this.log.debug("params: {}", params);
 
-//        final ObjectMapper mapper = new ObjectMapper();
-//        final String pj = mapper.writeValueAsString(params);
-
         final String pj = RedditHttpClient.urlParams(params);
 
         this.log.debug("params joined: {}", pj);

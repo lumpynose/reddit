@@ -43,6 +43,7 @@ public class HidePosts implements Serializable {
      * @param _getClient the getClient to set
      */
     public void setGetPosts(final GetPosts _getPosts) {
+        this.getPosts = _getPosts;
     }
 
     /**

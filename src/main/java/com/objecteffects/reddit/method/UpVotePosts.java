@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.jayway.jsonpath.Configuration;
-import com.objecteffects.reddit.core.RedditGet;
 import com.objecteffects.reddit.core.RedditPost;
 import com.objecteffects.reddit.core.Utils;
 import com.objecteffects.reddit.data.Post;
@@ -29,14 +28,14 @@ public class UpVotePosts implements Serializable {
 
     private final Configuration conf = Utils.jsonConf();
 
-    @Inject
-    private RedditGet redditGet;
+//    @Inject
+//    private RedditGet redditGet;
 
     @Inject
     private RedditPost redditPost;
 
     @Inject
-    GetPosts getPosts;
+    private GetPosts getPosts;
 
     /**
      */
@@ -44,14 +43,14 @@ public class UpVotePosts implements Serializable {
     }
 
     /**
-     * @param _getClient the redditGet to set
+     * @param _getPosts
      */
-    public void setGetClient(final RedditGet _redditGet) {
-        this.redditGet = _redditGet;
+    public void setGetPosts(final GetPosts _getPosts) {
+        this.getPosts = _getPosts;
     }
 
     /**
-     * @param _postClient the postClient to set
+     * @param _redditPost
      */
     public void setPostClient(final RedditPost _redditPost) {
         this.redditPost = _redditPost;

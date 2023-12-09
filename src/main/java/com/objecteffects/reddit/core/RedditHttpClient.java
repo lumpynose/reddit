@@ -128,7 +128,11 @@ public class RedditHttpClient implements Serializable {
 
         log.debug("response status: {}",
                 response.statusCode());
-//        log.debug("response headers: {}", response.headers());
+
+        if (!okCodes.contains(response.statusCode())) {
+            log.debug("response headers: {}", response.headers());
+        }
+
         // this.log.debug("response body: {}", response.body());
 
         // debugHeaders(response.headers());
