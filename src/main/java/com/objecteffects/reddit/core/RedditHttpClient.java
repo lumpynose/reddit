@@ -41,8 +41,8 @@ import jakarta.inject.Inject;
 public class RedditHttpClient implements Serializable {
     private static final long serialVersionUID = -1L;
 
-    private final static Logger log =
-            LoggerFactory.getLogger(RedditHttpClient.class);
+    private final Logger log =
+            LoggerFactory.getLogger(RedditHttpClient.class.getSimpleName());
 
     private final static String METHOD_URI = "https://oauth.reddit.com";
 
@@ -85,7 +85,7 @@ public class RedditHttpClient implements Serializable {
         if (!params.isEmpty()) {
             final String form = urlParams(params);
 
-            log.debug("form, length: {}, {}", form,
+            this.log.debug("form, length: {}, {}", form,
                     form.length());
 
             fullUri = String.format("%s/%s?%s", METHOD_URI, method, form);
@@ -100,7 +100,7 @@ public class RedditHttpClient implements Serializable {
 //            fullUri = "http://localhost:9090/";
 //        }
 
-        log.debug("fullUri: {}", fullUri);
+        this.log.debug("fullUri: {}", fullUri);
 //        log.debug("token: {}", token);
 
         final HttpRequest request = requestBuilder
@@ -112,25 +112,25 @@ public class RedditHttpClient implements Serializable {
                 .build();
 
 //        log.debug("request headers: {}", request.headers());
-        log.debug("uri: {}", request.uri());
+        this.log.debug("uri: {}", request.uri());
 
         HttpResponse<String> response = null;
 
-        log.debug("method: {}, {}", method, request.method());
+        this.log.debug("method: {}, {}", method, request.method());
 
         response = Utils.httpClient().send(request, BodyHandlers.ofString());
 
         if (response == null) {
-            log.debug("null response");
+            this.log.debug("null response");
 
             return null;
         }
 
-        log.debug("response status: {}",
+        this.log.debug("response status: {}",
                 response.statusCode());
 
         if (!okCodes.contains(response.statusCode())) {
-            log.debug("response headers: {}", response.headers());
+            this.log.debug("response headers: {}", response.headers());
         }
 
         // this.log.debug("response body: {}", response.body());
@@ -140,7 +140,7 @@ public class RedditHttpClient implements Serializable {
         this.redditOAuth.revokeToken();
 
         if (!okCodes.contains(response.statusCode())) {
-            log.debug("bad status code: {}, {}",
+            this.log.debug("bad status code: {}, {}",
                     response.statusCode(), method);
 
             return null;
@@ -176,10 +176,10 @@ public class RedditHttpClient implements Serializable {
     /**
      * @param headers
      */
-    public static void debugHeaders(final HttpHeaders headers) {
+    public void debugHeaders(final HttpHeaders headers) {
         final Map<String, List<String>> map = headers.map();
         for (final Map.Entry<String, List<String>> entry : map.entrySet()) {
-            log.debug("entry: {}, {}", entry.getKey(), entry.getValue());
+            this.log.debug("entry: {}, {}", entry.getKey(), entry.getValue());
         }
     }
 }
